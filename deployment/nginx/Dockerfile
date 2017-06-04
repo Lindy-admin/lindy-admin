@@ -1,0 +1,6 @@
+FROM nginx
+RUN rm /etc/nginx/conf.d/default.conf
+COPY deployment/nginx/app.conf /etc/nginx/conf.d/app.conf
+
+VOLUME /var/www
+VOLUME /certificates
