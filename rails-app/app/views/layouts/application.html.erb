@@ -9,6 +9,15 @@
   </head>
 
   <body>
+    <ul class="nav nav-tabs">
+      <li role="presentation"><%= link_to 'People', people_path %></li>
+      <li role="presentation"><%= link_to 'Courses', courses_path %></li>
+    </ul>
+    <% if flash[:notice] -%>
+    <div id="notice-holder">
+      <p id="notice" class="alert alert-success"><%= notice %></p>
+    </div>
+    <% end %>
     <div class="container">
       <%= yield %>
     </div>
