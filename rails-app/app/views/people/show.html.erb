@@ -1,15 +1,9 @@
 <p id="notice"><%= notice %></p>
-
-<p>
-  <strong>Firstname:</strong>
-  <%= @person.firstname %>
-</p>
-
-<p>
-  <strong>Lastname:</strong>
-  <%= @person.lastname %>
-</p>
-
+<h1>
+  <%= @person.firstname %> <%= @person.lastname %>
+</h1>
+<%= link_to 'Back', people_path, class: "btn btn-default" %>
+<%= link_to 'Edit', edit_person_path(@person), class: "btn-primary" %>
 <p>
   <strong>Email:</strong>
   <%= @person.email %>
@@ -19,6 +13,3 @@
   <strong>Address:</strong>
   <%= @person.address %>
 </p>
-
-<%= link_to 'Edit', edit_person_path(@person) %> |
-<%= link_to 'Back', people_path %>
