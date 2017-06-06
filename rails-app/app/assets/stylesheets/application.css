@@ -13,15 +13,22 @@
  *= require bootstrap.min
  */
 
- #notice-holder {
+ .notice-holder {
    position: absolute;
    top: 42px;
    width: 100%;
  }
 
- #notice {
+ .notice {
    width: 800px;
    max-width: 100%;
    margin-left: auto;
    margin-right: auto;
+ }
+ .notice.alert {
+   margin-bottom: 1px;
+ }
+
+ input[type=submit] {
+   margin-top: 50px;
  }

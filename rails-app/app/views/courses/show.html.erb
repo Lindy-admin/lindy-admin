@@ -1,7 +1,5 @@
 <h1><%= @course.title %></h1>
 <%= link_to 'Back', courses_path, class: "btn btn-default" %>
-<%= link_to 'Edit', edit_course_path(@course), class:"btn btn-primary" %>
-
 <p>
   <%= @course.description %>
 </p>
@@ -15,6 +13,7 @@
   <strong>End:</strong>
   <%= @course.end %>
 </p>
+<%= link_to 'Edit', edit_course_path(@course), class:"btn btn-primary" %>
 
 <h2>Participants</h2>
 <table class="table table-striped table-hover">

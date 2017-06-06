@@ -18,10 +18,12 @@
 
 window.setTimeout(function()
   {
-    $("#notice").fadeTo(500, 0).slideUp(500,
-      function(){
+    var duration = 600;
+    $(".notice").each(function(index){
+      $(this).delay(1.3*duration*index).fadeTo(duration, 0).slideUp(duration, function(){
         $(this).remove();
       });
+    });
   },
-2500
+4000
 );

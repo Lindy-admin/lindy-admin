@@ -2,7 +2,6 @@
   <%= @person.firstname %> <%= @person.lastname %>
 </h1>
 <%= link_to 'Back', people_path, class: "btn btn-default" %>
-<%= link_to 'Edit', edit_person_path(@person), class: "btn-primary" %>
 <p>
   <strong>Email:</strong>
   <%= @person.email %>
@@ -12,3 +11,4 @@
   <strong>Address:</strong>
   <%= @person.address %>
 </p>
+<%= link_to 'Edit', edit_person_path(@person), class: "btn btn-primary" %>

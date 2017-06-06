@@ -1,37 +1,33 @@
 <%= form_for(course) do |f| %>
-  <% if course.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(course.errors.count, "error") %> prohibited this course from being saved:</h2>
-
-      <ul>
-      <% course.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
+  <div class="row">
     <%= f.label :title %>
-    <%= f.text_field :title %>
+    <div class="col-xs-4 input-group"><%= f.text_field :title, class: "form-control" %></div>
   </div>
 
-  <div class="field">
+  <div class="row">
     <%= f.label :description %>
-    <%= f.text_area :description %>
+    <div class="col-xs-4 input-group"><%= f.text_area :description, class: "form-control" %></div>
   </div>
 
-  <div class="field">
+  <div class="row">
     <%= f.label :start %>
-    <%= f.datetime_select :start %>
+    <div class="col-xs-4 input-group"><%= f.datetime_select :start, class: "form-control" %></div>
   </div>
 
-  <div class="field">
+  <div class="row">
     <%= f.label :end %>
-    <%= f.datetime_select :end %>
+    <div class="col-xs-4 input-group"><%= f.datetime_select :end, class: "form-control" %></div>
   </div>
 
-  <div class="actions">
+  <div class="row actions">
     <%= f.submit "Save", class: "btn btn-success" %>
+  </div>
+<% end %>
+
+<% if course.errors.any? %>
+  <div class="notice-holder row">
+    <% course.errors.full_messages.each do |message| %>
+      <p class="notice alert alert-danger"><%= message %></p>
+    <% end %>
   </div>
 <% end %>
