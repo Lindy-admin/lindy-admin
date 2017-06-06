@@ -17,7 +17,7 @@
         <td><%= person.firstname %></td>
         <td><%= person.lastname %></td>
         <td><%= person.email %></td>
-        <td><%= person.address %></td>
+        <td><%= truncate(person.address, length: 40)%></td>
         <td><%= link_to 'Show', person %></td>
         <td><%= link_to 'Edit', edit_person_path(person), class:"btn btn-primary" %></td>
         <td><%= link_to 'Destroy', person, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger" %></td>
