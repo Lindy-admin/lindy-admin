@@ -21,19 +21,16 @@
       <th>Firstname</th>
       <th>Lastname</th>
       <th>Role</th>
-      <th colspan="2"></th>
     </tr>
   </thead>
 
   <tbody>
     <% @course.registrations.each do |registration| %>
     <% person = registration.person %>
-      <tr>
+      <tr data-link="<%= url_for(person) %>">
         <td><%= person.firstname %></td>
         <td><%= person.lastname %></td>
         <td><%= role_label(registration.role) %></td>
-        <td><%= link_to 'Show', person %></td>
-        <td><%= link_to 'Edit', edit_person_path(person) %></td>
       </tr>
     <% end %>
   </tbody>

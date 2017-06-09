@@ -16,6 +16,7 @@
 //= require turbolinks
 //= require_tree .
 
+// remove notices after a short while
 window.setTimeout(function()
   {
     var duration = 600;
@@ -27,3 +28,8 @@ window.setTimeout(function()
   },
 4000
 );
+
+// make table rows clickable
+$("tr[data-link]").click(function() {
+  window.location = $(this).data("link");
+})

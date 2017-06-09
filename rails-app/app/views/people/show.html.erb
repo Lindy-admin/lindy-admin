@@ -21,21 +21,18 @@
       <th>Start</th>
       <th>End</th>
       <th>Role</th>
-      <th colspan="2"></th>
     </tr>
   </thead>
 
   <tbody>
     <% @person.registrations.each do |registration| %>
     <% course = registration.course %>
-      <tr>
+      <tr data-link="<%= url_for(course) %>">
         <td><%= course.title %></td>
         <td><%= truncate(course.description, length: 40) %></td>
         <td><%= course.start %></td>
         <td><%= course.end %></td>
         <td><%= role_label(registration.role) %></td>
-        <td><%= link_to 'Show', course %></td>
-        <td><%= link_to 'Edit', edit_course_path(course), class:"btn btn-primary" %></td>
       </tr>
     <% end %>
   </tbody>
