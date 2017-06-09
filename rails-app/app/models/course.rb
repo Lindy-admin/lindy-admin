@@ -6,4 +6,14 @@ class Course < ApplicationRecord
   validates :start, presence: true
   validates :end, presence: true
 
+  def register(person)
+    ActiveRecord::Base.transaction do
+      person.save!
+      participants << person
+      save!
+      return true
+    end
+    return false
+  end
+
 end
