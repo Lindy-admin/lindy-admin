@@ -9,12 +9,19 @@ class RegistrationsController < ApplicationController
   # POST /registrations.json
   def create
     @person = Person.find_or_initialize_by(email: params[:email])
-    @person.update_attributes(person_params)
     @course = Course.find(params[:course])
     role = params[:role]
 
+    if Registration.exists?(person_id: @person.id, course_id: @course.id)
+      respond_to do |format|
+        format.html { redirect_to @person, notice: 'Person is already registered for this course' }
+        format.json { render :show, status: :conflict, location: @person }
+      end
+      return
+    end
+
     respond_to do |format|
-      if @course.register(@person, role)
+      if @course.register(@person, person_params, role)
         format.html { redirect_to @person, notice: 'Person was successfully registered.' }
         format.json { render :show, status: :created, location: @person }
       else

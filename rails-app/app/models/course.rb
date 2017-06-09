@@ -6,8 +6,9 @@ class Course < ApplicationRecord
   validates :start, presence: true
   validates :end, presence: true
 
-  def register(person, role)
+  def register(person, person_params, role)
     ActiveRecord::Base.transaction do
+      person.update_attributes(person_params)
       person.save!
       Registration.create!(person_id: person.id, course_id: self.id, role: role)
       return true
