@@ -21,7 +21,7 @@
       <th>Start</th>
       <th>End</th>
       <th>Role</th>
-      <th colspan="1"></th>
+      <th colspan="2"></th>
     </tr>
   </thead>
 
@@ -33,6 +33,7 @@
         <td><%= course.start %></td>
         <td><%= course.end %></td>
         <td><%= role_label(registration.role) %></td>
+        <td><%= link_to 'Switch Role', switch_role_path(registration), method: :post, class:"btn btn-primary" %></td>
         <td><%= link_to 'Remove', registration, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger" %></td>
       </tr>
     <% end %>

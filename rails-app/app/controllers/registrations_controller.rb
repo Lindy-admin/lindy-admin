@@ -1,5 +1,5 @@
 class RegistrationsController < ApplicationController
-  before_action :set_registration, only: [:destroy]
+  before_action :set_registration, only: [:destroy, :switch_role]
 
   # GET /registrations/new
   def new
@@ -37,6 +37,19 @@ class RegistrationsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to :back, notice: 'Registration was successfully removed.' }
       format.json { head :no_content }
+    end
+  end
+
+  def switch_role
+    new_role = !@registration.role
+    respond_to do |format|
+      if @registration.update(role: new_role)
+        format.html { redirect_to :back, notice: "Role was switched." }
+        format.json { render :show, status: :ok, location: @person }
+      else
+        format.html { render :edit }
+        format.json { render json: @person.errors, status: :unprocessable_entity }
+      end
     end
   end
 
