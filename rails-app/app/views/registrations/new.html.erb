@@ -7,6 +7,11 @@
   </div>
 
   <div class="row">
+    <%= label_tag :role %>
+    <div class="col-xs-4 input-group"><%= select_tag :role, options_for_select([["Lead", "true"], ["Follow", "false"]]), class: "form-control" %></div>
+  </div>
+
+  <div class="row">
     <%= label_tag :firstname %>
     <div class="col-xs-4 input-group"><%= text_field_tag :firstname, nil, class: "form-control" %></div>
   </div>

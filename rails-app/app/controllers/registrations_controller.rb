@@ -11,9 +11,10 @@ class RegistrationsController < ApplicationController
     @person = Person.find_or_initialize_by(email: params[:email])
     @person.update_attributes(person_params)
     @course = Course.find(params[:course])
+    role = params[:role]
 
     respond_to do |format|
-      if @course.register(@person)
+      if @course.register(@person, role)
         format.html { redirect_to @person, notice: 'Person was successfully registered.' }
         format.json { render :show, status: :created, location: @person }
       else
