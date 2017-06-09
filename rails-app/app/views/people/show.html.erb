@@ -11,3 +11,29 @@
   <%= @person.address %>
 </p>
 <%= link_to 'Edit', edit_person_path(@person), class: "btn btn-primary" %>
+
+<h2>Courses</h2>
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Start</th>
+      <th>End</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @person.courses.each do |course| %>
+      <tr>
+        <td><%= course.title %></td>
+        <td><%= truncate(course.description, length: 40) %></td>
+        <td><%= course.start %></td>
+        <td><%= course.end %></td>
+        <td><%= link_to 'Show', course %></td>
+        <td><%= link_to 'Edit', edit_course_path(course), class:"btn btn-primary" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
