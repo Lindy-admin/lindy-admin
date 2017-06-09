@@ -6,6 +6,13 @@ class Course < ApplicationRecord
   validates :start, presence: true
   validates :end, presence: true
 
+  def leads
+    registrations.where(role: true).count
+  end
+  def follows
+    registrations.where(role: false).count
+  end
+
   def register(person, person_params, role)
     ActiveRecord::Base.transaction do
       person.update_attributes(person_params)
