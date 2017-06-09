@@ -15,8 +15,8 @@ ActiveRecord::Schema.define(version: 20170609151705) do
   create_table "courses", force: :cascade do |t|
     t.string   "title",       null: false
     t.text     "description", null: false
-    t.datetime "start",       null: false
-    t.datetime "end",         null: false
+    t.date     "start",       null: false
+    t.date     "end",         null: false
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
