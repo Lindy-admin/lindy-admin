@@ -17,10 +17,10 @@
   <thead>
     <tr>
       <th>Title</th>
-      <th>Description</th>
       <th>Start</th>
       <th>End</th>
       <th>Role</th>
+      <th colspan="1"></th>
     </tr>
   </thead>
 
@@ -29,10 +29,10 @@
     <% course = registration.course %>
       <tr data-link="<%= url_for(course) %>">
         <td><%= course.title %></td>
-        <td><%= truncate(course.description, length: 40) %></td>
         <td><%= course.start %></td>
         <td><%= course.end %></td>
         <td><%= role_label(registration.role) %></td>
+        <td><%= link_to 'Remove', registration, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger" %></td>
       </tr>
     <% end %>
   </tbody>

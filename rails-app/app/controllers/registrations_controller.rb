@@ -1,4 +1,5 @@
 class RegistrationsController < ApplicationController
+  before_action :set_registration, only: [:destroy]
 
   # GET /registrations/new
   def new
@@ -31,7 +32,20 @@ class RegistrationsController < ApplicationController
     end
   end
 
+  def destroy
+    @registration.destroy
+    respond_to do |format|
+      format.html { redirect_to :back, notice: 'Registration was successfully removed.' }
+      format.json { head :no_content }
+    end
+  end
+
   private
+  # Use callbacks to share common setup or constraints between actions.
+  def set_registration
+    @registration = Registration.find(params[:id])
+  end
+
   def person_params
     params.permit(:firstname, :lastname, :email, :address)
   end
