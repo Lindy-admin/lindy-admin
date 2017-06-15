@@ -2,19 +2,13 @@ version: '2'
 services:
 
   app:
-    build:
-      context: ..
-      dockerfile: deployment/app/Dockerfile
     image: todorus/lindy-admin:develop
     ports:
       - "3000"
-    command: rails s
+    command: bash -c "rake db:migrate; rails s"
 
 
   web:
-    build:
-      context: ..
-      dockerfile: deployment/nginx/Dockerfile.dev
     image: todorus/lindy-admin:nginx-dev
     ports:
       - "80:80"
