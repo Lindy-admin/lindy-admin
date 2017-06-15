@@ -1,6 +1,7 @@
 class Course < ApplicationRecord
   has_many :registrations, dependent: :destroy
   has_many :participants, through: :registrations, source: :person
+  has_many :tickets, dependent: :destroy
 
   validates :title, presence: true
   validates :start, presence: true

@@ -15,6 +15,29 @@
 <%= link_to 'Edit', edit_course_path(@course), class:"btn btn-primary" %>
 <%= link_to 'Destroy', @course, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger" %>
 
+<h2>Tickets</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Label</th>
+      <th>Price</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @course.tickets.each do |ticket| %>
+      <tr>
+        <td><%= ticket.label %></td>
+        <td><%= ticket.price %></td>
+        <td><%= link_to 'Edit', edit_course_ticket_path(@course, ticket), class:"btn btn-primary" %></td>
+        <td><%= link_to 'Remove', [@course, ticket], method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= link_to 'Add Ticket', new_course_ticket_path(@course), class: "btn btn-success" %>
+
 <h2>Participants</h2>
 <p>
   <strong>Leads/Follows:</strong>

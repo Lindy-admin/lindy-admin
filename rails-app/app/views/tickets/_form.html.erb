@@ -1,0 +1,29 @@
+<%= form_for([course, ticket]) do |f| %>
+
+  <div class="row">
+    <%= f.label :Course %>
+    <div class="col-xs-4 input-group"><span class="form-control" ><%= @course.title %></span></div>
+  </div>
+
+  <div class="row">
+    <%= f.label :label %>
+    <div class="col-xs-4 input-group"><%= f.text_field :label, class: "form-control" %></div>
+  </div>
+
+  <div class="row">
+    <%= f.label :price %>
+    <div class="col-xs-4 input-group"><div class="input-group-addon"><%= currency_symbol %></div><%= f.number_field :price, step: :any, class: "form-control" %></div>
+  </div>
+
+  <div class="row actions">
+    <%= f.submit "Save", class: "btn btn-success" %>
+  </div>
+<% end %>
+
+<% if ticket.errors.any? %>
+  <div class="notice-holder row">
+    <% ticket.errors.full_messages.each do |message| %>
+      <p class="notice alert alert-danger"><%= message %></p>
+    <% end %>
+  </div>
+<% end %>
