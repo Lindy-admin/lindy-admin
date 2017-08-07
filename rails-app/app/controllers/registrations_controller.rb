@@ -11,6 +11,7 @@ class RegistrationsController < ApplicationController
   def create
     @person = Person.find_or_initialize_by(email: params[:email])
     @course = Course.find(params[:course])
+    @ticket = @course.tickets.find(params[:ticket])
     role = params[:role]
 
     if Registration.exists?(person_id: @person.id, course_id: @course.id)
