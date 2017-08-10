@@ -7,13 +7,27 @@ services:
       dockerfile: deployment/app/Dockerfile
     image: todorus/lindy-admin:develop
     ports:
-      - "3000"
+      - 3000
     volumes:
       - ../rails-app:/rails-app
+    depends_on:
+      - storage
+    links:
+      - storage:storage
     stdin_open: true
     tty: true
     command: /bin/bash
 
+  storage:
+   image: postgres:9.6.3
+   environment:
+     - POSTGRES_USER=lindy
+     - POSTGRES_DB=lindy
+     - POSTGRES_PASSWORD=mysecretpassword
+   volumes:
+     - ../data/storage:/var/lib/postgresql/data
+   ports:
+     - 5432
 
   web:
     build:
@@ -21,7 +35,7 @@ services:
       dockerfile: deployment/nginx/Dockerfile.dev
     image: todorus/lindy-admin:nginx-dev
     ports:
-      - "80:80"
+      - 80:80
     depends_on:
       - app
     links:

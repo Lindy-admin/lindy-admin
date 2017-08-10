@@ -12,6 +12,9 @@
 
 ActiveRecord::Schema.define(version: 20170615214506) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "courses", force: :cascade do |t|
     t.string   "title",       null: false
     t.text     "description", null: false
@@ -28,7 +31,7 @@ ActiveRecord::Schema.define(version: 20170615214506) do
     t.string   "address"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["email"], name: "index_people_on_email", unique: true
+    t.index ["email"], name: "index_people_on_email", unique: true, using: :btree
   end
 
   create_table "registrations", force: :cascade do |t|
@@ -38,10 +41,10 @@ ActiveRecord::Schema.define(version: 20170615214506) do
     t.datetime "updated_at",                 null: false
     t.boolean  "role",       default: false, null: false
     t.integer  "ticket_id"
-    t.index ["course_id"], name: "index_registrations_on_course_id"
-    t.index ["person_id", "course_id"], name: "index_registrations_on_person_id_and_course_id", unique: true
-    t.index ["person_id"], name: "index_registrations_on_person_id"
-    t.index ["ticket_id"], name: "index_registrations_on_ticket_id"
+    t.index ["course_id"], name: "index_registrations_on_course_id", using: :btree
+    t.index ["person_id", "course_id"], name: "index_registrations_on_person_id_and_course_id", unique: true, using: :btree
+    t.index ["person_id"], name: "index_registrations_on_person_id", using: :btree
+    t.index ["ticket_id"], name: "index_registrations_on_ticket_id", using: :btree
   end
 
   create_table "tickets", force: :cascade do |t|
@@ -51,7 +54,11 @@ ActiveRecord::Schema.define(version: 20170615214506) do
     t.string   "price_currency", default: "EUR", null: false
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
-    t.index ["course_id"], name: "index_tickets_on_course_id"
+    t.index ["course_id"], name: "index_tickets_on_course_id", using: :btree
   end
 
+  add_foreign_key "registrations", "courses"
+  add_foreign_key "registrations", "people"
+  add_foreign_key "registrations", "tickets"
+  add_foreign_key "tickets", "courses"
 end
