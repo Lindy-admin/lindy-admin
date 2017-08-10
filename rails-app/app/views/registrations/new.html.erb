@@ -1,6 +1,8 @@
 <div class="row"><h1>Register</h1></div>
 <%= form_tag(controller: "registrations", action:"create", method:"post") do |f| %>
 
+  <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+
   <div class="row">
     <%= label_tag :course %>
     <div class="col-xs-4 input-group"><%= select_tag :course, options_from_collection_for_select(@courses, :id, :title ), class: "form-control" %></div>

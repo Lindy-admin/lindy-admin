@@ -1,4 +1,7 @@
 <%= form_for(course) do |f| %>
+
+  <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+
   <div class="row">
     <%= f.label :title %>
     <div class="col-xs-4 input-group"><%= f.text_field :title, class: "form-control" %></div>
