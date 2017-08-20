@@ -14,7 +14,6 @@
 //= require jquery_ujs
 //= require bootstrap.min
 //= require turbolinks
-//= require_tree .
 
 // remove notices after a short while
 window.setTimeout(function()
