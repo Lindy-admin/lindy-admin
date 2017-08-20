@@ -37,3 +37,8 @@
  tr {
    cursor: pointer;
  }
+ nav.pagination {
+   display: block;
+   text-align: center;
+   margin: 0 auto;
+ }
