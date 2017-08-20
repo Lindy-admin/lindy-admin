@@ -23,7 +23,7 @@ class RegistrationsController < ApplicationController
     end
 
     respond_to do |format|
-      if @course.register(@person, person_params, role)
+      if @course.register(@person, person_params, role, @ticket)
         format.html { redirect_to @person, notice: 'Person was successfully registered.' }
         format.json { render :show, status: :created, location: @person }
       else

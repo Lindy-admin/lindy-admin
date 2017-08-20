@@ -38,7 +38,7 @@
 </table>
 <%= link_to 'Add Ticket', new_course_ticket_path(@course), class: "btn btn-success" %>
 
-<h2>Participants</h2>
+<h2>Registrations</h2>
 <p>
   <strong>Leads/Follows:</strong>
   <%= "#{@course.leads} / #{@course.follows}" %>
@@ -49,6 +49,7 @@
       <th>Firstname</th>
       <th>Lastname</th>
       <th>Role</th>
+      <th>Ticket</th>
       <th colspan="2"></th>
     </tr>
   </thead>
@@ -60,6 +61,7 @@
         <td><%= person.firstname %></td>
         <td><%= person.lastname %></td>
         <td><%= role_label(registration.role) %></td>
+        <td><%= registration.ticket.label %></td>
         <td><%= link_to 'Switch Role', switch_role_path(registration), method: :post, class:"btn btn-primary" %></td>
         <td><%= link_to 'Remove', registration, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger" %></td>
       </tr>

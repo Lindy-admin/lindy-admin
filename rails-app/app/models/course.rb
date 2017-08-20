@@ -14,11 +14,11 @@ class Course < ApplicationRecord
     registrations.where(role: false).count
   end
 
-  def register(person, person_params, role)
+  def register(person, person_params, role, ticket)
     ActiveRecord::Base.transaction do
       person.update_attributes(person_params)
       person.save!
-      Registration.create!(person_id: person.id, course_id: self.id, role: role)
+      Registration.create!(person_id: person.id, course_id: self.id, role: role, ticket: ticket)
       return true
     end
     return false

@@ -2,6 +2,11 @@ class TicketsController < ApplicationController
   before_action :set_ticket, only: [:edit, :update, :destroy]
   before_action :set_course
 
+  # GET /tickets
+  # GET /tickets.json
+  def index
+    @tickets = @course.tickets
+  end
 
   # GET /tickets/new
   def new
