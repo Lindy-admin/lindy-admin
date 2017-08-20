@@ -21,16 +21,15 @@
     <tr>
       <th>Label</th>
       <th>Price</th>
-      <th colspan="2"></th>
+      <th colspan="1"></th>
     </tr>
   </thead>
 
   <tbody>
     <% @course.tickets.each do |ticket| %>
-      <tr>
+      <tr data-link="<%= edit_course_ticket_path(@course, ticket) %>">
         <td><%= ticket.label %></td>
         <td><%= ticket.price %></td>
-        <td><%= link_to 'Edit', edit_course_ticket_path(@course, ticket), class:"btn btn-primary" %></td>
         <td><%= link_to 'Remove', [@course, ticket], method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger" %></td>
       </tr>
     <% end %>
