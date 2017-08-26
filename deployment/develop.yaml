@@ -1,4 +1,4 @@
-version: '2'
+version: '3.1'
 services:
 
   app:
@@ -19,24 +19,40 @@ services:
     command: /bin/bash
 
   storage:
-   image: postgres:9.6.3
-   environment:
-     - POSTGRES_USER=lindy
-     - POSTGRES_DB=lindy
-     - POSTGRES_PASSWORD=mysecretpassword
-   volumes:
-     - ../data/storage:/var/lib/postgresql/data
-   ports:
-     - 5432
-
-  web:
-    build:
-      context: ..
-      dockerfile: deployment/nginx/Dockerfile.dev
-    image: todorus/lindy-admin:nginx-dev
+    image: postgres:9.6.3
+    environment:
+       POSTGRES_USER: lindy
+       POSTGRES_DB: lindy
+       POSTGRES_PASSWORD: mysecretpassword
+    volumes:
+      - ../data/storage:/var/lib/postgresql/data
     ports:
-      - 80:80
+      - 5432
+
+  wordpress:
+    image: wordpress
+    environment:
+      WORDPRESS_DB_PASSWORD: example
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+
+  https-portal:
+    image: steveltn/https-portal:1
+    ports:
+      - '80:80'
+      - '443:443'
     depends_on:
+      - wordpress
       - app
     links:
-      - app:app
+      - wordpress
+      - app
+    restart: always
+    environment:
+      DOMAINS: 'lindy.dev -> http://wordpress:80, admin.dev -> http://app:3000'
+      STAGE: local
+      # STAGE: 'production'
+      # FORCE_RENEW: 'true'
