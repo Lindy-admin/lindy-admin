@@ -29,6 +29,6 @@ window.setTimeout(function()
 );
 
 // make table rows clickable
-$("tr[data-link]").click(function() {
+$("[data-link]").click(function() {
   window.location = $(this).data("link");
 })

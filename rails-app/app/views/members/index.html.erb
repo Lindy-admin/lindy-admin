@@ -1,0 +1,29 @@
+<h1>Members</h1>
+
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th><%=sortable "firstname" %></th>
+      <th><%=sortable "lastname" %></th>
+      <th><%=sortable "email" %></th>
+      <th><%=sortable "address" %></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @members.each do |member| %>
+      <tr data-link="<%= url_for(member) %>">
+        <td ><%= member.firstname %></td>
+        <td ><%= member.lastname %></td>
+        <td ><%= member.email %></td>
+        <td ><%= truncate(member.address, length: 40)%></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= paginate @members %>
+
+<br>
+
+<%= link_to 'New Member', new_member_path, class: "btn btn-success" %>

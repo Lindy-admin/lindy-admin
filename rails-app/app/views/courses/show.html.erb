@@ -55,10 +55,10 @@
 
   <tbody>
     <% @course.registrations.each do |registration| %>
-    <% person = registration.person %>
-      <tr data-link="<%= url_for(person) %>">
-        <td><%= person.firstname %></td>
-        <td><%= person.lastname %></td>
+    <% member = registration.member %>
+      <tr data-link="<%= url_for(member) %>">
+        <td><%= member.firstname %></td>
+        <td><%= member.lastname %></td>
         <td><%= role_label(registration.role) %></td>
         <td><%= registration.ticket.label %></td>
         <td><%= link_to 'Switch Role', switch_role_path(registration), method: :post, class:"btn btn-primary" %></td>

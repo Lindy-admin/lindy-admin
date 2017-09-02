@@ -1,5 +1,5 @@
 namespace :lindy do
-  desc "Adds people and registers them to courses"
+  desc "Adds members and registers them to courses"
   task seed: :environment do
     Course.all.each do |course|
       print "seeding #{course.title}\n"
@@ -8,11 +8,11 @@ namespace :lindy do
         space = name.index(" ")
         firstname = name[0..space-1]
         lastname = name[space+1..-1]
-        person = Person.create!({firstname: firstname, lastname: lastname, email: Faker::Internet.email, address: Faker::Address.street_address})
+        member = Member.create!({firstname: firstname, lastname: lastname, email: Faker::Internet.email, address: Faker::Address.street_address})
 
         registration = Registration.new
         registration.course = course
-        registration.person = person
+        registration.member = member
         registration.ticket = course.tickets.sample
         registration.role = [true, false].sample
         registration.save!

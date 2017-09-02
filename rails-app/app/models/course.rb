@@ -1,6 +1,6 @@
 class Course < ApplicationRecord
   has_many :registrations, dependent: :destroy
-  has_many :participants, through: :registrations, source: :person
+  has_many :participants, through: :registrations, source: :member
   has_many :tickets, dependent: :destroy
 
   validates :title, presence: true
@@ -14,11 +14,11 @@ class Course < ApplicationRecord
     registrations.where(role: false).count
   end
 
-  def register(person, person_params, role, ticket)
+  def register(member, member_params, role, ticket)
     ActiveRecord::Base.transaction do
-      person.update_attributes(person_params)
-      person.save!
-      Registration.create!(person_id: person.id, course_id: self.id, role: role, ticket: ticket)
+      member.update_attributes(member_params)
+      member.save!
+      Registration.create!(member_id: member.id, course_id: self.id, role: role, ticket: ticket)
       return true
     end
     return false

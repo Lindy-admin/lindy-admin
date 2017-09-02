@@ -1,10 +1,10 @@
 Rails.application.routes.draw do
 
-  root to: "people#index"
+  root to: "members#index"
   resources :courses do |r|
     resources :tickets
   end
-  resources :people
+  resources :members
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   get 'registrations', to: 'registrations#new', as: 'register'

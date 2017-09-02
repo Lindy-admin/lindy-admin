@@ -9,26 +9,26 @@ class RegistrationsController < ApplicationController
   # POST /registrations
   # POST /registrations.json
   def create
-    @person = Person.find_or_initialize_by(email: params[:email])
+    @member = Member.find_or_initialize_by(email: params[:email])
     @course = Course.find(params[:course])
     @ticket = @course.tickets.find(params[:ticket])
     role = params[:role]
 
-    if Registration.exists?(person_id: @person.id, course_id: @course.id)
+    if Registration.exists?(member_id: @member.id, course_id: @course.id)
       respond_to do |format|
-        format.html { redirect_to @person, notice: 'Person is already registered for this course' }
-        format.json { render :show, status: :conflict, location: @person }
+        format.html { redirect_to @member, notice: 'Member is already registered for this course' }
+        format.json { render :show, status: :conflict, location: @member }
       end
       return
     end
 
     respond_to do |format|
-      if @course.register(@person, person_params, role, @ticket)
-        format.html { redirect_to @person, notice: 'Person was successfully registered.' }
-        format.json { render :show, status: :created, location: @person }
+      if @course.register(@member, member_params, role, @ticket)
+        format.html { redirect_to @member, notice: 'Member was successfully registered.' }
+        format.json { render :show, status: :created, location: @member }
       else
         format.html { render :new }
-        format.json { render json: @person.errors, status: :unprocessable_entity }
+        format.json { render json: @member.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -46,10 +46,10 @@ class RegistrationsController < ApplicationController
     respond_to do |format|
       if @registration.update(role: new_role)
         format.html { redirect_to :back, notice: "Role was switched." }
-        format.json { render :show, status: :ok, location: @person }
+        format.json { render :show, status: :ok, location: @member }
       else
         format.html { render :edit }
-        format.json { render json: @person.errors, status: :unprocessable_entity }
+        format.json { render json: @member.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -60,7 +60,7 @@ class RegistrationsController < ApplicationController
     @registration = Registration.find(params[:id])
   end
 
-  def person_params
+  def member_params
     params.permit(:firstname, :lastname, :email, :address)
   end
 

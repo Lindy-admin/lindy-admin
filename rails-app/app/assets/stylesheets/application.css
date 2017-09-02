@@ -13,32 +13,34 @@
  *= require bootstrap.min
  */
 
- .notice-holder {
-   position: absolute;
-   top: 42px;
-   width: 100%;
-   z-index: 100;
-   pointer-events: none;
- }
+input[type=submit] {
+ margin-top: 50px;
+}
+tr {
+ cursor: pointer;
+}
+nav.pagination {
+ display: block;
+ text-align: center;
+ margin: 0 auto;
+}
+.container {
+  margin-bottom: 50px;
+}
+.notice-holder {
+ position: absolute;
+ top: 42px;
+ width: 100%;
+ z-index: 100;
+ pointer-events: none;
+}
 
- .notice {
-   width: 800px;
-   max-width: 100%;
-   margin-left: auto;
-   margin-right: auto;
- }
- .notice.alert {
-   margin-bottom: 1px;
- }
-
- input[type=submit] {
-   margin-top: 50px;
- }
- tr {
-   cursor: pointer;
- }
- nav.pagination {
-   display: block;
-   text-align: center;
-   margin: 0 auto;
- }
+.notice {
+ width: 800px;
+ max-width: 100%;
+ margin-left: auto;
+ margin-right: auto;
+}
+.notice.alert {
+ margin-bottom: 1px;
+}

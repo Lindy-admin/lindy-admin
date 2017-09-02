@@ -24,26 +24,26 @@ ActiveRecord::Schema.define(version: 20170615214506) do
     t.datetime "updated_at",  null: false
   end
 
-  create_table "people", force: :cascade do |t|
+  create_table "members", force: :cascade do |t|
     t.string   "firstname",  null: false
     t.string   "lastname",   null: false
     t.string   "email",      null: false
     t.string   "address"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["email"], name: "index_people_on_email", unique: true, using: :btree
+    t.index ["email"], name: "index_members_on_email", unique: true, using: :btree
   end
 
   create_table "registrations", force: :cascade do |t|
-    t.integer  "person_id"
+    t.integer  "member_id"
     t.integer  "course_id"
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
     t.boolean  "role",       default: false, null: false
     t.integer  "ticket_id"
     t.index ["course_id"], name: "index_registrations_on_course_id", using: :btree
-    t.index ["person_id", "course_id"], name: "index_registrations_on_person_id_and_course_id", unique: true, using: :btree
-    t.index ["person_id"], name: "index_registrations_on_person_id", using: :btree
+    t.index ["member_id", "course_id"], name: "index_registrations_on_member_id_and_course_id", unique: true, using: :btree
+    t.index ["member_id"], name: "index_registrations_on_member_id", using: :btree
     t.index ["ticket_id"], name: "index_registrations_on_ticket_id", using: :btree
   end
 
@@ -58,7 +58,7 @@ ActiveRecord::Schema.define(version: 20170615214506) do
   end
 
   add_foreign_key "registrations", "courses"
-  add_foreign_key "registrations", "people"
+  add_foreign_key "registrations", "members"
   add_foreign_key "registrations", "tickets"
   add_foreign_key "tickets", "courses"
 end

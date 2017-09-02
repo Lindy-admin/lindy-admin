@@ -1,4 +1,4 @@
-class Person < ApplicationRecord
+class Member < ApplicationRecord
   has_many :registrations, dependent: :destroy
   has_many :courses, through: :registrations
 
