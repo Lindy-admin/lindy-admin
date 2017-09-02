@@ -22,8 +22,16 @@
   </tbody>
 </table>
 
-<%= paginate @members %>
+<div class="row">
+  <%= paginate @members %>
+</div>
 
-<br>
+<div class="row">
+  <%= link_to 'New Member', new_member_path, class: "btn btn-success" %>
+</div>
 
-<%= link_to 'New Member', new_member_path, class: "btn btn-success" %>
+<div class="row">
+  <h2>Export</h2>
+  <%= link_to 'CSV', members_path(format: "csv"), class: "btn btn-info" %>
+  <%= link_to 'Excel', members_path(format: "xls"), class: "btn btn-success" %>
+</div>

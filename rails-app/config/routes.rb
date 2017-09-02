@@ -1,11 +1,13 @@
 Rails.application.routes.draw do
 
   root to: "members#index"
+
   resources :courses do |r|
     resources :tickets
   end
+
+  get 'members/courses/:id', to: 'members#course', as: 'members_course'
   resources :members
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   get 'registrations', to: 'registrations#new', as: 'register'
   post 'registrations', to: 'registrations#create'

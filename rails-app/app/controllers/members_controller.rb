@@ -1,11 +1,18 @@
 class MembersController < ApplicationController
   before_action :set_member, only: [:show, :edit, :update, :destroy]
+  before_action :set_course, only: [:course]
   helper_method :sort_column, :sort_direction
 
   # GET /members
   # GET /members.json
   def index
     @members = Member.all.order(sort_column + " " + sort_direction).page(params[:page])
+
+    respond_to do |format|
+      format.html
+      format.csv { send_data Member.to_csv(@members), filename: "Members.csv" }
+      format.xls { send_data Member.to_csv(@members, col_sep: "\t"), filename: "Members.xls" }
+    end
   end
 
   # GET /members/1
@@ -62,8 +69,14 @@ class MembersController < ApplicationController
     end
   end
 
-  def export
+  def course
+    members = @course.participants.order(sort_column + " " + sort_direction).page(params[:page])
 
+    respond_to do |format|
+      format.html
+      format.csv { send_data Member.to_csv(members), filename: "#{@course.title}_participants.csv" }
+      format.xls { send_data Member.to_csv(members, col_sep: "\t"), filename: "#{@course.title}_participants.xls" }
+    end
   end
 
   private
@@ -83,5 +96,10 @@ class MembersController < ApplicationController
 
     def sort_direction
       %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+    end
+
+    # Use callbacks to share common setup or constraints between actions.
+    def set_course
+      @course = Course.find(params[:id])
     end
 end

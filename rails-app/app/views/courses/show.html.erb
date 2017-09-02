@@ -67,3 +67,9 @@
     <% end %>
   </tbody>
 </table>
+
+<div class="row">
+  <h2>Export</h2>
+  <%= link_to 'CSV', members_course_path(@course, format: "csv"), class: "btn btn-info" %>
+  <%= link_to 'Excel', members_course_path(@course, format: "xls"), class: "btn btn-success" %>
+</div>
