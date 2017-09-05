@@ -18,7 +18,11 @@ class Course < ApplicationRecord
     ActiveRecord::Base.transaction do
       member.update_attributes(member_params)
       member.save!
-      Registration.create!(member_id: member.id, course_id: self.id, role: role, ticket: ticket)
+
+      registration = Registration.new(member_id: member.id, course_id: self.id, role: role, ticket: ticket)
+      registration.build_payment(registration: registration)
+      registration.save!
+      
       return true
     end
     return false

@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ticket: one
+  remote_id: MyString
+  status: 
+
+two:
+  ticket: two
+  remote_id: MyString
+  status: 
