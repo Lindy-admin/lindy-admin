@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170615214506) do
+ActiveRecord::Schema.define(version: 20170905193353) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,15 @@ ActiveRecord::Schema.define(version: 20170615214506) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_members_on_email", unique: true, using: :btree
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.integer  "registration_id"
+    t.string   "remote_id"
+    t.integer  "status",          default: 0
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.index ["registration_id"], name: "index_payments_on_registration_id", using: :btree
   end
 
   create_table "registrations", force: :cascade do |t|
@@ -57,8 +66,9 @@ ActiveRecord::Schema.define(version: 20170615214506) do
     t.index ["course_id"], name: "index_tickets_on_course_id", using: :btree
   end
 
-  add_foreign_key "registrations", "courses"
-  add_foreign_key "registrations", "members"
-  add_foreign_key "registrations", "tickets"
-  add_foreign_key "tickets", "courses"
+  add_foreign_key "payments", "registrations", on_delete: :cascade
+  add_foreign_key "registrations", "courses", on_delete: :cascade
+  add_foreign_key "registrations", "members", on_delete: :cascade
+  add_foreign_key "registrations", "tickets", on_delete: :cascade
+  add_foreign_key "tickets", "courses", on_delete: :cascade
 end
