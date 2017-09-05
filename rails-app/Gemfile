@@ -23,6 +23,7 @@ gem 'coffee-rails', '~> 4.2'
 
 gem 'pg', '~> 0.18.4'
 gem 'kaminari', '~> 0.17.0'
+gem 'mollie-api-ruby', '~> 2.2.0'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
