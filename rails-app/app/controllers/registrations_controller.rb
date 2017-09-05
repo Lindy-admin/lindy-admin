@@ -1,4 +1,5 @@
 class RegistrationsController < ApplicationController
+  
   before_action :set_registration, only: [:destroy, :switch_role]
 
   # GET /registrations/new
@@ -23,8 +24,23 @@ class RegistrationsController < ApplicationController
     end
 
     respond_to do |format|
-      if @course.register(@member, member_params, role, @ticket)
-        format.html { redirect_to @member, notice: 'Member was successfully registered.' }
+      registration = @course.register(@member, member_params, role, @ticket)
+      payment = registration.payment
+
+      mollie = Mollie::API::Client.new(Rails.application.secrets.mollie_api_key)
+      mollie_payment = mollie.payments.create(
+        amount:       registration.ticket.price,
+        description:  registration.course.title,
+        redirect_url: "https://admin.dev/payments/#{payment.id}",
+        webhook_url:  "https://webshop.example.org/mollie-webhook/"
+      )
+
+      payment.remote_id = mollie_payment.id
+      payment.payment_url = mollie_payment.payment_url
+      payment.save!
+
+      if payment
+        format.html { redirect_to payment.payment_url }
         format.json { render :show, status: :created, location: @member }
       else
         format.html { render :new }

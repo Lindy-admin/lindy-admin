@@ -81,6 +81,7 @@ GEM
     mime-types-data (3.2016.0521)
     mini_portile2 (2.1.0)
     minitest (5.10.2)
+    mollie-api-ruby (2.2.0)
     monetize (1.6.0)
       money (~> 6.8)
     money (6.8.4)
@@ -178,6 +179,7 @@ DEPENDENCIES
   jquery-rails
   kaminari (~> 0.17.0)
   listen (~> 3.0.5)
+  mollie-api-ruby (~> 2.2.0)
   money-rails (~> 1)
   pg (~> 0.18.4)
   puma (~> 3.0)
@@ -192,4 +194,4 @@ DEPENDENCIES
   web-console (>= 3.3.0)
 
 BUNDLED WITH
-   1.15.3
+   1.15.4

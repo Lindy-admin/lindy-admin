@@ -22,8 +22,8 @@ class Course < ApplicationRecord
       registration = Registration.new(member_id: member.id, course_id: self.id, role: role, ticket: ticket)
       registration.build_payment(registration: registration)
       registration.save!
-      
-      return true
+
+      return registration
     end
     return false
   end

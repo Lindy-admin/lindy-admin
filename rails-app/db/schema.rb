@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 20170905193353) do
   create_table "payments", force: :cascade do |t|
     t.integer  "registration_id"
     t.string   "remote_id"
+    t.string   "payment_url"
     t.integer  "status",          default: 0
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
