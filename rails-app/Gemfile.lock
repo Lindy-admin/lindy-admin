@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/mollie/mollie-api-ruby.git
+  revision: cac8b50d06057e9dff0d5b857b7df6033a920e21
+  tag: v2.2.1
+  specs:
+    mollie-api-ruby (2.2.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -81,7 +88,6 @@ GEM
     mime-types-data (3.2016.0521)
     mini_portile2 (2.1.0)
     minitest (5.10.2)
-    mollie-api-ruby (2.2.0)
     monetize (1.6.0)
       money (~> 6.8)
     money (6.8.4)
@@ -179,7 +185,7 @@ DEPENDENCIES
   jquery-rails
   kaminari (~> 0.17.0)
   listen (~> 3.0.5)
-  mollie-api-ruby (~> 2.2.0)
+  mollie-api-ruby!
   money-rails (~> 1)
   pg (~> 0.18.4)
   puma (~> 3.0)

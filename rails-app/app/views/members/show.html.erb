@@ -36,7 +36,7 @@
         <td><%= course.end %></td>
         <td><%= role_label(registration.role) %></td>
         <td><%= registration.ticket.label %></td>
-        <td><%= payment_status_label(registration.payment.status) %></td>
+        <td><%= registration.payment.status %></td>
         <td><%= link_to 'Switch Role', switch_role_path(registration), method: :post, class:"btn btn-primary" %></td>
         <td><%= link_to 'Remove', registration, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger" %></td>
       </tr>
