@@ -4,8 +4,8 @@ class Payment < ApplicationRecord
   enum status: {
     created: 0,
     submitted: 1,
-    completed: 2,
-    failed: 3
+    paid: 2,
+    aborted: 3
   }
 
   after_create :submit_to_payment_provider
