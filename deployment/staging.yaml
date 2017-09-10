@@ -1,10 +1,19 @@
-version: '2'
+version: '3.1'
 services:
 
   app:
     image: todorus/lindy-admin:develop
+    environment:
+      SECRET_KEY_BASE: TODO
+      MOLLIE_API_KEY: TODO
     ports:
       - 3000
+      - 80
+      - 443
+    deploy:
+      restart_policy:
+        condition: any
+        window: 5s
     depends_on:
       - storage
     links:
@@ -14,19 +23,31 @@ services:
   storage:
     image: postgres:9.6.3
     environment:
-      - POSTGRES_USER=lindy
-      - POSTGRES_DB=lindy
-      - POSTGRES_PASSWORD=mysecretpassword
+      POSTGRES_USER: lindy
+      POSTGRES_DB: lindy
+      POSTGRES_PASSWORD: mysecretpassword
+    deploy:
+      restart_policy:
+        condition: any
+        window: 5s
     volumes:
       - ../data/storage:/var/lib/postgresql/data
     ports:
       - 5432
 
-  web:
-    image: todorus/lindy-admin:nginx-dev
+  https-portal:
+    image: steveltn/https-portal:1
     ports:
-      - 80:80
+      - '80:80'
+      - '443:443'
     depends_on:
       - app
     links:
-      - app:app
+      - app
+    deploy:
+      restart_policy:
+        condition: any
+        window: 5s
+    environment:
+      DOMAINS: 'lindy.todorus.com -> http://app:3000'
+      STAGE: production

@@ -19,4 +19,4 @@ WORKDIR /rails-app
 RUN bundle
 
 # Run server
-CMD rails s
+CMD rake db:migrate && rails s
