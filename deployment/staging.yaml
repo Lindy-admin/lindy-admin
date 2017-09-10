@@ -4,6 +4,7 @@ services:
   app:
     image: todorus/lindy-admin:develop
     environment:
+      HOST_NAME: TODO
       SECRET_KEY_BASE: TODO
       MOLLIE_API_KEY: TODO
     ports:

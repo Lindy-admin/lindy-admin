@@ -15,8 +15,8 @@ class Payment < ApplicationRecord
     mollie_payment = mollie.payments.create(
       amount:       registration.ticket.price.fractional * 0.01,
       description:  registration.course.title,
-      redirect_url: "https://admin.dev/members/#{self.registration.member.id}",
-      webhook_url:  "https://webshop.example.org/mollie-webhook/"
+      redirect_url: "https://#{Rails.application.config.hostname}/members/#{self.registration.member.id}",
+      webhook_url:  "https://#{Rails.application.config.hostname}/payments/webhook"
     )
 
     self.remote_id = mollie_payment.id

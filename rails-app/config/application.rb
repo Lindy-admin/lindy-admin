@@ -17,5 +17,6 @@ module LindyAdmin
     config.assets.paths << Rails.root.join("app", "assets", "fonts")
     # Enable the asset pipeline
     config.assets.enabled = true
+    config.hostname = ENV["HOST_NAME"]
   end
 end
