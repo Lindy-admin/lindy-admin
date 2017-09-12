@@ -28,7 +28,10 @@ class Payment < ApplicationRecord
 
   def send_welcome_email
     if self.status == "paid" then
-      logger.info("SENDING WELCOME EMAIL")
+      logger.info("SENDING PAYMENT EMAIL")
+      mailing = Mailing.create(registration: self.registration)
+      PaidMailingWorker.perform_async(mailing.id)
     end
   end
+  
 end

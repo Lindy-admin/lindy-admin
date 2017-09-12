@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  registration: one
+  status: 1
+  remote_template_id: MyString
+  arguments: 
+
+two:
+  registration: two
+  status: 1
+  remote_template_id: MyString
+  arguments: 

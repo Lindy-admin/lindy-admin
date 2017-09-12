@@ -15,4 +15,8 @@ Rails.application.routes.draw do
   post 'registration/:id/switch_role', to: 'registrations#switch_role', as: 'switch_role'
 
   post 'payments/webhook', to: 'payments#webhook'
+
+  require 'sidekiq/web'
+
+  mount Sidekiq::Web, at: "/sidekiq"
 end
