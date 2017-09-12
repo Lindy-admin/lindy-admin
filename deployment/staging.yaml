@@ -36,6 +36,36 @@ services:
     ports:
       - 5432
 
+  worker:
+    build:
+      context: ..
+      dockerfile: deployment/app/Dockerfile
+    image: todorus/lindy-admin:develop
+    environment:
+      REDIS_URL: "redis://redis:6379"
+      MJ_APIKEY_PUBLIC: TODO
+      MJ_APIKEY_PRIVATE: TODO
+    ports:
+      - 3000
+      - 80
+      - 443
+    volumes:
+      - ../rails-app:/rails-app
+    depends_on:
+      - storage
+      - redis
+    links:
+      - storage
+      - redis
+    command: bundle exec sidekiq
+
+  redis:
+    image: redis
+    volumes:
+      - ../data/redis:/data
+    ports:
+      - 6379
+
   https-portal:
     image: steveltn/https-portal:1
     ports:

@@ -31,6 +31,8 @@ gem 'sidekiq', '~> 4.1', '>= 4.1.2'
 # Sidekiq monitoring
 gem 'sinatra', require: false
 gem 'slim'
+# Transactional email provider
+gem 'mailjet', '~> 1.3', '>= 1.3.8'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'

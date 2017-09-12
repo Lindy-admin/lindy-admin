@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 20170912153328) do
   create_table "mailings", force: :cascade do |t|
     t.integer  "registration_id"
     t.integer  "status"
+    t.string   "remote_id"
     t.string   "remote_template_id"
     t.json     "arguments"
     t.datetime "created_at",         null: false
