@@ -18,5 +18,6 @@ module LindyAdmin
     # Enable the asset pipeline
     config.assets.enabled = true
     config.hostname = ENV["HOST_NAME"]
+    config.webhook_hostname = ENV["WEBHOOK_HOST_NAME"]
   end
 end

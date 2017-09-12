@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170905193353) do
+ActiveRecord::Schema.define(version: 20170912153328) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,17 @@ ActiveRecord::Schema.define(version: 20170905193353) do
     t.date     "end",         null: false
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+  end
+
+  create_table "mailings", force: :cascade do |t|
+    t.integer  "registration_id"
+    t.integer  "status"
+    t.string   "remote_id"
+    t.string   "remote_template_id"
+    t.json     "arguments"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.index ["registration_id"], name: "index_mailings_on_registration_id", using: :btree
   end
 
   create_table "members", force: :cascade do |t|
@@ -67,6 +78,7 @@ ActiveRecord::Schema.define(version: 20170905193353) do
     t.index ["course_id"], name: "index_tickets_on_course_id", using: :btree
   end
 
+  add_foreign_key "mailings", "registrations"
   add_foreign_key "payments", "registrations", on_delete: :cascade
   add_foreign_key "registrations", "courses", on_delete: :cascade
   add_foreign_key "registrations", "members", on_delete: :cascade

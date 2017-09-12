@@ -6,6 +6,10 @@ class Member < ApplicationRecord
   validates :lastname, presence: true
   validates :email, presence: true
 
+  def full_name
+    "#{self.firstname} #{self.lastname}"
+  end
+
   def self.to_csv(members, options = {})
     CSV.generate(options) do |csv|
       csv << column_names
