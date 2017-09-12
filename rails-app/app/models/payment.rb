@@ -9,6 +9,7 @@ class Payment < ApplicationRecord
   }
 
   after_create :submit_to_payment_provider
+  after_save :send_welcome_email, if: :status_changed?
 
   def submit_to_payment_provider
     mollie = Mollie::API::Client.new(Rails.application.secrets.mollie_api_key)
@@ -16,12 +17,18 @@ class Payment < ApplicationRecord
       amount:       registration.ticket.price.fractional * 0.01,
       description:  registration.course.title,
       redirect_url: "https://#{Rails.application.config.hostname}/members/#{self.registration.member.id}",
-      webhook_url:  "https://#{Rails.application.config.hostname}/payments/webhook"
+      webhook_url:  "https://#{Rails.application.config.webhook_hostname}/payments/webhook"
     )
 
     self.remote_id = mollie_payment.id
     self.payment_url = mollie_payment.payment_url
     self.status = :submitted
     self.save!
+  end
+
+  def send_welcome_email
+    if self.status == "paid" then
+      logger.info("SENDING WELCOME EMAIL")
+    end
   end
 end
