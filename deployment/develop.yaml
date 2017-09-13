@@ -82,6 +82,8 @@ services:
     ports:
       - '80:80'
       - '443:443'
+    volumes:
+      - ../data/ssl_certs:/var/lib/https-portal
     depends_on:
       - wordpress
       - app
