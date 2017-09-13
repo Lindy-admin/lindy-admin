@@ -3,5 +3,5 @@ class Registration < ApplicationRecord
   belongs_to :course
   belongs_to :ticket
   has_one :payment, dependent: :destroy
-  has_many :mailings, dependent: :destroy_all
+  has_many :mailings, dependent: :destroy
 end
