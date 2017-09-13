@@ -7,12 +7,21 @@ class PaidMailingWorker
     member = mailing.registration.member
     course = mailing.registration.course
 
+    sender_email = "todorus@todorus.com"
+    sender_name = "Theo is testing emails"
+    template_id = 210827
+    variables = {
+      member_firstname: member.firstname,
+      member_lastname: member.lastname,
+      course_title: course.title
+    }
+
     response = Mailjet::Send.create(
       messages: [
         {
           From: {
-            Email: "todorus@todorus.com",
-            Name: "Theo is testing emails"
+            Email: sender_email,
+            Name: sender_name
           },
           To: [
             {
@@ -20,20 +29,17 @@ class PaidMailingWorker
               Name: member.full_name
             }
           ],
-          TemplateID: 210827,
+          TemplateID: template_id,
           TemplateLanguage: true,
           Subject: "Welcome to #{course.title}!",
-          Variables: {
-            member_firstname: member.firstname,
-            member_lastname: member.lastname,
-            course_title: course.title
-          }
+          Variables: variables
         }
       ]
     )
 
     message = response.Messages[0]
 
+    mailing.arguments = variables
     if message[:Status] == "success" then
       mailing.status = :sent
       mailing.remote_id = message[:To][0][:MessageID]
