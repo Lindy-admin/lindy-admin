@@ -4,8 +4,9 @@ class Course < ApplicationRecord
   has_many :tickets, dependent: :destroy
 
   validates :title, presence: true
-  validates :start, presence: true
-  validates :end, presence: true
+  validates :registration_start, presence: true
+  validates :registration_end, presence: true
+  validate :start_is_before_end
 
   def leads
     registrations.where(role: true).count
@@ -26,6 +27,13 @@ class Course < ApplicationRecord
       return registration
     end
     return false
+  end
+
+  private
+  def start_is_before_end
+    if self.registration_start > self.registration_end
+      errors.add(:registration_start, "cannot be after registration end")
+    end
   end
 
 end

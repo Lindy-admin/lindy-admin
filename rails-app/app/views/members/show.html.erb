@@ -32,8 +32,8 @@
     <% course = registration.course %>
       <tr data-link="<%= url_for(course) %>">
         <td><%= course.title %></td>
-        <td><%= course.start %></td>
-        <td><%= course.end %></td>
+        <td><%= course.registration_start %></td>
+        <td><%= course.registration_end %></td>
         <td><%= role_label(registration.role) %></td>
         <td><%= registration.ticket.label %></td>
         <td><%= registration.payment.status %></td>

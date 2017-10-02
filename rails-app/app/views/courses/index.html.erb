@@ -16,8 +16,8 @@
       <tr data-link="<%= url_for(course) %>">
         <td><%= course.title %></td>
         <td><%= truncate(course.description, length: 40) %></td>
-        <td><%= course.start %></td>
-        <td><%= course.end %></td>
+        <td><%= course.registration_start %></td>
+        <td><%= course.registration_end %></td>
         <td><%= "#{course.leads} / #{course.follows}" %></td>
       </tr>
     <% end %>

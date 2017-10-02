@@ -3,15 +3,16 @@
   <%= @course.description %>
 </p>
 
+<h4>Registration</h4>
 <p>
   <strong>Start:</strong>
-  <%= @course.start %>
+  <%= @course.registration_start %>
 </p>
-
 <p>
   <strong>End:</strong>
-  <%= @course.end %>
+  <%= @course.registration_end %>
 </p>
+
 <%= link_to 'Edit', edit_course_path(@course), class:"btn btn-primary" %>
 <%= link_to 'Destroy', @course, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger" %>
 
