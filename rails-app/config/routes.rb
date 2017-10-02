@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
   root to: "members#index"
 
+  get 'courses/open', to: "courses#open", as: "open_courses"
   resources :courses do |r|
     resources :tickets
   end
