@@ -1,0 +1,64 @@
+<html>
+
+<head>
+</head>
+
+<body>
+
+    <form action="admin.dev/registrations" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="&#x2713;" />
+
+        <div class="row">
+            <label for="course">Course</label>
+            <div class="col-xs-4 input-group"><select name="course" id="course" class="form-control"><option value="2">Lindy A</option></select></div>
+        </div>
+
+        <div class="row">
+          <label for="role">Role</label>
+          <div class="col-xs-4 input-group">
+            <select name="role" id="role" class="form-control">
+              <option value="true">Lead</option>
+              <option value="false">Follow</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <label for="ticket">Ticket</label>
+          <div class="col-xs-4 input-group">
+            <select name="ticket" id="ticket" class="form-control">
+              <option value="">Loading...</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+            <label for="firstname">Firstname</label>
+            <div class="col-xs-4 input-group"><input type="text" name="firstname" id="firstname" class="form-control" /></div>
+        </div>
+
+        <div class="row">
+            <label for="lastname">Lastname</label>
+            <div class="col-xs-4 input-group"><input type="text" name="lastname" id="lastname" class="form-control" /></div>
+        </div>
+
+        <div class="row">
+            <label for="email">Email</label>
+            <div class="col-xs-4 input-group"><input type="text" name="email" id="email" class="form-control" /></div>
+        </div>
+
+        <div class="row">
+            <label for="address">Address</label>
+            <div class="col-xs-4 input-group"><input type="text" name="address" id="address" class="form-control" /></div>
+        </div>
+
+        <div class="row actions">
+            <input type="submit" name="commit" value="Save" class="btn btn-success" data-disable-with="Save" />
+        </div>
+    </form>
+
+     <script src="jquery.js"></script>
+     <script src="registration-form.js"></script>
+
+  </body>
+
+</html>
