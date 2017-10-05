@@ -1,6 +1,7 @@
 class RegistrationsController < ApplicationController
 
   before_action :set_registration, only: [:destroy, :switch_role]
+  skip_before_filter :verify_authenticity_token, only: [:create]
 
   # GET /registrations/new
   def new
