@@ -4,22 +4,25 @@ services:
   app:
     image: todorus/lindy-admin:develop
     environment:
-      HOST_NAME: TODO
-      SECRET_KEY_BASE: TODO
-      MOLLIE_API_KEY: TODO
+      HOST_NAME: lindy.todorus.com
+      WEBHOOK_HOST_NAME: lindy.todorus.com
+      SECRET_KEY_BASE: 32fbc25fb6cf0b875046c4342fd340b85ad5ba7c9ccca1993c3af44d584caf0f3c3f4b57b50ab20b3b8dee1a212bc61ea7e7f7f0dc2d0562bfe37c57fa54286b
+      MOLLIE_API_KEY: test_PWvS3keMWtjSA7Mybn5p7JdTmaqB4G
+      REDIS_URL: "redis://redis:6379"
     ports:
       - 3000
       - 80
       - 443
-    deploy:
-      restart_policy:
-        condition: any
-        window: 5s
+    restart: unless-stopped
     depends_on:
       - storage
+      - redis
     links:
-      - storage:storage
-    command: bash -c "rake db:migrate; rails s"
+      - storage
+      - redis
+    entrypoint: ["/rails-app/docker-entrypoint.sh"]
+    command: "rails s"
+
 
   storage:
     image: postgres:9.6.3
@@ -27,30 +30,23 @@ services:
       POSTGRES_USER: lindy
       POSTGRES_DB: lindy
       POSTGRES_PASSWORD: mysecretpassword
-    deploy:
-      restart_policy:
-        condition: any
-        window: 5s
+    restart: unless-stopped
     volumes:
       - ../data/storage:/var/lib/postgresql/data
     ports:
       - 5432
 
   worker:
-    build:
-      context: ..
-      dockerfile: deployment/app/Dockerfile
     image: todorus/lindy-admin:develop
     environment:
       REDIS_URL: "redis://redis:6379"
-      MJ_APIKEY_PUBLIC: TODO
-      MJ_APIKEY_PRIVATE: TODO
+      MJ_APIKEY_PUBLIC: c574305a9ef95462a092f3e370e79c8d
+      MJ_APIKEY_PRIVATE: 37266a528010dd54b8bdf94517c1d30d
     ports:
       - 3000
       - 80
       - 443
-    volumes:
-      - ../rails-app:/rails-app
+    restart: unless-stopped
     depends_on:
       - storage
       - redis
@@ -65,20 +61,20 @@ services:
       - ../data/redis:/data
     ports:
       - 6379
+    restart: unless-stopped
 
   https-portal:
     image: steveltn/https-portal:1
     ports:
       - '80:80'
       - '443:443'
+    volumes:
+      - ../data/ssl_certs:/var/lib/https-portal
     depends_on:
       - app
     links:
       - app
-    deploy:
-      restart_policy:
-        condition: any
-        window: 5s
+    restart: unless-stopped
     environment:
       DOMAINS: 'lindy.todorus.com -> http://app:3000'
-      STAGE: production
+      STAGE: staging
