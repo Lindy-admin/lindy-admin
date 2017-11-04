@@ -1,0 +1,11 @@
+<h1>Settings</h1>
+
+<%= form_tag(settings_path, method: 'put') do %>
+  <% @settings.each_key do |key| %>
+  <div>
+    <%= label_tag(key, "#{key}") %>
+    <%= text_field_tag(key, @settings[key]) %>
+  </div>
+  <% end %>
+  <%= submit_tag %>
+<% end %>

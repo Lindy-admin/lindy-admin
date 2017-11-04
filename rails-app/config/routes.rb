@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   get 'members/courses/:id', to: 'members#course', as: 'members_course'
   resources :members
 
+  get 'settings', to: 'settings#index', as: 'settings'
+  put 'settings', to: 'settings#update'
+
   get 'registrations', to: 'registrations#new', as: 'register'
   post 'registrations', to: 'registrations#create'
   delete 'registrations/:id', to: 'registrations#destroy', as: 'registration'

@@ -1,0 +1,17 @@
+# config/app.yml for rails-settings-cached
+defaults: &defaults
+  mollie_api_key: ~
+  mailjet_public_api_key: ~
+  mailjet_private_api_key: ~
+  mailjet_sender_email: ~
+  mailjet_sender_name: ~
+  mailjet_payed_template_id: ~
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults

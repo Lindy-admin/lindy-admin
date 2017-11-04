@@ -8,8 +8,6 @@ end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0.1'
-# Use sqlite3 as the database for Active Record
-gem 'sqlite3'
 # Use Puma as the app server
 gem 'puma', '~> 3.0'
 # Use SCSS for stylesheets
@@ -26,6 +24,9 @@ gem 'kaminari', '~> 0.17.0'
 git 'https://github.com/mollie/mollie-api-ruby.git', :tag => 'v2.2.1' do
   gem 'mollie-api-ruby'
 end
+
+# Storing settings
+gem "rails-settings-cached"
 
 gem 'sidekiq', '~> 4.1', '>= 4.1.2'
 # Sidekiq monitoring
