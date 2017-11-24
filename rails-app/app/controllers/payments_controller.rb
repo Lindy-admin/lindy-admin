@@ -11,7 +11,7 @@ class PaymentsController < ApplicationController
           raise ActiveRecord::RecordNotFound
         end
 
-        mollie = Mollie::API::Client.new(Rails.application.secrets.mollie_api_key)
+        mollie = Mollie::API::Client.new(Setting.mollie_api_key)
         mollie_payment = mollie.payments.get payment.remote_id
 
         if mollie_payment.paid?

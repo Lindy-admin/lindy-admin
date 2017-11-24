@@ -12,7 +12,7 @@ class Payment < ApplicationRecord
   after_save :send_welcome_email, if: :status_changed?
 
   def submit_to_payment_provider
-    mollie = Mollie::API::Client.new(Rails.application.secrets.mollie_api_key)
+    mollie = Mollie::API::Client.new(Setting.mollie_api_key)
     mollie_payment = mollie.payments.create(
       amount:       registration.ticket.price.fractional * 0.01,
       description:  registration.course.title,
