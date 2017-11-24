@@ -39,8 +39,6 @@ services:
     image: todorus/lindy-admin:develop
     environment:
       REDIS_URL: "redis://redis:6379"
-      MJ_APIKEY_PUBLIC: c574305a9ef95462a092f3e370e79c8d
-      MJ_APIKEY_PRIVATE: 37266a528010dd54b8bdf94517c1d30d
     ports:
       - 3000
       - 80
