@@ -58,6 +58,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.7'              # BDD
   gem 'guard-rspec', '~> 4.7'              # automated testing
   gem 'terminal-notifier-guard', '~> 1.7'  # osx notification
+  gem 'webmock', '~> 3.1'                  # mock external http calls
 
   gem 'faker', '~> 1.8'                    # generate fake data
   gem 'ci_reporter_rspec', '~> 1.0'        # Jenkins reports
