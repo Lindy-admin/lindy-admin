@@ -20,7 +20,13 @@ class Course < ApplicationRecord
       member.update_attributes(member_params)
       member.save!
 
-      registration = Registration.new(member_id: member.id, course_id: self.id, role: role, ticket: ticket)
+      registration = Registration.new(
+        member_id: member.id,
+        course_id: self.id,
+        role: role,
+        ticket: ticket,
+        status: :triage
+      )
       registration.build_payment(registration: registration)
       registration.save!
 

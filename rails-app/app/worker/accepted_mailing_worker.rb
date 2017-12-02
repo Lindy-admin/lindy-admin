@@ -1,4 +1,4 @@
-class PaidMailingWorker
+class AcceptedMailingWorker
   include Sidekiq::Worker
 
   def perform(mailing_id)
@@ -6,17 +6,19 @@ class PaidMailingWorker
     mailing = Mailing.find(mailing_id)
     member = mailing.registration.member
     course = mailing.registration.course
+    ticket = mailing.registration.ticket
 
-    logger.info("Sending paid mail to member.id #{member.id}")
+    logger.info("Sending accepted mail to member.id #{member.id}")
 
     sender_email = Setting.mailjet_sender_email
     sender_name = Setting.mailjet_sender_name
-    template_id = Setting.mailjet_paid_template_id.to_i
+    template_id = Setting.mailjet_accepted_template_id.to_i
     variables = {
       member_firstname: member.firstname,
       member_lastname: member.lastname,
       course_title: course.title,
-      ticket_label: ticket.label
+      ticket_label: ticket.label,
+      payment_url: payment_url
     }
 
     options = {

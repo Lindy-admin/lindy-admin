@@ -5,7 +5,8 @@ defaults: &defaults
   mailjet_private_api_key: ~
   mailjet_sender_email: ~
   mailjet_sender_name: ~
-  mailjet_payed_template_id: ~
+  mailjet_paid_template_id: ~
+  mailjet_register_template_id: ~
 
 development:
   <<: *defaults
