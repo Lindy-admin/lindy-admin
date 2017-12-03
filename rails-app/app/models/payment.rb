@@ -9,8 +9,6 @@ class Payment < ApplicationRecord
   }
 
   after_create :submit_to_payment_provider
-  after_create :send_payment_email
-
   after_save :send_confirmation_email, if: :status_changed?
 
   def submit_to_payment_provider
@@ -26,12 +24,6 @@ class Payment < ApplicationRecord
     self.payment_url = mollie_payment.payment_url
     self.status = :submitted
     self.save!
-  end
-
-  def send_payment_email
-    logger.info("qeueuing payment mail")
-    mailing = Mailing.create(registration: self.registration)
-    RegisteredMailingWorker.perform_async(mailing.id)
   end
 
   def send_confirmation_email
