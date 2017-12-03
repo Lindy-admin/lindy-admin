@@ -13,10 +13,9 @@ Rails.application.routes.draw do
   get 'settings', to: 'settings#index', as: 'settings'
   put 'settings', to: 'settings#update'
 
-  get 'registrations', to: 'registrations#new', as: 'register'
-  post 'registrations', to: 'registrations#create'
-  delete 'registrations/:id', to: 'registrations#destroy', as: 'registration'
-  post 'registration/:id/switch_role', to: 'registrations#switch_role', as: 'switch_role'
+  post 'registrations/:id/switch_role', to: 'registrations#switch_role', as: 'switch_role'
+  get 'registrations/available', to: 'registrations#new', as: 'register'
+  resources :registrations
 
   post 'payments/webhook', to: 'payments#webhook'
 

@@ -1,0 +1,45 @@
+<h1>Registration</h1>
+
+<h2>Member</h2>
+<p>
+  <strong>Name:</strong>
+  <%= @registration.member.full_name %>
+</p>
+<p>
+  <strong>Email:</strong>
+  <%= @registration.member.email %>
+</p>
+
+<h2>Ticket</h2>
+<p>
+  <strong>Label:</strong>
+  <%= @registration.ticket.label %>
+</p>
+<p>
+  <strong>Price:</strong>
+  <%= @registration.ticket.price %>
+</p>
+
+<h2>Payment</h2>
+<p>
+  <strong>Status:</strong>
+  <%= @registration.payment.status %>
+</p>
+<p>
+  <strong>Payment Url:</strong>
+  <%= @registration.payment.payment_url %>
+</p>
+<p>
+  <strong>Remote id:</strong>
+  <%= @registration.payment.remote_id %>
+</p>
+
+<h2>Mailings</h2>
+<p>
+  TODO
+</p>
+
+
+
+<%= link_to 'Edit', edit_registration_path(@registration), class: "btn btn-primary" %>
+<%= link_to 'Destroy', @registration, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger" %>

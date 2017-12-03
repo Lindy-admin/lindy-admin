@@ -1,6 +1,6 @@
 class RegistrationsController < ApplicationController
 
-  before_action :set_registration, only: [:destroy, :switch_role]
+  before_action :set_registration, only: [:show, :edit, :destroy, :switch_role]
   skip_before_action :verify_authenticity_token, only: [:create]
 
   # GET /registrations/new
@@ -38,6 +38,24 @@ class RegistrationsController < ApplicationController
     end
   end
 
+  def show
+  end
+
+  def edit
+  end
+
+  def update
+    respond_to do |format|
+      if @registration.update(registration_params)
+        format.html { redirect_to @registration, notice: 'Registration was successfully updated.' }
+        format.json { render :show, status: :ok, location: @registration }
+      else
+        format.html { render :edit }
+        format.json { render json: @registration.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   def destroy
     @registration.destroy
     respond_to do |format|
@@ -60,16 +78,20 @@ class RegistrationsController < ApplicationController
   end
 
   private
-  # Use callbacks to share common setup or constraints between actions.
-  def set_registration
-    @registration = Registration.find(params[:id])
-  end
+    # Use callbacks to share common setup or constraints between actions.
+    def set_registration
+      @registration = Registration.find(params[:id])
+    end
 
-  def member_params
-    params.permit(:firstname, :lastname, :email, :address)
-  end
+    def member_params
+      params.require(:member).permit(:member, :course, :role, :ticket, :status)
+    end
 
-  def course_params
-    params.permit(:course_id)
-  end
+    def member_params
+      params.permit(:firstname, :lastname, :email, :address)
+    end
+
+    def course_params
+      params.permit(:course_id)
+    end
 end
