@@ -75,7 +75,10 @@ describe "When registering for a course", type: :request do
     it "will send an email confirmation" do
       expect {
         post registrations_path, params: params
-      }.to change{RegisteredMailingWorker.jobs.length}.by(1)
+      }.to change{RegistrationMailingWorker.jobs.length}.by(1)
+
+      mailing = Mailing.last
+      expect(mailing.label).to eq("registration confirmation")
     end
 
     pending "notifies the admin"

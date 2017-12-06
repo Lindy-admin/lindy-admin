@@ -51,8 +51,6 @@
 </table>
 
 <h2>Mailings</h2>
-<p>
-  TODO
-</p>
+<%= render partial: 'mailings/mailings_table', locals: {mailings: @registration.mailings} %>
 
 <%= link_to 'Destroy', @registration, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger" %>

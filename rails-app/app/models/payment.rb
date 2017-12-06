@@ -29,8 +29,12 @@ class Payment < ApplicationRecord
   def send_confirmation_email
     if self.status == "paid" then
       logger.info("qeueuing confirmation mail")
-      mailing = Mailing.create(registration: self.registration)
-      PaidMailingWorker.perform_async(mailing.id)
+      mailing = Mailing.create(
+        registration: self.registration,
+        remote_template_id: Setting.mailjet_paid_template_id,
+        label: "payment_confirmation"
+      )
+      RegistrationMailingWorker.perform_async(mailing.id)
     end
   end
 

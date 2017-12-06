@@ -6,7 +6,9 @@ defaults: &defaults
   mailjet_sender_email: ~
   mailjet_sender_name: ~
   mailjet_paid_template_id: ~
-  mailjet_register_template_id: ~
+  mailjet_registered_template_id: ~
+  mailjet_waitinglist_template_id: ~
+  mailjet_accepted_template_id: ~
 
 development:
   <<: *defaults

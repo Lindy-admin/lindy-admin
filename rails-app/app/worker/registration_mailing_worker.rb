@@ -1,23 +1,26 @@
-class PaidMailingWorker
+class RegistrationMailingWorker
   include Sidekiq::Worker
 
   def perform(mailing_id)
 
     mailing = Mailing.find(mailing_id)
+    template_id = mailing.remote_template_id.to_i
     member = mailing.registration.member
     course = mailing.registration.course
+    ticket = mailing.registration.ticket
+    payment_url = mailing.registration.payment != nil ? mailing.registration.payment.payment_url : nil
 
-    logger.info("Sending paid mail to member.id #{member.id}")
+    logger.info("Sending #{mailing.label} mail to member.id #{member.id}")
 
     sender_email = Setting.mailjet_sender_email
     sender_name = Setting.mailjet_sender_name
-    template_id = Setting.mailjet_paid_template_id.to_i
     variables = {
       member_firstname: member.firstname,
       member_lastname: member.lastname,
       course_title: course.title,
-      ticket_label: ticket.label
+      ticket_label: ticket.label,
     }
+    variables[:payment_url] = payment_url if payment_url != nil
 
     options = {
       api_key: Setting.mailjet_public_api_key,

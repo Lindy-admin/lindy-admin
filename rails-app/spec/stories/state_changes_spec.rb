@@ -11,7 +11,10 @@ describe "When a registration is accepted" do
     it "sends an acceptance email" do
       expect{
         @registration.update!(status: :accepted)
-      }.to change{AcceptedMailingWorker.jobs.length}.by(1)
+      }.to change{RegistrationMailingWorker.jobs.length}.by(1)
+
+      mailing = Mailing.last
+      expect(mailing.label).to eq("acceptance")
     end
 
     pending "notifies the admin"
@@ -29,7 +32,10 @@ describe "When a registration is accepted" do
     it "sends an acceptance email" do
       expect{
         @registration.update!(status: :accepted)
-      }.to change{AcceptedMailingWorker.jobs.length}.by(1)
+      }.to change{RegistrationMailingWorker.jobs.length}.by(1)
+
+      mailing = Mailing.last
+      expect(mailing.label).to eq("acceptance")
     end
 
     pending "notifies the admin"
@@ -51,7 +57,10 @@ describe "When a registration is put onto the waitinglist", type: :request do
     it "sends a waitinglist email" do
       expect{
         @registration.update!(status: :waitinglist)
-      }.to change{WaitinglistMailingWorker.jobs.length}.by(1)
+      }.to change{RegistrationMailingWorker.jobs.length}.by(1)
+
+      mailing = Mailing.last
+      expect(mailing.label).to eq("moved to waitinglist")
     end
 
     pending "notifies the admin"
@@ -69,7 +78,10 @@ describe "When a registration is put onto the waitinglist", type: :request do
     it "sends a waitinglist email" do
       expect{
         @registration.update!(status: :waitinglist)
-      }.to change{WaitinglistMailingWorker.jobs.length}.by(1)
+      }.to change{RegistrationMailingWorker.jobs.length}.by(1)
+
+      mailing = Mailing.last
+      expect(mailing.label).to eq("moved to waitinglist")
     end
 
     pending "notifies the admin"
