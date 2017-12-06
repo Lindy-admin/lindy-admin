@@ -1,0 +1,22 @@
+<% can_sort ||= false %>
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th><%= can_sort ? sortable("firstname") : "firstname"%></th>
+      <th><%= can_sort ? sortable("lastname") : "lastname"%></th>
+      <th><%= can_sort ? sortable("email") : "email"%></th>
+      <th><%= can_sort ? sortable("address") : "address"%></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% members.each do |member| %>
+      <tr data-link="<%= url_for(member) %>">
+        <td ><%= member.firstname %></td>
+        <td ><%= member.lastname %></td>
+        <td ><%= member.email %></td>
+        <td ><%= truncate(member.address, length: 40)%></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -59,7 +59,7 @@ class RegistrationsController < ApplicationController
   def destroy
     @registration.destroy
     respond_to do |format|
-      format.html { redirect_to :back, notice: 'Registration was successfully removed.' }
+      format.html { redirect_to @registration.course, notice: 'Registration was successfully removed.' }
       format.json { head :no_content }
     end
   end

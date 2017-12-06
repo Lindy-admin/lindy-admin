@@ -1,0 +1,26 @@
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Firstname</th>
+      <th>Lastname</th>
+      <th>Role</th>
+      <th>Ticket</th>
+      <th>Payment</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% registrations.each do |registration| %>
+      <tr data-link="<%= registration_path(registration) %>">
+        <td><%= registration.member.firstname %></td>
+        <td><%= registration.member.lastname %></td>
+        <td><%= role_label(registration.role) %></td>
+        <td><%= registration.ticket.label %></td>
+        <td><%= registration.payment.status %></td>
+        <td><%= link_to 'Switch Role', switch_role_path(registration), method: :post, class:"btn btn-primary" %></td>
+        <td><%= link_to 'Remove', registration, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
