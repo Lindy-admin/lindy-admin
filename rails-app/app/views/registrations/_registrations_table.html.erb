@@ -3,10 +3,10 @@
     <tr>
       <th>Firstname</th>
       <th>Lastname</th>
-      <th>Role</th>
+      <th colspan="2">Role</th>
       <th>Ticket</th>
       <th>Payment</th>
-      <th colspan="2"></th>
+      <th colspan="2">Status</th>
     </tr>
   </thead>
 
@@ -16,10 +16,14 @@
         <td><%= registration.member.firstname %></td>
         <td><%= registration.member.lastname %></td>
         <td><%= role_label(registration.role) %></td>
+        <td><%= link_to 'Switch Role', switch_role_path(registration), method: :post, class:"btn btn-primary" %></td>
         <td><%= registration.ticket.label %></td>
         <td><%= registration.payment.status %></td>
-        <td><%= link_to 'Switch Role', switch_role_path(registration), method: :post, class:"btn btn-primary" %></td>
-        <td><%= link_to 'Remove', registration, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger" %></td>
+        <td><%= registration.status %></td>
+        <td>
+          <%= link_to 'Waitinglist', set_status_path(registration, :waitinglist), method: :post, class:"btn btn-warning", disabled: registration.status == "waitinglist" %>
+          <%= link_to 'Accept', set_status_path(registration, :accepted), method: :post, class:"btn btn-success", disabled: registration.status == "accepted" %>
+        </td>
       </tr>
     <% end %>
   </tbody>

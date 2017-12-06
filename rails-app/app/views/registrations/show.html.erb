@@ -1,5 +1,14 @@
 <h1>Registration</h1>
 
+<p>
+  <strong>Status:</strong>
+  <%= @registration.status %>
+</p>
+<p>
+  <%= link_to 'Waitinglist', set_status_path(@registration, :waitinglist), method: :post, class:"btn btn-warning", disabled: @registration.status == "waitinglist" %>
+  <%= link_to 'Accept', set_status_path(@registration, :accepted), method: :post, class:"btn btn-success", disabled: @registration.status == "accepted" %>
+</p>
+
 <h2>Member</h2>
 <%= render partial: 'members/members_table', locals: {members: [@registration.member]} %>
 
@@ -33,7 +42,7 @@
   </thead>
 
   <tbody>
-      <tr data-link="<%= course_path(@registration.course) %>">
+      <tr>
         <td><%= @registration.payment.status %></td>
         <td><%= @registration.payment.payment_url %></td>
         <td><%= @registration.payment.remote_id %></td>

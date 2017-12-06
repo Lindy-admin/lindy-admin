@@ -1,6 +1,6 @@
 class RegistrationsController < ApplicationController
 
-  before_action :set_registration, only: [:show, :edit, :destroy, :switch_role]
+  before_action :set_registration, only: [:show, :edit, :update, :destroy, :switch_role, :set_status]
   skip_before_action :verify_authenticity_token, only: [:create]
 
   # GET /registrations/new
@@ -69,18 +69,34 @@ class RegistrationsController < ApplicationController
     respond_to do |format|
       if @registration.update(role: new_role)
         format.html { redirect_to :back, notice: "Role was switched." }
-        format.json { render :show, status: :ok, location: @member }
+        format.json { render :show, status: :ok, location: @registration }
       else
         format.html { render :edit }
-        format.json { render json: @member.errors, status: :unprocessable_entity }
+        format.json { render json: @registration.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def set_status
+    new_status = params[:status]
+    respond_to do |format|
+      if @registration.update(status: new_status)
+        format.html { redirect_to :back, notice: "Status was updated to #{new_status}" }
+        format.json { render :show, status: :ok, location: @registration }
+      else
+        format.html { render :edit }
+        format.json { render json: @registration.errors, status: :unprocessable_entity }
       end
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_registration
       @registration = Registration.find(params[:id])
+    end
+
+    def registration_params
+      params.require(:registration).permit(:status)
     end
 
     def member_params
