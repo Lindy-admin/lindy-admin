@@ -40,10 +40,16 @@
 
 <h2>Registrations</h2>
 <p>
-  <strong>Leads/Follows:</strong>
-  <%= "#{@course.leads} / #{@course.follows}" %>
+  <strong>Accepted (L/F):</strong>
+  <%= "#{@course.leads.where(status:"accepted").count} / #{@course.follows.where(status:"accepted").count}" %>
+  <br />
+  <strong>Waitinglist (L/F):</strong>
+  <%= "#{@course.leads.where(status:"waitinglist").count} / #{@course.follows.where(status:"waitinglist").count}" %>
+  <br />
+  <strong>Triage (L/F):</strong>
+  <%= "#{@course.leads.where(status:"triage").count} / #{@course.follows.where(status:"triage").count}" %>
 </p>
-<%= render partial: 'registrations/registrations_table', locals: {registrations: @course.registrations} %>
+<%= render partial: 'registrations/registrations_table', locals: {registrations: @course.registrations.order(:created_at)} %>
 
 <div class="row">
   <h2>Export</h2>

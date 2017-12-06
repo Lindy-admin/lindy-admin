@@ -9,10 +9,10 @@ class Course < ApplicationRecord
   validate :start_is_before_end
 
   def leads
-    registrations.where(role: true).count
+    registrations.where(role: true)
   end
   def follows
-    registrations.where(role: false).count
+    registrations.where(role: false)
   end
 
   def register(member, member_params, role, ticket)

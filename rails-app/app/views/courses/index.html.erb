@@ -18,7 +18,16 @@
         <td><%= truncate(course.description, length: 40) %></td>
         <td><%= course.registration_start %></td>
         <td><%= course.registration_end %></td>
-        <td><%= "#{course.leads} / #{course.follows}" %></td>
+        <td>
+          <strong>Accepted (L/F):</strong>
+          <%= "#{course.leads.where(status:"accepted").count} / #{course.follows.where(status:"accepted").count}" %>
+          <br />
+          <strong>Waitinglist (L/F):</strong>
+          <%= "#{course.leads.where(status:"waitinglist").count} / #{course.follows.where(status:"waitinglist").count}" %>
+          <br />
+          <strong>Triage (L/F):</strong>
+          <%= "#{course.leads.where(status:"triage").count} / #{course.follows.where(status:"triage").count}" %>
+        </td>
       </tr>
     <% end %>
   </tbody>

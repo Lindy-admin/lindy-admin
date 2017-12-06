@@ -1,6 +1,7 @@
 <table class="table table-striped table-hover">
   <thead>
     <tr>
+      <th>Registered</th>
       <th>Firstname</th>
       <th>Lastname</th>
       <th colspan="2">Role</th>
@@ -13,6 +14,7 @@
   <tbody>
     <% registrations.each do |registration| %>
       <tr data-link="<%= registration_path(registration) %>">
+        <td><%= registration.created_at %></td>
         <td><%= registration.member.firstname %></td>
         <td><%= registration.member.lastname %></td>
         <td><%= role_label(registration.role) %></td>
