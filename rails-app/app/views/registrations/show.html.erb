@@ -51,6 +51,6 @@
 </table>
 
 <h2>Mailings</h2>
-<%= render partial: 'mailings/mailings_table', locals: {mailings: @registration.mailings} %>
+<%= render partial: 'mailings/mailings_table', locals: {mailings: @registration.mailings.order(:created_at)} %>
 
 <%= link_to 'Destroy', @registration, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger" %>
