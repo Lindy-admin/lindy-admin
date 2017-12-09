@@ -12,7 +12,11 @@
  *
  *= require bootstrap.min
  */
-
+h3 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 5px;
+}
 input[type=submit] {
  margin-top: 50px;
 }
@@ -43,4 +47,15 @@ nav.pagination {
 }
 .notice.alert {
  margin-bottom: 1px;
+}
+
+.settings {
+  width: 560px;
+}
+
+.settings label {
+  width: 200px;
+}
+.settings input[type=text] {
+  width:  350px;
 }

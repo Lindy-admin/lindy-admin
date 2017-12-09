@@ -4,8 +4,8 @@ require "mollie_helper"
 describe "When registering for a course", type: :request do
 
   before(:each) do
-    Setting.mailjet_sender_email = "some@email.com"
-    Setting.mailjet_sender_name = "some_email_name"
+    Setting.mailjet_sender_email_address = "some@email.com"
+    Setting.mailjet_sender_email_name = "some_email_name"
     Setting.mailjet_paid_template_id = 1
     Setting.save
 

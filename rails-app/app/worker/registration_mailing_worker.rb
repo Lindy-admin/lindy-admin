@@ -12,8 +12,8 @@ class RegistrationMailingWorker
 
     logger.info("Sending #{mailing.label} mail to member.id #{member.id}")
 
-    sender_email = Setting.mailjet_sender_email
-    sender_name = Setting.mailjet_sender_name
+    sender_email = Setting.mailjet_sender_email_address
+    sender_name = Setting.mailjet_sender_email_name
     variables = {
       member_firstname: member.firstname,
       member_lastname: member.lastname,
