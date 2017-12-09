@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 20171206211726) do
     t.json     "arguments"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
-    t.string   "label"
+    t.integer  "label"
     t.index ["registration_id"], name: "index_mailings_on_registration_id", using: :btree
   end
 

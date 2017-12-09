@@ -16,10 +16,11 @@ class Registration < ApplicationRecord
   after_save :send_status_mail, if: :status_changed?
 
   def send_created_mail
+    logger.info("qeueuing registration mail")
     mailing = Mailing.create(
       registration: self,
       remote_template_id: Setting.mailjet_registered_template_id,
-      label: "registration confirmation"
+      label: :registration
     )
     RegistrationMailingWorker.perform_async(mailing.id)
   end
@@ -30,7 +31,7 @@ class Registration < ApplicationRecord
       mailing = Mailing.create(
         registration: self,
         remote_template_id: Setting.mailjet_waitinglist_template_id,
-        label: "moved to waitinglist"
+        label: :waitinglist
       )
       RegistrationMailingWorker.perform_async(mailing.id)
     elsif self.status == "accepted" then
@@ -38,7 +39,7 @@ class Registration < ApplicationRecord
       mailing = Mailing.create(
         registration: self,
         remote_template_id: Setting.mailjet_accepted_template_id,
-        label: "acceptance"
+        label: :acceptance
       )
       RegistrationMailingWorker.perform_async(mailing.id)
     end

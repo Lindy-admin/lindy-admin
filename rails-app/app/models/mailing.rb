@@ -7,4 +7,13 @@ class Mailing < ApplicationRecord
     failed: 2
   }
   
+
+  enum label: {
+    unknown: 0,
+    registration: 1,
+    payment: 2,
+    waitinglist: 3,
+    acceptance: 4
+  }
+
 end
