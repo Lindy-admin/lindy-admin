@@ -6,7 +6,6 @@ class Mailing < ApplicationRecord
     sent: 1,
     failed: 2
   }
-  
 
   enum label: {
     unknown: 0,
@@ -14,6 +13,11 @@ class Mailing < ApplicationRecord
     payment: 2,
     waitinglist: 3,
     acceptance: 4
+  }
+
+  enum target: {
+    member: 1,
+    admin: 2
   }
 
 end

@@ -32,7 +32,8 @@ class Payment < ApplicationRecord
       mailing = Mailing.create(
         registration: self.registration,
         remote_template_id: Setting.mailjet_paid_template_id,
-        label: "payment_confirmation"
+        label: "payment_confirmation",
+        target: :member
       )
       RegistrationMailingWorker.perform_async(mailing.id)
     end

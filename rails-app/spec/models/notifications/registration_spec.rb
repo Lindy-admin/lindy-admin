@@ -13,16 +13,24 @@ describe "When a member registers for a course" do
       stub_payment_creation_request
     end
 
-    it "sends a registration email" do
-      expect{
+    it "will send an email confirmation" do
+      expect {
         @course.register(@member, {}, true, @ticket)
-      }.to change{RegistrationMailingWorker.jobs.length}.by(1)
+      }.to change{Mailing.where(target: :member, label: :registration).count}.by(1)
 
-      mailing = Mailing.last
-      expect(mailing.label).to eq("registration")
+      mailing = Mailing.where(target: :member, label: :registration).last
+      expect(RegistrationMailingWorker).to have_enqueued_sidekiq_job(mailing.id)
     end
 
-    pending "notifies the admin"
+    it "notifies the admin" do
+      expect {
+        @course.register(@member, {}, true, @ticket)
+      }.to change{Mailing.where(target: :admin, label: :registration).count}.by(1)
+
+      mailing = Mailing.where(target: :admin, label: :registration).last
+      expect(RegistrationMailingWorker).to have_enqueued_sidekiq_job(mailing.id)
+    end
+
 
     pending "logs to the audit log"
 

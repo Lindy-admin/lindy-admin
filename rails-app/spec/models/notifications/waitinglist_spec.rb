@@ -13,13 +13,20 @@ describe "When a registration is put onto the waitinglist", type: :request do
       it "sends a waitinglist email" do
         expect{
           @registration.update!(status: :waitinglist)
-        }.to change{RegistrationMailingWorker.jobs.length}.by(1)
+        }.to change{Mailing.where(target: :member, label: :waitinglist).count}.by(1)
 
-        mailing = Mailing.last
-        expect(mailing.label).to eq("waitinglist")
+        mailing = Mailing.where(target: :member, label: :waitinglist).last
+        expect(RegistrationMailingWorker).to have_enqueued_sidekiq_job(mailing.id)
       end
 
-      pending "notifies the admin"
+      it "notifies the admin" do
+        expect {
+          @registration.update!(status: :waitinglist)
+        }.to change{Mailing.where(target: :admin, label: :waitinglist).count}.by(1)
+
+        mailing = Mailing.where(target: :admin, label: :waitinglist).last
+        expect(RegistrationMailingWorker).to have_enqueued_sidekiq_job(mailing.id)
+      end
 
       pending "logs to the audit log"
 
@@ -34,13 +41,20 @@ describe "When a registration is put onto the waitinglist", type: :request do
       it "sends a waitinglist email" do
         expect{
           @registration.update!(status: :waitinglist)
-        }.to change{RegistrationMailingWorker.jobs.length}.by(1)
+        }.to change{Mailing.where(target: :member, label: :waitinglist).count}.by(1)
 
-        mailing = Mailing.last
-        expect(mailing.label).to eq("waitinglist")
+        mailing = Mailing.where(target: :member, label: :waitinglist).last
+        expect(RegistrationMailingWorker).to have_enqueued_sidekiq_job(mailing.id)
       end
 
-      pending "notifies the admin"
+      it "notifies the admin" do
+        expect {
+          @registration.update!(status: :waitinglist)
+        }.to change{Mailing.where(target: :admin, label: :waitinglist).count}.by(1)
+
+        mailing = Mailing.where(target: :admin, label: :waitinglist).last
+        expect(RegistrationMailingWorker).to have_enqueued_sidekiq_job(mailing.id)
+      end
 
       pending "logs to the audit log"
 

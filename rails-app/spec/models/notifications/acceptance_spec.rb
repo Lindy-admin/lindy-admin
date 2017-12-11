@@ -13,13 +13,20 @@ describe "When a registration is accepted" do
       it "sends an acceptance email" do
         expect{
           @registration.update!(status: :accepted)
-        }.to change{RegistrationMailingWorker.jobs.length}.by(1)
+        }.to change{Mailing.where(target: :member, label: :acceptance).count}.by(1)
 
-        mailing = Mailing.last
-        expect(mailing.label).to eq("acceptance")
+        mailing = Mailing.where(target: :member, label: :acceptance).last
+        expect(RegistrationMailingWorker).to have_enqueued_sidekiq_job(mailing.id)
       end
 
-      pending "notifies the admin"
+      it "notifies the admin" do
+        expect {
+          @registration.update!(status: :accepted)
+        }.to change{Mailing.where(target: :admin, label: :acceptance).count}.by(1)
+
+        mailing = Mailing.where(target: :admin, label: :acceptance).last
+        expect(RegistrationMailingWorker).to have_enqueued_sidekiq_job(mailing.id)
+      end
 
       pending "logs to the audit log"
 
@@ -34,13 +41,20 @@ describe "When a registration is accepted" do
       it "sends an acceptance email" do
         expect{
           @registration.update!(status: :accepted)
-        }.to change{RegistrationMailingWorker.jobs.length}.by(1)
+        }.to change{Mailing.where(target: :member, label: :acceptance).count}.by(1)
 
-        mailing = Mailing.last
-        expect(mailing.label).to eq("acceptance")
+        mailing = Mailing.where(target: :member, label: :acceptance).last
+        expect(RegistrationMailingWorker).to have_enqueued_sidekiq_job(mailing.id)
       end
 
-      pending "notifies the admin"
+      it "notifies the admin" do
+        expect {
+          @registration.update!(status: :accepted)
+        }.to change{Mailing.where(target: :admin, label: :acceptance).count}.by(1)
+
+        mailing = Mailing.where(target: :admin, label: :acceptance).last
+        expect(RegistrationMailingWorker).to have_enqueued_sidekiq_job(mailing.id)
+      end
 
       pending "logs to the audit log"
 

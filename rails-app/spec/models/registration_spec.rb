@@ -47,17 +47,6 @@ describe "When registering for a course", type: :request do
       }.to change{Payment.count}.by(1)
     end
 
-    it "will send an email confirmation" do
-      expect {
-        post registrations_path, params: params
-      }.to change{RegistrationMailingWorker.jobs.length}.by(1)
-
-      mailing = Mailing.last
-      expect(mailing.label).to eq("registration confirmation")
-    end
-
-    pending "notifies the admin"
-
     pending "logs to the audit log"
 
   end
