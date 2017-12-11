@@ -1,0 +1,39 @@
+<%= form_for(registration) do |f| %>
+
+  <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+
+  <div class="row">
+    <%= f.label :Status %>
+  <div class="row">
+
+  <div class="row">
+    <%= f.label :status do %>
+      <%= f.radio_button(:status, :created, checked: @registration.status == "created") %>
+      Created
+    <% end %>
+    <%= f.label :status do %>
+      <%= f.radio_button(:status, :triage, checked: @registration.status == "triage") %>
+      Triage
+    <% end %>
+    <%= f.label :status do %>
+      <%= f.radio_button(:status, :waitinglist, checked: @registration.status == "waitinglist") %>
+      Waitinglist
+    <% end %>
+    <%= f.label :status do %>
+      <%= f.radio_button(:status, :accepted, checked: @registration.status == "accepted") %>
+      Accepted
+    <% end %>
+  </div>
+
+  <div class="row actions">
+    <%= f.submit "Save", class: "btn btn-success" %>
+  </div>
+<% end %>
+
+<% if registration.errors.any? %>
+  <div class="notice-holder row">
+    <% registration.errors.full_messages.each do |message| %>
+      <p class="notice alert alert-danger"><%= message %></p>
+    <% end %>
+  </div>
+<% end %>

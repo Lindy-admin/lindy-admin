@@ -9,10 +9,10 @@ class Course < ApplicationRecord
   validate :start_is_before_end
 
   def leads
-    registrations.where(role: true).count
+    registrations.where(role: true)
   end
   def follows
-    registrations.where(role: false).count
+    registrations.where(role: false)
   end
 
   def register(member, member_params, role, ticket)
@@ -20,7 +20,13 @@ class Course < ApplicationRecord
       member.update_attributes(member_params)
       member.save!
 
-      registration = Registration.new(member_id: member.id, course_id: self.id, role: role, ticket: ticket)
+      registration = Registration.new(
+        member_id: member.id,
+        course_id: self.id,
+        role: role,
+        ticket: ticket,
+        status: :triage
+      )
       registration.build_payment(registration: registration)
       registration.save!
 

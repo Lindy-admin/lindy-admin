@@ -216,6 +216,9 @@ GEM
       rspec-expectations (~> 3.7.0)
       rspec-mocks (~> 3.7.0)
       rspec-support (~> 3.7.0)
+    rspec-sidekiq (3.0.3)
+      rspec-core (~> 3.0, >= 3.0.0)
+      sidekiq (>= 2.4.0)
     rspec-support (3.7.0)
     safe_yaml (1.0.4)
     sass (3.4.24)
@@ -303,6 +306,7 @@ DEPENDENCIES
   rails (~> 5.0.1)
   rails-settings-cached
   rspec-rails (~> 3.7)
+  rspec-sidekiq
   sass-rails (~> 5.0)
   sidekiq (~> 4.1, >= 4.1.2)
   sinatra

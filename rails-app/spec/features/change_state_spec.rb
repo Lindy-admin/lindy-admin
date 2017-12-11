@@ -1,15 +1,9 @@
-require "rails_helper"
+require 'rails_helper'
 
-describe "When registering for a course", type: :request do
+feature "Waitinglist", type: :feature do
 
-  before(:all) do
+  scenario "An admin puts a registration from triage on the waiting list" do
 
-    @course = FactoryBot.create(:course)
-    @ticket = FactoryBot.create(:ticket, course: @course)
-
-  end
-
-  before(:each) do
     stub_request(:post, "https://api.mollie.nl/v1/payments").
     to_return(
         status: 200,
@@ -37,34 +31,19 @@ describe "When registering for a course", type: :request do
           }
       }.to_json
     )
-  end
 
-  context "while providing the correct input" do
+    registration = FactoryBot.create(:registration, status: :triage)
+    payment = FactoryBot.create(:payment, registration: registration)
 
-    let (:params) do
-      {
-        firstname: "firstname",
-        lastname: "lastname",
-        course: @course.id,
-        ticket: @ticket.id,
-        role: 1,
-        email: "test@email.com"
-      }
-    end
+    expect {
+      visit edit_registration_path(registration)
+      select "waitinglist", from: "status"
+      click_button "Submit"
 
-    it "will create a new registration" do
-      expect {
-        post registrations_path, params: params
-      }.to change{Registration.count}.by(1)
-    end
+      expect(page).to have_content("Registration was successfully updated.")
+      expect(page).to have_select("status", selected: "waitinglist")
+    }.to change{registration.status}.from("triage").to("waitinglist")
 
-    it "will create a payment for the registration" do
-      expect {
-        post registrations_path, params: params
-      }.to change{Payment.count}.by(1)
-    end
-
-    pending "will send an email with payment instructions"
 
   end
 

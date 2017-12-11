@@ -1,6 +1,6 @@
 class RegistrationsController < ApplicationController
 
-  before_action :set_registration, only: [:destroy, :switch_role]
+  before_action :set_registration, only: [:show, :edit, :update, :destroy, :switch_role, :set_status]
   skip_before_action :verify_authenticity_token, only: [:create]
 
   # GET /registrations/new
@@ -38,10 +38,28 @@ class RegistrationsController < ApplicationController
     end
   end
 
+  def show
+  end
+
+  def edit
+  end
+
+  def update
+    respond_to do |format|
+      if @registration.update(registration_params)
+        format.html { redirect_to @registration, notice: 'Registration was successfully updated.' }
+        format.json { render :show, status: :ok, location: @registration }
+      else
+        format.html { render :edit }
+        format.json { render json: @registration.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   def destroy
     @registration.destroy
     respond_to do |format|
-      format.html { redirect_to :back, notice: 'Registration was successfully removed.' }
+      format.html { redirect_to @registration.course, notice: 'Registration was successfully removed.' }
       format.json { head :no_content }
     end
   end
@@ -51,25 +69,45 @@ class RegistrationsController < ApplicationController
     respond_to do |format|
       if @registration.update(role: new_role)
         format.html { redirect_to :back, notice: "Role was switched." }
-        format.json { render :show, status: :ok, location: @member }
+        format.json { render :show, status: :ok, location: @registration }
       else
         format.html { render :edit }
-        format.json { render json: @member.errors, status: :unprocessable_entity }
+        format.json { render json: @registration.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def set_status
+    new_status = params[:status]
+    respond_to do |format|
+      if @registration.update(status: new_status)
+        format.html { redirect_to :back, notice: "Status was updated to #{new_status}" }
+        format.json { render :show, status: :ok, location: @registration }
+      else
+        format.html { render :edit }
+        format.json { render json: @registration.errors, status: :unprocessable_entity }
       end
     end
   end
 
   private
-  # Use callbacks to share common setup or constraints between actions.
-  def set_registration
-    @registration = Registration.find(params[:id])
-  end
+    def set_registration
+      @registration = Registration.find(params[:id])
+    end
 
-  def member_params
-    params.permit(:firstname, :lastname, :email, :address)
-  end
+    def registration_params
+      params.require(:registration).permit(:status)
+    end
 
-  def course_params
-    params.permit(:course_id)
-  end
+    def member_params
+      params.require(:member).permit(:member, :course, :role, :ticket, :status)
+    end
+
+    def member_params
+      params.permit(:firstname, :lastname, :email, :address)
+    end
+
+    def course_params
+      params.permit(:course_id)
+    end
 end

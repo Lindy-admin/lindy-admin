@@ -64,6 +64,10 @@ group :development, :test do
   gem 'ci_reporter_rspec', '~> 1.0'        # Jenkins reports
 end
 
+group :test do
+  gem 'rspec-sidekiq'                      # testing background jobs
+end
+
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
   gem 'web-console', '>= 3.3.0'

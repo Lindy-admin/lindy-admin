@@ -9,7 +9,7 @@ class Payment < ApplicationRecord
   }
 
   after_create :submit_to_payment_provider
-  after_save :send_welcome_email, if: :status_changed?
+  after_save :send_confirmation_email, if: :status_changed?
 
   def submit_to_payment_provider
     mollie = Mollie::API::Client.new(Setting.mollie_api_key)
@@ -26,11 +26,16 @@ class Payment < ApplicationRecord
     self.save!
   end
 
-  def send_welcome_email
+  def send_confirmation_email
     if self.status == "paid" then
-      logger.info("qeueuing payment mail")
-      mailing = Mailing.create(registration: self.registration)
-      PaidMailingWorker.perform_async(mailing.id)
+      logger.info("qeueuing confirmation mail")
+      mailing = Mailing.create(
+        registration: self.registration,
+        remote_template_id: Setting.mailjet_paid_template_id,
+        label: "payment_confirmation",
+        target: :member
+      )
+      RegistrationMailingWorker.perform_async(mailing.id)
     end
   end
 
