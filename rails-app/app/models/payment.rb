@@ -16,7 +16,7 @@ class Payment < ApplicationRecord
     mollie_payment = mollie.payments.create(
       amount:       registration.ticket.price.fractional * 0.01,
       description:  registration.course.title,
-      redirect_url: "https://#{Rails.application.config.hostname}/members/#{self.registration.member.id}",
+      redirect_url: "#{Setting.mollie_redirect_url}?payment=#{self.id}",
       webhook_url:  "https://#{Rails.application.config.webhook_hostname}/payments/webhook"
     )
 

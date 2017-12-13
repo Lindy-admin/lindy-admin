@@ -17,25 +17,20 @@ class RegistrationsController < ApplicationController
     role = params[:role]
 
     if Registration.exists?(member_id: @member.id, course_id: @course.id)
-      respond_to do |format|
-        format.html { redirect_to @member, notice: 'Member is already registered for this course' }
-        format.json { render :show, status: :conflict, location: @member }
-      end
+      @registration = Registration.where(member_id: @member.id, course_id: @course.id).first
+      render :show, status: :conflict
       return
     end
 
-    respond_to do |format|
-      registration = @course.register(@member, member_params, role, @ticket)
-      payment = registration.payment
+    @registration = @course.register(@member, member_params, role, @ticket)
+    payment = @registration.payment
 
-      if payment
-        format.html { redirect_to payment.payment_url }
-        format.json { render :show, status: :created, location: @member }
-      else
-        format.html { render :new }
-        format.json { render json: @member.errors, status: :unprocessable_entity }
-      end
+    if payment
+      render :show, status: :created, location: @registration
+    else
+      render json: @registration.errors, status: :unprocessable_entity
     end
+
   end
 
   def show
