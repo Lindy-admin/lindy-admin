@@ -3,9 +3,18 @@
 <%= form_tag(settings_path, method: 'put', class:"settings") do %>
 
   <h2>Mollie</h2>
+  <p>
+    The api key can be found by logging into you Mollie account.
+    The result url is the url where the user will be redirected to after the
+    payment process.
+  <p>
   <div>
     <%= label_tag(:mollie_api_key, "API key") %>
     <%= text_field_tag(:mollie_api_key, @settings[:mollie_api_key]) %>
+  </div>
+  <div>
+    <%= label_tag(:mollie_redirect_url, "Result url") %>
+    <%= text_field_tag(:mollie_redirect_url, @settings[:mollie_redirect_url]) %>
   </div>
 
   <h2>Mailjet</h2>

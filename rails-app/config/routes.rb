@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   get 'settings', to: 'settings#index', as: 'settings'
   put 'settings', to: 'settings#update'
 
-  get 'registrations/available', to: 'registrations#new', as: 'register', constraints: lambda { |req| req.format == :json }
+  get 'registrations/available', to: 'registrations#new', as: 'register'
   post 'registrations/:id/switch_role', to: 'registrations#switch_role', as: 'switch_role'
   post 'registrations/:id/set_status/:status', to: 'registrations#set_status', as: 'set_status'
   resources :registrations
