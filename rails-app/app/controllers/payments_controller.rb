@@ -1,6 +1,6 @@
 class PaymentsController < ApplicationController
 
-  skip_before_action :verify_authenticity_token, :only => [:webhook]
+  skip_before_action :verify_authenticity_token, :only => [:webhook, :status]
 
   def webhook
 
@@ -16,7 +16,6 @@ class PaymentsController < ApplicationController
 
         if mollie_payment.paid?
             payment.status = :paid
-            # TODO send email
         elsif !mollie_payment.open?
             payment.status = :aborted
         end
@@ -27,4 +26,8 @@ class PaymentsController < ApplicationController
 
   end
 
+  def status
+    @payment = Payment.find(params[:id])
   end
+
+end
