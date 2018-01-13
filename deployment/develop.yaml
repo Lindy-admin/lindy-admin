@@ -91,7 +91,7 @@ services:
       - app
     restart: always
     environment:
-      DOMAINS: 'lindy.dev -> http://wordpress:80, admin.dev -> http://app:3000'
+      DOMAINS: 'lindy.test -> http://wordpress:80, lindy.admin.test -> http://app:3000'
       STAGE: local
       # STAGE: 'production'
       # FORCE_RENEW: 'true'
