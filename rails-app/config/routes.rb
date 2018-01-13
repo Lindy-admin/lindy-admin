@@ -2,6 +2,9 @@ Rails.application.routes.draw do
 
   root to: "members#index"
 
+  devise_for :users
+  resources :users
+
   get 'courses/open', to: "courses#open", as: "open_courses"
   resources :courses do |r|
     resources :tickets
