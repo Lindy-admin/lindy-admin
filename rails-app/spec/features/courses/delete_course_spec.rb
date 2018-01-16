@@ -11,7 +11,7 @@ describe "When deleting a course" do
   end
 
   before(:each) do
-    FactoryBot.create(:course, title: old_course_name)
+    FactoryBot.create(:course)
   end
 
   context "while not logged in" do

@@ -1,6 +1,7 @@
 class PaymentsController < ApplicationController
 
   skip_before_action :verify_authenticity_token, :only => [:webhook, :status]
+  skip_before_action :authenticate_user!, :only => [:webhook, :status]
 
   def webhook
 

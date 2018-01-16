@@ -2,6 +2,7 @@ class RegistrationsController < ApplicationController
 
   before_action :set_registration, only: [:show, :edit, :update, :destroy, :switch_role, :set_status]
   skip_before_action :verify_authenticity_token, only: [:create]
+  skip_before_action :authenticate_user!, :only => [:create]
 
   # GET /registrations/new
   def new
@@ -76,7 +77,7 @@ class RegistrationsController < ApplicationController
     new_status = params[:status]
     respond_to do |format|
       if @registration.update(status: new_status)
-        format.html { redirect_to :back, notice: "Status was updated to #{new_status}" }
+        format.html { redirect_back fallback_location: root_path, notice: "Status was updated to #{new_status}" }
         format.json { render :show, status: :ok, location: @registration }
       else
         format.html { render :edit }
