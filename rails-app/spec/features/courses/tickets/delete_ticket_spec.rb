@@ -1,17 +1,18 @@
 require "rails_helper"
 require "mollie_helper"
 
-describe "When deleting a course" do
+describe "When deleting a ticket" do
 
   let(:password) { "1234567890" }
 
-  def delete_course
-    visit course_path(Course.last.id)
-    click_on "Destroy"
+  def delete_ticket
+    visit course_path(@course.id)
+    click_on "Remove"
   end
 
   before(:each) do
-    FactoryBot.create(:course, title: old_course_name)
+    @course = FactoryBot.create(:course)
+    @ticket = FactoryBot.create(:ticket, course: @course)
   end
 
   context "while not logged in" do
@@ -30,15 +31,15 @@ describe "When deleting a course" do
       login(@user)
     end
 
-    it "will delete the course" do
-      expect{delete_course}.to change {
-        Course.count
+    it "will delete the ticket" do
+      expect{delete_ticket}.to change {
+        Ticket.count
       }.by(-1)
     end
 
-    it "will redirect to the courses overview" do
-      delete_course
-      expect(page).to have_current_path( courses_path )
+    it "will redirect to the course overview" do
+      delete_ticket
+      expect(page).to have_current_path( course_path(@course.id) )
     end
 
   end
@@ -50,15 +51,15 @@ describe "When deleting a course" do
       login(@user)
     end
 
-    it "will delete the course" do
-      expect{delete_course}.to change {
-        Course.count
+    it "will delete the ticket" do
+      expect{delete_ticket}.to change {
+        Ticket.count
       }.by(-1)
     end
 
-    it "will show the updated course" do
-      delete_course
-      expect(page).to have_current_path( courses_path )
+    it "will redirect to the course overview" do
+      delete_ticket
+      expect(page).to have_current_path( course_path(@course.id) )
     end
 
   end
