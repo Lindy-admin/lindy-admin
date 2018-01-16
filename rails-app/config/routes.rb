@@ -1,8 +1,12 @@
 Rails.application.routes.draw do
 
   root to: "members#index"
+  get 'user_root', to: "users#index", as: "user_root"
 
-  devise_for :users
+  devise_for :user, skip: [:registrations]
+  devise_scope :user do
+     resources :users, path: "", only: [:new, :create], controller: "users" #-> url.com/users/new
+  end
   resources :users
 
   get 'courses/open', to: "courses#open", as: "open_courses"
