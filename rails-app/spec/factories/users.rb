@@ -6,5 +6,6 @@ FactoryBot.define do
     sequence :password do |n|
       "password#{n}"
     end
+    tenant
   end
 end

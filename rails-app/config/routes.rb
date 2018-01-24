@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :tenants
   root to: "members#index"
   get 'user_root', to: "users#index", as: "user_root"
 

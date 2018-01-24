@@ -27,6 +27,8 @@ end
 
 # Authentication
 gem 'devise', '~> 4.4'
+# Multi tenancy
+gem 'apartment', '~> 2.1'
 
 # Storing settings
 gem "rails-settings-cached"

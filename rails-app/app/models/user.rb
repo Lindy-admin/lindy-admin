@@ -4,22 +4,19 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
+  belongs_to :tenant
+  before_create :add_tenant
+
   enum role: {
    member: 0,
    admin: 1,
    superadmin: 10
   }
 
-  validates :tenant, uniqueness: true
-
-  before_create :generate_tenant_hash
-
-  protected
-
-  def generate_tenant_hash
-    self.tenant = loop do
-      random_token = SecureRandom.urlsafe_base64(nil, false)
-      break random_token unless User.exists?(tenant: random_token)
+  def add_tenant
+    if role != "superadmin" and tenant == nil
+      self.tenant = Tenant.create!
     end
   end
+
 end

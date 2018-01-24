@@ -37,31 +37,31 @@ feature "Waitinglist" do
 
     end
 
-    context "while logged in as a superadmin" do
-
-      before(:each) do
-        @user = FactoryBot.create(:user, role: :superadmin, password: password)
-      end
-
-      it "changes the status from triage to waitinglist" do
-
-        registration = FactoryBot.create(:registration, status: :triage)
-        payment = FactoryBot.create(:payment, registration: registration)
-
-        expect {
-          login(@user)
-          visit registration_path(registration)
-          click_on "Waitinglist"
-
-          expect(page).to have_current_path( registration_path(registration) )
-        }.to change{
-          registration.reload
-          registration.status
-        }.from("triage").to("waitinglist")
-
-      end
-
-    end
+    # context "while logged in as a superadmin" do
+    #
+    #   before(:each) do
+    #     @user = FactoryBot.create(:user, role: :superadmin, password: password)
+    #   end
+    #
+    #   it "changes the status from triage to waitinglist" do
+    #
+    #     registration = FactoryBot.create(:registration, status: :triage)
+    #     payment = FactoryBot.create(:payment, registration: registration)
+    #
+    #     expect {
+    #       login(@user)
+    #       visit registration_path(registration)
+    #       click_on "Waitinglist"
+    #
+    #       expect(page).to have_current_path( registration_path(registration) )
+    #     }.to change{
+    #       registration.reload
+    #       registration.status
+    #     }.from("triage").to("waitinglist")
+    #
+    #   end
+    #
+    # end
 
   end
 
