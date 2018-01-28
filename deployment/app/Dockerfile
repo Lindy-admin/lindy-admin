@@ -1,5 +1,5 @@
 # Set the base image to Ubuntu
-FROM ruby:2.4.1
+FROM ruby:2.5.0-stretch
 
 # File Author / Maintainer
 MAINTAINER todorus

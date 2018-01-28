@@ -111,6 +111,6 @@ Rails.application.config.middleware.use Apartment::Elevators::Generic, lambda { 
       logger.info error.message
     end
   end
-  
+
   return tenant_token
 }

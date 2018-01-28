@@ -3,6 +3,7 @@ class Tenant < ApplicationRecord
   validates :token, uniqueness: true
 
   before_create :generate_token
+  before_destroy :destroy_schema
   after_create :create_schema
 
   protected
@@ -16,6 +17,9 @@ class Tenant < ApplicationRecord
 
   def create_schema
     Apartment::Tenant.create(self.token)
+  end
+  def destroy_schema
+    Apartment::Tenant.drop(self.token)
   end
 
 end
