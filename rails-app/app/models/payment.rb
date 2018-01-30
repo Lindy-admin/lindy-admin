@@ -35,7 +35,7 @@ class Payment < ApplicationRecord
         label: :payment,
         target: :member
       )
-      RegistrationMailingWorker.perform_async(mailing.id)
+      MailjetWorker.perform_async(mailing.id)
     end
   end
 

@@ -1,4 +1,4 @@
-class RegistrationMailingWorker
+class MailjetWorker
   include Sidekiq::Worker
 
   def perform(mailing_id)

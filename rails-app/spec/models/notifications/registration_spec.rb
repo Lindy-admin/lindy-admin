@@ -19,7 +19,7 @@ describe "When a member registers for a course" do
       }.to change{Mailing.where(target: :member, label: :registration).count}.by(1)
 
       mailing = Mailing.where(target: :member, label: :registration).last
-      expect(RegistrationMailingWorker).to have_enqueued_sidekiq_job(mailing.id)
+      expect(MailjetWorker).to have_enqueued_sidekiq_job(mailing.id)
     end
 
     it "notifies the admin" do
@@ -28,7 +28,7 @@ describe "When a member registers for a course" do
       }.to change{Mailing.where(target: :admin, label: :registration).count}.by(1)
 
       mailing = Mailing.where(target: :admin, label: :registration).last
-      expect(RegistrationMailingWorker).to have_enqueued_sidekiq_job(mailing.id)
+      expect(MailjetWorker).to have_enqueued_sidekiq_job(mailing.id)
     end
 
 
