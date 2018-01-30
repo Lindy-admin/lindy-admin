@@ -29,6 +29,7 @@ end
 gem 'devise', '~> 4.4'
 # Multi tenancy
 gem 'apartment', '~> 2.1'
+gem 'apartment-sidekiq', '~> 1.2'
 
 # Storing settings
 gem "rails-settings-cached"

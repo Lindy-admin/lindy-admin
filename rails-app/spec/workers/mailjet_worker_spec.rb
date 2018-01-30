@@ -3,19 +3,25 @@ require "mollie_helper"
 
 describe "MailjetWorker" do
 
-  before(:all) do
-
-  end
-
   describe "sending a mail" do
+
+    before(:each) do
+      @subject = MailjetWorker.new
+      @tenant = FactoryBot.create(:user, role: :admin).tenant
+      
+      Apartment::Tenant.switch!(@tenant.token)
+      @mailing = FactoryBot.create(:mailing, remote_id: nil)
+    end
+
+    after(:each) do
+      Apartment::Tenant.reset
+    end
 
     context "succesfully" do
 
       let(:remote_id) {456}
 
       before(:each) do
-        @subject = MailjetWorker.new
-        @mailing = FactoryBot.create(:mailing, remote_id: nil)
 
         stub_request(:post, "https://api.mailjet.com/v3.1/send").
           to_return(
@@ -69,9 +75,6 @@ describe "MailjetWorker" do
       let(:remote_id) {456}
 
       before(:each) do
-        @subject = MailjetWorker.new
-        @mailing = FactoryBot.create(:mailing, remote_id: nil)
-
         stub_request(:post, "https://api.mailjet.com/v3.1/send").
           to_return(
             status: 200,
@@ -122,9 +125,6 @@ describe "MailjetWorker" do
     context "servererror" do
 
       before(:each) do
-        @subject = MailjetWorker.new
-        @mailing = FactoryBot.create(:mailing, remote_id: nil)
-
         stub_request(:post, "https://api.mailjet.com/v3.1/send").
           to_return(
             status: 500,

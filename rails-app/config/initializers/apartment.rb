@@ -102,13 +102,12 @@ Rails.application.config.middleware.use Apartment::Elevators::Generic, lambda { 
   tenant_token = nil
 
   if request.env['rack.session']['warden.user.user.key'] != nil
-    begin
-      current_user = User.find(request.env['rack.session']['warden.user.user.key'][0][0])
+    user_id = request.env['rack.session']['warden.user.user.key'][0][0]
+    if User.exists?(id: user_id)
+      current_user = User.find(user_id)
       if current_user.role != "superadmin"
         tenant_token = current_user.tenant.token
       end
-    rescue ActiveRecord::RecordNotFound => error
-      logger.info error.message
     end
   end
 
