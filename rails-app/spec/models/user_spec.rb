@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe "Tenant" do
+describe "Admin" do
 
   context "when it is created" do
 

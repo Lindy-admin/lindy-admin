@@ -129,10 +129,10 @@ class MailjetWorker
     mailing.arguments = variables
     if message[:Status] == "success" then
       mailing.status = :sent
-      mailing.remote_id = message[:To][0][:MessageID]
     else
       mailing.status = :failed
     end
+    mailing.remote_id = message[:To][0][:MessageID]
     mailing.save!
   end
 
