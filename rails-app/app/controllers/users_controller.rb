@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_superadmin!
 
   # GET /users
   # GET /users.json
@@ -70,5 +71,20 @@ class UsersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
       params.require(:user).permit(:email, :password, :password_confirmation, :role)
+    end
+
+    def authenticate_superadmin!
+      if current_user == nil or current_user.role != "superadmin"
+        respond_to do |format|
+          format.html do
+            flash[:error] = 'Access denied'
+            redirect_to root_url
+          end
+          format.json do
+            self.status = :unauthorized
+            self.response_body = { error: 'Access denied' }.to_json
+          end
+        end
+      end
     end
 end
