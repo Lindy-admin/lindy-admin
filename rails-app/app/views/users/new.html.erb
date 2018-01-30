@@ -39,7 +39,7 @@
 
 <% if @user.errors.any? %>
   <div class="notice-holder row">
-    <% registration.errors.full_messages.each do |message| %>
+    <% @user.errors.full_messages.each do |message| %>
       <p class="notice alert alert-danger"><%= message %></p>
     <% end %>
   </div>
