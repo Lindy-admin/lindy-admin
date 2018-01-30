@@ -1,0 +1,34 @@
+<%= form_for(user) do |f| %>
+
+  <div class="field">
+    <%= f.label :email %>
+    <%= f.text_field :email %>
+  </div>
+
+  <div class="row">
+    <%= f.label :role do %>
+      <%= f.radio_button(:role, :member, checked: user.role == "member") %>
+      member
+    <% end %>
+    <%= f.label :role do %>
+      <%= f.radio_button(:role, :admin, checked: user.role == "admin") %>
+      admin
+    <% end %>
+    <%= f.label :role do %>
+      <%= f.radio_button(:role, :superadmin, checked: user.role == "superadmin") %>
+      superadmin
+    <% end %>
+  </div>
+
+  <div class="row actions">
+    <%= f.submit "Save", class: "btn btn-success" %>
+  </div>
+<% end %>
+
+<% if user.errors.any? %>
+  <div class="notice-holder row">
+    <% user.errors.full_messages.each do |message| %>
+      <p class="notice alert alert-danger"><%= message %></p>
+    <% end %>
+  </div>
+<% end %>

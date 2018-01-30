@@ -1,0 +1,22 @@
+<% can_sort ||= false %>
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th><%= can_sort ? sortable("Email") : "Email"%></th>
+      <th><%= can_sort ? sortable("Role") : "Role"%></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% users.each do |user| %>
+      <tr data-link="<%= url_for(user) %>">
+        <td ><%= user.email %></td>
+        <td ><%= user.role %></td>
+        <td>
+          <%= link_to 'Edit', edit_user_path(user), class:"btn btn-primary" %>
+          <%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-warning"%>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -7,7 +7,7 @@ services:
       dockerfile: deployment/app/Dockerfile
     image: todorus/lindy-admin:develop
     environment:
-      HOST_NAME: admin.dev
+      HOST_NAME: admin.test
       WEBHOOK_HOST_NAME: example.com
       SECRET_KEY_BASE: 32fbc25fb6cf0b875046c4342fd340b85ad5ba7c9ccca1993c3af44d584caf0f3c3f4b57b50ab20b3b8dee1a212bc61ea7e7f7f0dc2d0562bfe37c57fa54286b
       REDIS_URL: "redis://redis:6379"
@@ -34,6 +34,7 @@ services:
     image: todorus/lindy-admin:develop
     environment:
       REDIS_URL: "redis://redis:6379"
+      SECRET_KEY_BASE: 32fbc25fb6cf0b875046c4342fd340b85ad5ba7c9ccca1993c3af44d584caf0f3c3f4b57b50ab20b3b8dee1a212bc61ea7e7f7f0dc2d0562bfe37c57fa54286b
     ports:
       - 3000
       - 80
@@ -91,7 +92,7 @@ services:
       - app
     restart: always
     environment:
-      DOMAINS: 'lindy.dev -> http://wordpress:80, admin.dev -> http://app:3000'
+      DOMAINS: 'lindy.test -> http://wordpress:80, lindy.admin.test -> http://app:3000'
       STAGE: local
       # STAGE: 'production'
       # FORCE_RENEW: 'true'

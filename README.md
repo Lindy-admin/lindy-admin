@@ -6,8 +6,8 @@ Install Docker engine and Docker-Compose
 
 Add these entries to your hosts file
 ```
-127.0.0.1       admin.dev
-127.0.0.1       lindy.dev
+127.0.0.1       *.admin.test
+127.0.0.1       lindy.test
 ```
 
 * Run ```develop-build.sh``` to build the docker images (go grab some chai tea)

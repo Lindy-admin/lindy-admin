@@ -8,15 +8,59 @@
   </head>
 
   <body>
-    <ul class="nav nav-tabs">
-      <li role="presentation"><%= link_to 'Members', members_path %></li>
-      <li role="presentation"><%= link_to 'Courses', courses_path %></li>
-      <li role="presentation"><%= link_to 'Settings', settings_path %></li>
-      <li role="presentation"><%= link_to 'Registration form example', register_path %></li>
-    </ul>
+    <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">LindyAdmin</a>
+    </div>
+
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li role="presentation"><%= link_to 'Members', members_path %></li>
+        <li role="presentation"><%= link_to 'Courses', courses_path %></li>
+        <li role="presentation"><%= link_to 'Settings', settings_path %></li>
+        <% if user_signed_in? and current_user.superadmin? %>
+          <li role="presentation"><%= link_to 'Users', user_root_path %></li>
+        <% end %>
+        <li role="presentation"><%= link_to 'Registration form example', register_path %></li>
+      </ul>
+      <p class="navbar-text navbar-right">
+        <% if user_signed_in? %>
+          Signed in as <strong><%= link_to current_user.email, destroy_user_session_path, method: :delete %></strong>.
+        <% else %>
+          <%= link_to "Login", new_user_session_path %>
+        <% end %>
+      </p>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+    <!-- <nav class="navbar navbar-default">
+      <p class="navbar-text navbar-right">
+        <% if user_signed_in? %>
+          Signed in as <strong><%= current_user.email %></strong>.
+        <% else %>
+          <%= link_to "Login", new_user_session_path %>
+        <% end %>
+      </p>
+      <ul class="nav nav-tabs">
+        <li role="presentation"><%= link_to 'Members', members_path %></li>
+        <li role="presentation"><%= link_to 'Courses', courses_path %></li>
+        <li role="presentation"><%= link_to 'Settings', settings_path %></li>
+        <li role="presentation"><%= link_to 'Users', user_root_path %></li>
+        <li role="presentation"><%= link_to 'Registration form example', register_path %></li>
+      </ul>
+    </nav> -->
     <% if flash[:notice] -%>
     <div class="notice-holder row">
       <p class="notice alert alert-success"><%= notice %></p>
+    </div>
+    <% end %>
+    <% if flash[:alert] -%>
+    <div class="notice-holder row">
+      <p class="notice alert alert-error"><%= notice %></p>
     </div>
     <% end %>
     <div class="container">

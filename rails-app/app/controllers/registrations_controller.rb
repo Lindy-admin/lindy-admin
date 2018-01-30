@@ -2,6 +2,7 @@ class RegistrationsController < ApplicationController
 
   before_action :set_registration, only: [:show, :edit, :update, :destroy, :switch_role, :set_status]
   skip_before_action :verify_authenticity_token, only: [:create]
+  skip_before_action :authenticate_user!, :only => [:create]
 
   # GET /registrations/new
   def new
@@ -17,25 +18,20 @@ class RegistrationsController < ApplicationController
     role = params[:role]
 
     if Registration.exists?(member_id: @member.id, course_id: @course.id)
-      respond_to do |format|
-        format.html { redirect_to @member, notice: 'Member is already registered for this course' }
-        format.json { render :show, status: :conflict, location: @member }
-      end
+      @registration = Registration.where(member_id: @member.id, course_id: @course.id).first
+      render :show, status: :conflict
       return
     end
 
-    respond_to do |format|
-      registration = @course.register(@member, member_params, role, @ticket)
-      payment = registration.payment
+    @registration = @course.register(@member, member_params, role, @ticket)
+    payment = @registration.payment
 
-      if payment
-        format.html { redirect_to payment.payment_url }
-        format.json { render :show, status: :created, location: @member }
-      else
-        format.html { render :new }
-        format.json { render json: @member.errors, status: :unprocessable_entity }
-      end
+    if payment
+      render :show, status: :created, location: @registration
+    else
+      render json: @registration.errors, status: :unprocessable_entity
     end
+
   end
 
   def show
@@ -81,7 +77,7 @@ class RegistrationsController < ApplicationController
     new_status = params[:status]
     respond_to do |format|
       if @registration.update(status: new_status)
-        format.html { redirect_to :back, notice: "Status was updated to #{new_status}" }
+        format.html { redirect_back fallback_location: root_path, notice: "Status was updated to #{new_status}" }
         format.json { render :show, status: :ok, location: @registration }
       else
         format.html { render :edit }

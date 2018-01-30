@@ -1,0 +1,11 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Users</h1>
+<%= render partial: 'users_table', locals: {users: @users, can_sort: false} %>
+<div class="row">
+  <%= paginate @users %>
+</div>
+
+<div class="row">
+  <%= link_to 'New User', new_user_path, class: "btn btn-success"%>
+</div>

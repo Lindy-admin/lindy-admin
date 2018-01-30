@@ -25,6 +25,12 @@ git 'https://github.com/mollie/mollie-api-ruby.git', :tag => 'v2.2.1' do
   gem 'mollie-api-ruby'
 end
 
+# Authentication
+gem 'devise', '~> 4.4'
+# Multi tenancy
+gem 'apartment', '~> 2.1'
+gem 'apartment-sidekiq', '~> 1.2'
+
 # Storing settings
 gem "rails-settings-cached"
 
@@ -53,6 +59,8 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
 
+  gem "capybara"                           # simulate UI interactions
+  gem 'selenium-webdriver', '~> 3.8'
   gem "factory_bot_rails", "~> 4.0"        # creates database entries
   gem 'database_cleaner', '~> 1.6'         # truncates database in between tests
   gem 'rspec-rails', '~> 3.7'              # BDD
@@ -62,6 +70,7 @@ group :development, :test do
 
   gem 'faker', '~> 1.8'                    # generate fake data
   gem 'ci_reporter_rspec', '~> 1.0'        # Jenkins reports
+  gem 'rails-controller-testing', '~> 1.0'
 end
 
 group :test do

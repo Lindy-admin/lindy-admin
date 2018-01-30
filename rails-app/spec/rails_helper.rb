@@ -1,5 +1,6 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
+require 'session_helper'
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 # Prevent database truncation if the environment is production
@@ -8,7 +9,8 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'rspec/rails'
 require 'sidekiq/testing'
-require 'capybara/rspec'
+
+include Warden::Test::Helpers
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -52,6 +54,8 @@ RSpec.configure do |config|
   config.before(:each) do |x|
     #start transaction before each test
     DatabaseCleaner.start
+    Apartment::Tenant.reset
+    Warden.test_reset!
   end
 
   #clean database after each test
@@ -79,3 +83,25 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 end
+
+# WebMock.disable_net_connect!(allow_localhost: true)
+#
+# Capybara.register_driver :chrome do |app|
+#   Capybara::Selenium::Driver.new(app, browser: :chrome)
+# end
+#
+# Capybara.register_driver :headless_chrome do |app|
+#   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
+#     chromeOptions: { args: %w(no-sandbox headless disable-gpu) }
+#   )
+#
+#   Capybara::Selenium::Driver.new app,
+#     browser: :chrome,
+#     desired_capabilities: capabilities
+# end
+#
+# Capybara.javascript_driver = :headless_chrome
+# Capybara.configure do |config|
+#   config.default_max_wait_time = 10 # seconds
+#   config.default_driver        = :headless_chrome
+# end

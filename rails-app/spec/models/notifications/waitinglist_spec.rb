@@ -16,7 +16,7 @@ describe "When a registration is put onto the waitinglist", type: :request do
         }.to change{Mailing.where(target: :member, label: :waitinglist).count}.by(1)
 
         mailing = Mailing.where(target: :member, label: :waitinglist).last
-        expect(RegistrationMailingWorker).to have_enqueued_sidekiq_job(mailing.id)
+        expect(MailjetWorker).to have_enqueued_sidekiq_job(mailing.id)
       end
 
       it "notifies the admin" do
@@ -25,7 +25,7 @@ describe "When a registration is put onto the waitinglist", type: :request do
         }.to change{Mailing.where(target: :admin, label: :waitinglist).count}.by(1)
 
         mailing = Mailing.where(target: :admin, label: :waitinglist).last
-        expect(RegistrationMailingWorker).to have_enqueued_sidekiq_job(mailing.id)
+        expect(MailjetWorker).to have_enqueued_sidekiq_job(mailing.id)
       end
 
       pending "logs to the audit log"
@@ -44,7 +44,7 @@ describe "When a registration is put onto the waitinglist", type: :request do
         }.to change{Mailing.where(target: :member, label: :waitinglist).count}.by(1)
 
         mailing = Mailing.where(target: :member, label: :waitinglist).last
-        expect(RegistrationMailingWorker).to have_enqueued_sidekiq_job(mailing.id)
+        expect(MailjetWorker).to have_enqueued_sidekiq_job(mailing.id)
       end
 
       it "notifies the admin" do
@@ -53,7 +53,7 @@ describe "When a registration is put onto the waitinglist", type: :request do
         }.to change{Mailing.where(target: :admin, label: :waitinglist).count}.by(1)
 
         mailing = Mailing.where(target: :admin, label: :waitinglist).last
-        expect(RegistrationMailingWorker).to have_enqueued_sidekiq_job(mailing.id)
+        expect(MailjetWorker).to have_enqueued_sidekiq_job(mailing.id)
       end
 
       pending "logs to the audit log"
