@@ -1,27 +1,47 @@
 class MailjetWorker
   include Sidekiq::Worker
 
-  def perform(mailing_id)
-    mailing = Mailing.find(mailing_id)
-
-    sender_email = Setting.mailjet_sender_email_address
-    sender_name = Setting.mailjet_sender_email_name
-    options = {
-      api_key: Setting.mailjet_public_api_key,
-      secret_key: Setting.mailjet_private_api_key
-    }
-    variables = get_variables(mailing)
-
-    if mailing.target == "admin"
-      response = notifiy_admin(mailing, options, variables, sender_email, sender_name)
-    elsif mailing.target == "member"
-      response = notify_member(mailing, options, variables, sender_email, sender_name)
-    end
-
-    store_result(mailing, response, variables)
+  class IncorrectConfigException < StandardError
   end
 
-  def notifiy_admin(mailing, options, variables, sender_email, sender_name)
+
+  def perform(mailing_id)
+    begin
+      mailing = Mailing.find(mailing_id)
+
+      sender_email = Setting.mailjet_sender_email_address
+      sender_name = Setting.mailjet_sender_email_name
+      options = {
+        api_key: Setting.mailjet_public_api_key,
+        secret_key: Setting.mailjet_private_api_key
+      }
+      variables = get_variables(mailing)
+
+      check_config(mailing, options, variables, sender_email, sender_name)
+      if mailing.target == "admin"
+        response = notify_admin(mailing, options, variables, sender_email, sender_name)
+      elsif mailing.target == "member"
+        response = notify_member(mailing, options, variables, sender_email, sender_name)
+      end
+
+      store_result(mailing, response, variables)
+    rescue IncorrectConfigException
+      mailing.status = :failed
+      mailing.save!
+      return
+    end
+  end
+
+  def check_config(mailing, options, variables, sender_email, sender_name)
+    raise IncorrectConfigException, "No api key" if options[:api_key] == nil
+    raise IncorrectConfigException, "No api secret" if options[:secret_key] == nil
+    raise IncorrectConfigException, "No template id" if mailing.remote_template_id == nil
+    raise IncorrectConfigException, "No sender email" if sender_email == nil
+  end
+
+  def notify_admin(mailing, options, variables, sender_email, sender_name)
+    raise IncorrectConfigException, "No notification email" if Setting.notification_email_address == nil
+
     logger.info("Sending #{mailing.label} notification mail")
     template_id = mailing.remote_template_id.to_i
     member = mailing.registration.member
@@ -38,8 +58,8 @@ class MailjetWorker
             },
             To: [
               {
-                Email: member.email,
-                Name: member.full_name
+                Email: Setting.notification_email_address,
+                Name: "Lindy Administrator"
               }
             ],
             TemplateID: template_id,
