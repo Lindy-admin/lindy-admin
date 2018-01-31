@@ -4,6 +4,15 @@
   <strong>Status:</strong>
   <%= @registration.status %>
 </p>
+<% if @registration.additional != nil %>
+  <% @registration.additional.each do |key, value| %>
+    <p>
+      <strong><%= key.capitalize %>:</strong>
+      <%= value %>
+    </p>
+  <% end %>
+<% end %>
+
 <p>
   <%= link_to 'Waitinglist', set_status_path(@registration, :waitinglist), method: :post, class:"btn btn-warning", disabled: @registration.status == "waitinglist" %>
   <%= link_to 'Accept', set_status_path(@registration, :accepted), method: :post, class:"btn btn-success", disabled: @registration.status == "accepted" %>

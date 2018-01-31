@@ -35,7 +35,11 @@
 
   <div class="row">
     <%= label_tag :address %>
-    <div class="col-xs-4 input-group"><%= text_field_tag :address, nil, class: "form-control" %></div>
+    <div class="col-xs-4 input-group"><%= text_field_tag "additional[address]", nil, class: "form-control" %></div>
+  </div>
+  <div class="row">
+    <%= label_tag :note %>
+    <div class="col-xs-4 input-group"><%= text_field_tag "additional[note]", nil, class: "form-control" %></div>
   </div>
 
   <div class="row actions">

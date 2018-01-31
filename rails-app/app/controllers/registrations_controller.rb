@@ -16,6 +16,7 @@ class RegistrationsController < ApplicationController
     @course = Course.find(params[:course])
     @ticket = @course.tickets.find(params[:ticket])
     role = params[:role]
+    additional_params = params[:additional]
 
     if Registration.exists?(member_id: @member.id, course_id: @course.id)
       @registration = Registration.where(member_id: @member.id, course_id: @course.id).first
@@ -23,7 +24,7 @@ class RegistrationsController < ApplicationController
       return
     end
 
-    @registration = @course.register(@member, member_params, role, @ticket)
+    @registration = @course.register(@member, member_params, role, @ticket, additional_params)
     payment = @registration.payment
 
     if payment
@@ -96,14 +97,11 @@ class RegistrationsController < ApplicationController
     end
 
     def member_params
-      params.require(:member).permit(:member, :course, :role, :ticket, :status)
-    end
-
-    def member_params
       params.permit(:firstname, :lastname, :email, :address)
     end
 
     def course_params
       params.permit(:course_id)
     end
+
 end
