@@ -15,7 +15,7 @@ describe "When a member registers for a course" do
 
     it "will send an email confirmation" do
       expect {
-        @course.register(@member, {}, true, @ticket)
+        @course.register(@member, {}, true, @ticket, {})
       }.to change{Mailing.where(target: :member, label: :registration).count}.by(1)
 
       mailing = Mailing.where(target: :member, label: :registration).last
@@ -24,7 +24,7 @@ describe "When a member registers for a course" do
 
     it "notifies the admin" do
       expect {
-        @course.register(@member, {}, true, @ticket)
+        @course.register(@member, {}, true, @ticket, {})
       }.to change{Mailing.where(target: :admin, label: :registration).count}.by(1)
 
       mailing = Mailing.where(target: :admin, label: :registration).last

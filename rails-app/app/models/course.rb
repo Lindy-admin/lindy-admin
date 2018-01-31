@@ -15,7 +15,7 @@ class Course < ApplicationRecord
     registrations.where(role: false)
   end
 
-  def register(member, member_params, role, ticket)
+  def register(member, member_params, role, ticket, additional_params)
     ActiveRecord::Base.transaction do
       member.update_attributes(member_params)
       member.save!
@@ -25,7 +25,8 @@ class Course < ApplicationRecord
         course_id: self.id,
         role: role,
         ticket: ticket,
-        status: :triage
+        status: :triage,
+        additional: additional_params
       )
       registration.build_payment(registration: registration)
       registration.save!

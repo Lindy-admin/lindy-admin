@@ -24,7 +24,12 @@ describe "When registering for a course" do
         course: @course.id,
         ticket: @ticket.id,
         role: 1,
-        email: "test@email.com"
+        email: "test@email.com",
+        additional: {
+          extra1: "Some note",
+          extra2: true,
+          extra3: 12
+        }
       }
     end
 
@@ -45,6 +50,17 @@ describe "When registering for a course" do
 
       registration = Registration.last
       expect(registration.status).to eq("triage")
+    end
+
+    it "will save additional properties with the Registration" do
+      post registrations_path, params: params, headers: headers
+
+      registration = Registration.last
+      expect(registration.additional).to eq({
+        "extra1" => params[:additional][:extra1].to_s,
+        "extra2" => params[:additional][:extra2].to_s,
+        "extra3" => params[:additional][:extra3].to_s
+      })
     end
 
     it "will create a Payment for the Registration" do
