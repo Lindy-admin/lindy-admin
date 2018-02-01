@@ -80,6 +80,46 @@ describe "When registering for a course" do
 
   end
 
+  context "while providing an invalid email" do
+
+    let (:params) do
+      {
+        firstname: "firstname",
+        lastname: "lastname",
+        course: @course.id,
+        ticket: @ticket.id,
+        role: 1,
+        email: "test_email.com",
+        additional: {
+          extra1: "Some note",
+          extra2: true,
+          extra3: 12
+        }
+      }
+    end
+
+    let (:headers) do
+      {
+        HTTP_ACCEPT: 'application/json'
+      }
+    end
+
+    it "will not create a new Registration" do
+      expect {
+        post registrations_path, params: params, headers: headers
+      }.to_not change{Registration.count}
+    end
+
+    it "will return an UNPROCESSABLE ENTITY status" do
+      post registrations_path, params: params, headers: headers
+
+      expect(response.status).to be(422)
+    end
+
+    pending "logs to the audit log"
+
+  end
+
   context "while there is an already existing registration" do
 
     let (:params) do
