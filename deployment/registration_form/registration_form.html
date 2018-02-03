@@ -1,4 +1,10 @@
-<form action="https://lindy.admin.test/api/m5uhj_oN7bvKRvKXk-WggQ/register" accept-charset="UTF-8" method="post">
+<div id=lindy_admin_register_form_success style="display: none;">
+  Successfully registered, check your mail!
+</div>
+<div id=lindy_admin_register_form_error style="display: none;">
+  Something went wrong while registering, please try again later.
+</div>
+<form id="lindy_admin_register_form" action="https://lindy.admin.test/api/m5uhj_oN7bvKRvKXk-WggQ/register" accept-charset="UTF-8" method="post">
 
   <div class="row">
     <label for="course">Course</label>
@@ -99,6 +105,39 @@ function onCourseChange(e) {
   )
 
 }
+
+function submitData(data) {
+  console.log("submitting", data);
+  $.ajax(
+    {
+      url: HOST + "/api/"+TOKEN+"/register",
+      method: "POST",
+      crossDomain: true,
+      data: data,
+      success: function(data){
+        console.log("Success", data);
+        $(form).hide();
+        $(success_message).show();
+      },
+      error: function(error){
+        console.error("Could not submit form", error);
+        $(form).hide();
+        $(error_message).show();
+      }
+    }
+  )
+}
+
+// capture the submit
+$('#lindy_admin_register_form').on('submit', function(e) { //use on if jQuery 1.7+
+    e.preventDefault();  //prevent form from submitting
+    var data = $("#lindy_admin_register_form :input").serializeArray();
+    submitData(data)
+});
+
+var form = $("#lindy_admin_register_form");
+var success_message = $("#lindy_admin_register_form_success");
+var error_message = $("#lindy_admin_register_form_error");
 
 var course_select = $("select#course");
 var ticket_select = $("select#ticket");
