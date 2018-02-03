@@ -1,0 +1,109 @@
+<form action="https://lindy.admin.test/api/m5uhj_oN7bvKRvKXk-WggQ/register" accept-charset="UTF-8" method="post">
+
+  <div class="row">
+    <label for="course">Course</label>
+    <div class="col-xs-4 input-group"><select name="course" id="course" class="form-control"><option value="">Loading...</option></select></div>
+  </div>
+
+  <div class="row">
+    <label for="role">Role</label>
+    <div class="col-xs-4 input-group"><select name="role" id="role" class="form-control"><option value="true">Lead</option>
+<option value="false">Follow</option></select></div>
+  </div>
+
+  <div class="row">
+    <label for="ticket">Ticket</label>
+    <div class="col-xs-4 input-group"><select name="ticket" id="ticket" class="form-control"><option value="">Loading...</option></select></div>
+  </div>
+
+  <div class="row">
+    <label for="firstname">Firstname</label>
+    <div class="col-xs-4 input-group"><input type="text" name="firstname" id="firstname" class="form-control" /></div>
+  </div>
+
+  <div class="row">
+    <label for="lastname">Lastname</label>
+    <div class="col-xs-4 input-group"><input type="text" name="lastname" id="lastname" class="form-control" /></div>
+  </div>
+
+  <div class="row">
+    <label for="email">Email</label>
+    <div class="col-xs-4 input-group"><input type="text" name="email" id="email" class="form-control" /></div>
+  </div>
+
+  <div class="row">
+    <label for="address">Address</label>
+    <div class="col-xs-4 input-group"><input type="text" name="additional[address]" id="additional_address" class="form-control" /></div>
+  </div>
+  <div class="row">
+    <label for="note">Note</label>
+    <div class="col-xs-4 input-group"><input type="text" name="additional[note]" id="additional_note" class="form-control" /></div>
+  </div>
+
+  <div class="row actions">
+    <input type="submit" name="commit" value="Save" class="btn btn-success" data-disable-with="Save" />
+  </div>
+</form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+var HOST = "https://lindy.admin.test"
+var TOKEN = "m5uhj_oN7bvKRvKXk-WggQ";
+
+function populateCourses(course_select) {
+  $.ajax(
+    {
+      url: HOST + "/api/"+TOKEN+"/courses",
+      method: "GET",
+      crossDomain: true,
+      success: function(data) {
+        course_select.empty();
+        $.each(data, function() {
+         course = this;
+         course_select.append('<option value="'+course["id"]+'">'+course["title"]+'</option>')
+        });
+
+        onCourseChange();
+      },
+      error: function(error){
+        console.error("Could not fetch courses data", error);
+      }
+    }
+  )
+}
+
+function onCourseChange(e) {
+  var course_id = course_select.val();
+
+  $('input[type="submit"]').hide();
+
+  $.ajax(
+    {
+      url: HOST + "/api/"+TOKEN+"/courses/"+course_id,
+      method: "GET",
+      crossDomain: true,
+      success: function(data){
+        ticket_select.empty()
+
+        $.each(data["tickets"], function() {
+          ticket = this;
+          ticket_select.append('<option value="'+ticket["id"]+'">'+ticket["label"]+'</option>')
+        });
+
+        $('input[type="submit"]').show();
+      },
+      error: function(error){
+        console.error("Could not fetch ticket data", error);
+      }
+    }
+  )
+
+}
+
+var course_select = $("select#course");
+var ticket_select = $("select#ticket");
+
+$('input[type="submit"]').hide();
+course_select.change(onCourseChange);
+populateCourses(course_select);
+</script>
