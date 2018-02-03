@@ -5,7 +5,7 @@
 
   <div class="row">
     <%= label_tag :course %>
-    <div class="col-xs-4 input-group"><%= select_tag :course, options_from_collection_for_select(@courses, :id, :title ), class: "form-control" %></div>
+    <div class="col-xs-4 input-group"><%= select_tag :course, options_for_select([["Loading...", nil]]), class: "form-control" %></div>
   </div>
 
   <div class="row">
