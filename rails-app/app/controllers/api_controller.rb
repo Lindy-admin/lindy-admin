@@ -3,14 +3,26 @@ class ApiController < ApplicationController
   skip_before_action :verify_authenticity_token
   skip_before_action :authenticate_user!
 
+  before_action :disable_cors
   before_action :set_default_response_format
 
   def courses
     begin
       tenant = Tenant.where(token: params[:tenant]).first
       Apartment::Tenant.switch!(tenant.token)
+      @courses = Course.all
+      render
+    ensure
+      Apartment::Tenant.reset
+    end
+  end
 
-      @courses = Course.all.page(params[:page])
+  def course
+    begin
+      tenant = Tenant.where(token: params[:tenant]).first
+      Apartment::Tenant.switch!(tenant.token)
+      @course = Course.find(params[:id])
+      render
     ensure
       Apartment::Tenant.reset
     end
@@ -102,5 +114,28 @@ class ApiController < ApplicationController
   def course_params
     params.permit(:course_id)
   end
+
+  def disable_cors
+    headers['Access-Control-Allow-Origin'] = '*'
+    headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
+    headers['Access-Control-Request-Method'] = '*'
+    headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  end
+
+  # def cors_set_access_control_headers
+  #   headers['Access-Control-Allow-Origin'] = '*'
+  #   headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE, OPTIONS'
+  #   headers['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Accept, Authorization, Token'
+  # end
+  #
+  # def cors_preflight_check
+  #   if request.method == 'OPTIONS'
+  #     headers['Access-Control-Allow-Origin'] = '*'
+  #     headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE, OPTIONS'
+  #     headers['Access-Control-Allow-Headers'] = 'X-Requested-With, X-Prototype-Version, Token'
+  #
+  #     render :text => '', :content_type => 'text/plain'
+  #   end
+  # end
 
 end
