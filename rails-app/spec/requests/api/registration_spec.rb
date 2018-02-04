@@ -4,6 +4,10 @@ require "mollie_helper"
 describe "When registering for a course" do
 
   before(:each) do
+    @user = FactoryBot.create(:user, role: :admin)
+    @tenant = @user.tenant
+    Apartment::Tenant.switch!(@tenant.token)
+
     Setting.mailjet_sender_email_address = "some@email.com"
     Setting.mailjet_sender_email_name = "some_email_name"
     Setting.mailjet_paid_template_id = 1
@@ -11,6 +15,7 @@ describe "When registering for a course" do
 
     @course = FactoryBot.create(:course)
     @ticket = FactoryBot.create(:ticket, course: @course)
+    Apartment::Tenant.reset
 
     stub_payment_creation_request
   end
@@ -41,21 +46,30 @@ describe "When registering for a course" do
 
     it "will create a new Registration" do
       expect {
-        post registrations_path, params: params, headers: headers
-      }.to change{Registration.count}.by(1)
+        post api_register_path @tenant.token, params: params, headers: headers
+      }.to change{
+        Apartment::Tenant.switch!(@tenant.token)
+        count = Registration.count
+        Apartment::Tenant.reset
+        count
+      }.by(1)
     end
 
     it "will put the Registration in the triage status" do
-      post registrations_path, params: params, headers: headers
+      post api_register_path @tenant.token, params: params, headers: headers
 
+      Apartment::Tenant.switch!(@tenant.token)
       registration = Registration.last
+      Apartment::Tenant.reset
       expect(registration.status).to eq("triage")
     end
 
     it "will save additional properties with the Registration" do
-      post registrations_path, params: params, headers: headers
+      post api_register_path @tenant.token, params: params, headers: headers
 
+      Apartment::Tenant.switch!(@tenant.token)
       registration = Registration.last
+      Apartment::Tenant.reset
       expect(registration.additional).to eq({
         "extra1" => params[:additional][:extra1].to_s,
         "extra2" => params[:additional][:extra2].to_s,
@@ -65,15 +79,20 @@ describe "When registering for a course" do
 
     it "will create a Payment for the Registration" do
       expect {
-        post registrations_path, params: params, headers: headers
-      }.to change{Payment.count}.by(1)
+        post api_register_path @tenant.token, params: params, headers: headers
+      }.to change{
+        Apartment::Tenant.switch!(@tenant.token)
+        count = Registration.count
+        Apartment::Tenant.reset
+        count
+      }.by(1)
     end
 
     it "will return a CREATED status and the registration" do
-      post registrations_path, params: params, headers: headers
+      post api_register_path @tenant.token, params: params, headers: headers
 
       expect(response.status).to be(201)
-      expect(response).to render_template(:show)
+      expect(response).to render_template(:register)
     end
 
     pending "logs to the audit log"
@@ -106,12 +125,17 @@ describe "When registering for a course" do
 
     it "will not create a new Registration" do
       expect {
-        post registrations_path, params: params, headers: headers
-      }.to_not change{Registration.count}
+        post api_register_path @tenant.token, params: params, headers: headers
+      }.to_not change{
+        Apartment::Tenant.switch!(@tenant.token)
+        count = Registration.count
+        Apartment::Tenant.reset
+        count
+      }
     end
 
     it "will return an UNPROCESSABLE ENTITY status" do
-      post registrations_path, params: params, headers: headers
+      post api_register_path @tenant.token, params: params, headers: headers
 
       expect(response.status).to be(422)
     end
@@ -140,32 +164,50 @@ describe "When registering for a course" do
     end
 
     before(:each) do
-      post registrations_path, params: params, headers: headers
+      post api_register_path @tenant.token, params: params, headers: headers
     end
 
     it "will not create a new Registration" do
       expect {
-        post registrations_path, params: params, headers: headers
-      }.to_not change{Registration.count}
+        post api_register_path @tenant.token, params: params, headers: headers
+      }.to_not change{
+        Apartment::Tenant.switch!(@tenant.token)
+        count = Registration.count
+        Apartment::Tenant.reset
+        count
+      }
     end
 
     it "will not change the status of the existing registration" do
+      Apartment::Tenant.switch!(@tenant.token)
       registration = Registration.last
+      Apartment::Tenant.reset
+
       expect {
-        post registrations_path, params: params, headers: headers
-      }.to_not change{registration.status}
+        post api_register_path @tenant.token, params: params, headers: headers
+      }.to_not change{
+        Apartment::Tenant.switch!(@tenant.token)
+        status = registration.status
+        Apartment::Tenant.reset
+        status
+      }
     end
 
     it "will not create a new Payment for the Registration" do
       expect {
-        post registrations_path, params: params, headers: headers
-      }.to_not change{Payment.count}
+        post api_register_path @tenant.token, params: params, headers: headers
+      }.to_not change{
+        Apartment::Tenant.switch!(@tenant.token)
+        count = Registration.count
+        Apartment::Tenant.reset
+        count
+      }
     end
 
     it "will return an CONFLICT status and the registration" do
-      post registrations_path, params: params, headers: headers
+      post api_register_path @tenant.token, params: params, headers: headers
       expect(response.status).to be(409)
-      expect(response).to render_template(:show)
+      expect(response).to render_template(:register)
     end
 
   end

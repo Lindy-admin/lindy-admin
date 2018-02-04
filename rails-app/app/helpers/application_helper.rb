@@ -9,4 +9,9 @@ module ApplicationHelper
     direction = column == sort_column && sort_direction == "asc" ? "desc" : "asc"
     link_to title, {:sort => column, :direction => direction}, {:class => css_class}
   end
+
+  def render_source view
+    html = CodeRay.scan(render(view), :html).div(:line_numbers => :table)
+    raw(html)
+  end
 end

@@ -24,13 +24,12 @@ class RegistrationsController < ApplicationController
       return
     end
 
-    @registration = @course.register(@member, member_params, role, @ticket, additional_params)
-    payment = @registration.payment
-
-    if payment
+    begin
+      @registration = @course.register(@member, member_params, role, @ticket, additional_params)
+      payment = @registration.payment
       render :show, status: :created, location: @registration
-    else
-      render json: @registration.errors, status: :unprocessable_entity
+    rescue Exception => e
+      render json: { error: 0, message: e.message}, status: :unprocessable_entity
     end
 
   end

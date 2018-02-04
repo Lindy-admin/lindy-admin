@@ -334,6 +334,7 @@ DEPENDENCIES
   byebug
   capybara
   ci_reporter_rspec (~> 1.0)
+  coderay (~> 1.1, >= 1.1.2)
   coffee-rails (~> 4.2)
   database_cleaner (~> 1.6)
   devise (~> 4.4)

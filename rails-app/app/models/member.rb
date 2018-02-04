@@ -4,7 +4,7 @@ class Member < ApplicationRecord
 
   validates :firstname, presence: true
   validates :lastname, presence: true
-  validates :email, presence: true
+  validates :email, presence: true, format: { with: Devise.email_regexp, message: "Invalid email" }
 
   def full_name
     "#{self.firstname} #{self.lastname}"

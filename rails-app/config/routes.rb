@@ -26,8 +26,11 @@ Rails.application.routes.draw do
   post 'registrations/:id/set_status/:status', to: 'registrations#set_status', as: 'set_status'
   resources :registrations
 
-  get 'payments/:id/status', to: 'payments#status', as: "payment_status"
-  post 'payments/webhook', to: 'payments#webhook'
+  get 'api/:tenant/payments/:id/status', to: 'api#payment_status', as: "payment_status"
+  post 'api/:tenant/payments/webhook', to: 'api#payment_webhook', as: "payment_webhook"
+  post 'api/:tenant/register', to: 'api#register', as: "api_register"
+  get 'api/:tenant/courses', to: 'api#courses', as: "api_courses"
+  get 'api/:tenant/courses/:id', to: 'api#course', as: "api_course"
 
   require 'sidekiq/web'
 
