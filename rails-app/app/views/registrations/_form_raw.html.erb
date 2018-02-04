@@ -41,6 +41,8 @@
     <label for="address">Address</label>
     <div class="col-xs-4 input-group"><input type="text" name="additional[address]" id="additional_address" class="form-control" /></div>
   </div>
+
+  <!--  Optional properties can be added by using name="additional[PROPERTY_NAME]" -->
   <div class="row">
     <label for="note">Note</label>
     <div class="col-xs-4 input-group"><input type="text" name="additional[note]" id="additional_note" class="form-control" /></div>
@@ -53,13 +55,11 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
-var HOST = "https://lindy.admin.test"
-var TOKEN = "m5uhj_oN7bvKRvKXk-WggQ";
 
 function populateCourses(course_select) {
   $.ajax(
     {
-      url: HOST + "/api/"+TOKEN+"/courses",
+      url: "<%= api_courses_url(Apartment::Tenant.current) %>",
       method: "GET",
       crossDomain: true,
       success: function(data) {
@@ -85,7 +85,7 @@ function onCourseChange(e) {
 
   $.ajax(
     {
-      url: HOST + "/api/"+TOKEN+"/courses/"+course_id,
+      url: "<%= api_courses_url(Apartment::Tenant.current) %>/"+course_id,
       method: "GET",
       crossDomain: true,
       success: function(data){
@@ -110,7 +110,7 @@ function submitData(data) {
   console.log("submitting", data);
   $.ajax(
     {
-      url: HOST + "/api/"+TOKEN+"/register",
+      url: "<%= api_register_url(Apartment::Tenant.current) %>",
       method: "POST",
       crossDomain: true,
       data: data,

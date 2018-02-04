@@ -1,52 +1,5 @@
 <div class="row"><h1>Register</h1></div>
-<%= form_tag(controller: "registrations", action:"create", method:"post") do |f| %>
+<%= render "form_raw" %>
 
-  <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-
-  <div class="row">
-    <%= label_tag :course %>
-    <div class="col-xs-4 input-group"><%= select_tag :course, options_for_select([["Loading...", nil]]), class: "form-control" %></div>
-  </div>
-
-  <div class="row">
-    <%= label_tag :role %>
-    <div class="col-xs-4 input-group"><%= select_tag :role, options_for_select([["Lead", "true"], ["Follow", "false"]]), class: "form-control" %></div>
-  </div>
-
-  <div class="row">
-    <%= label_tag :ticket %>
-    <div class="col-xs-4 input-group"><%= select_tag :ticket, options_for_select([["Loading...", nil]]), class: "form-control" %></div>
-  </div>
-
-  <div class="row">
-    <%= label_tag :firstname %>
-    <div class="col-xs-4 input-group"><%= text_field_tag :firstname, nil, class: "form-control" %></div>
-  </div>
-
-  <div class="row">
-    <%= label_tag :lastname %>
-    <div class="col-xs-4 input-group"><%= text_field_tag :lastname, nil, class: "form-control" %></div>
-  </div>
-
-  <div class="row">
-    <%= label_tag :email %>
-    <div class="col-xs-4 input-group"><%= text_field_tag :email, nil, class: "form-control" %></div>
-  </div>
-
-  <div class="row">
-    <%= label_tag :address %>
-    <div class="col-xs-4 input-group"><%= text_field_tag "additional[address]", nil, class: "form-control" %></div>
-  </div>
-  <div class="row">
-    <%= label_tag :note %>
-    <div class="col-xs-4 input-group"><%= text_field_tag "additional[note]", nil, class: "form-control" %></div>
-  </div>
-
-  <div class="row actions">
-    <%= submit_tag "Save", class: "btn btn-success" %>
-  </div>
-<% end %>
-
-<% content_for :page_js do
-  javascript_include_tag 'registration'
-end %>
+<h2>Source</h2>
+<%= render_source "form_raw" %>
