@@ -20,7 +20,7 @@ services:
       - storage
       - redis
     entrypoint: ["/rails-app/docker-entrypoint.sh"]
-    command: bash -c "rake db:migrate; rails s"
+    command: bash -c "rake db:migrate RAILS_ENV=staging; rails s -e staging"
 
 
   storage:

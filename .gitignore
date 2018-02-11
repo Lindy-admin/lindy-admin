@@ -36,3 +36,6 @@ bower.json
 
 # Databases etc
 data/*
+
+#compiled assets
+rails-app/public/assets/
