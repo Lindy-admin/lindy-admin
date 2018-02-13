@@ -10,7 +10,8 @@ class ApiController < ApplicationController
     begin
       tenant = Tenant.where(token: params[:tenant]).first
       Apartment::Tenant.switch!(tenant.token)
-      @courses = Course.all
+      today = Date.today
+      @courses = Course.where("registration_start <= ? AND registration_end >= ?", today, today)
       render
     ensure
       Apartment::Tenant.reset
