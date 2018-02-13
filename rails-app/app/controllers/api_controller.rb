@@ -60,7 +60,7 @@ class ApiController < ApplicationController
 
   end
 
-  def payments_webhook
+  def payment_webhook
 
     begin
       tenant = Tenant.where(token: params[:tenant]).first
