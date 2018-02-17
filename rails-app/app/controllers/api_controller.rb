@@ -74,7 +74,8 @@ class ApiController < ApplicationController
       mollie = Mollie::API::Client.new(Setting.mollie_api_key)
       mollie_payment = mollie.payments.get payment.remote_id
 
-      if mollie_payment.paid?
+      # the mollie_payment.paid? method seems to function incorrectly
+      if mollie_payment.status == "paid"
           payment.status = :paid
       elsif !mollie_payment.open?
           payment.status = :aborted
