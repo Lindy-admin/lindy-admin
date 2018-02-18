@@ -66,7 +66,7 @@ class ApiController < ApplicationController
       tenant = Tenant.where(token: params[:tenant]).first
       Apartment::Tenant.switch!(tenant.token)
 
-      payment = Payment.where(remote_id: params[:id]).first
+      payment = Payment.find(params[:id].to_i)
       if payment == nil
         raise ActiveRecord::RecordNotFound
       end

@@ -19,7 +19,7 @@ class Payment < ApplicationRecord
       amount:       registration.ticket.price.fractional * 0.01,
       description:  registration.course.title,
       redirect_url: "#{Setting.mollie_redirect_url}?payment=#{self.id}",
-      webhook_url:  payment_webhook_url(Apartment::Tenant.current, host: Rails.application.config.webhook_hostname)
+      webhook_url:  payment_webhook_url(Apartment::Tenant.current, self.id, host: Rails.application.config.webhook_hostname)
     )
 
     self.remote_id = mollie_payment.id
