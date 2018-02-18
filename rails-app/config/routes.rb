@@ -27,7 +27,7 @@ Rails.application.routes.draw do
   resources :registrations
 
   get 'api/:tenant/payments/:id/status', to: 'api#payment_status', as: "payment_status"
-  post 'api/:tenant/payments/webhook', to: 'api#payment_webhook', as: "payment_webhook"
+  post 'api/:tenant/payments/:id/webhook', to: 'api#payment_webhook', as: "payment_webhook"
   post 'api/:tenant/register', to: 'api#register', as: "api_register"
   get 'api/:tenant/courses', to: 'api#courses', as: "api_courses"
   get 'api/:tenant/courses/:id', to: 'api#course', as: "api_course"

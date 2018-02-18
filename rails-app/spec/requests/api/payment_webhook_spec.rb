@@ -14,12 +14,6 @@ describe "When updating a payment status through the webhook" do
     Apartment::Tenant.reset
   end
 
-  let :params do
-    {
-      id: @payment.remote_id
-    }
-  end
-
   context "with a payment that changed to paid" do
 
     before :each do
@@ -28,7 +22,7 @@ describe "When updating a payment status through the webhook" do
 
     it "changes the payment status to paid" do
       expect {
-        post payment_webhook_path(@tenant.token), params: params, headers: { HTTP_ACCEPT: "application/json" }
+        post payment_webhook_path(@tenant.token, @payment.id), headers: { HTTP_ACCEPT: "application/json" }
       }.to change {
         Apartment::Tenant.switch!(@tenant.token)
         @payment.reload
@@ -40,7 +34,7 @@ describe "When updating a payment status through the webhook" do
     end
 
     it "returns a NO CONTENT status" do
-      post payment_webhook_path(@tenant.token), params: params, headers: { HTTP_ACCEPT: "application/json" }
+      post payment_webhook_path(@tenant.token, @payment.id), headers: { HTTP_ACCEPT: "application/json" }
       expect(response.status).to eq(204)
       expect(response.body).to eq("")
     end
@@ -55,7 +49,7 @@ describe "When updating a payment status through the webhook" do
 
     it "changes the payment status to aborted" do
       expect {
-        post payment_webhook_path(@tenant.token), params: params, headers: { HTTP_ACCEPT: "application/json" }
+        post payment_webhook_path(@tenant.token, @payment.id), headers: { HTTP_ACCEPT: "application/json" }
       }.to change {
         Apartment::Tenant.switch!(@tenant.token)
         @payment.reload
@@ -67,7 +61,7 @@ describe "When updating a payment status through the webhook" do
     end
 
     it "returns a NO CONTENT status" do
-      post payment_webhook_path(@tenant.token), params: params, headers: { HTTP_ACCEPT: "application/json" }
+      post payment_webhook_path(@tenant.token, @payment.id), headers: { HTTP_ACCEPT: "application/json" }
       expect(response.status).to eq(204)
       expect(response.body).to eq("")
     end
@@ -82,7 +76,7 @@ describe "When updating a payment status through the webhook" do
 
     it "changes the payment status to aborted" do
       expect {
-        post payment_webhook_path(@tenant.token), params: params, headers: { HTTP_ACCEPT: "application/json" }
+        post payment_webhook_path(@tenant.token, @payment.id), headers: { HTTP_ACCEPT: "application/json" }
       }.to change {
         Apartment::Tenant.switch!(@tenant.token)
         @payment.reload
@@ -94,7 +88,7 @@ describe "When updating a payment status through the webhook" do
     end
 
     it "returns a NO CONTENT status" do
-      post payment_webhook_path(@tenant.token), params: params, headers: { HTTP_ACCEPT: "application/json" }
+      post payment_webhook_path(@tenant.token, @payment.id), headers: { HTTP_ACCEPT: "application/json" }
       expect(response.status).to eq(204)
       expect(response.body).to eq("")
     end
@@ -109,7 +103,7 @@ describe "When updating a payment status through the webhook" do
 
     it "changes the payment status to aborted" do
       expect {
-        post payment_webhook_path(@tenant.token), params: params, headers: { HTTP_ACCEPT: "application/json" }
+        post payment_webhook_path(@tenant.token, @payment.id), headers: { HTTP_ACCEPT: "application/json" }
       }.to change {
         Apartment::Tenant.switch!(@tenant.token)
         @payment.reload
@@ -121,7 +115,7 @@ describe "When updating a payment status through the webhook" do
     end
 
     it "returns a NO CONTENT status" do
-      post payment_webhook_path(@tenant.token), params: params, headers: { HTTP_ACCEPT: "application/json" }
+      post payment_webhook_path(@tenant.token, @payment.id), headers: { HTTP_ACCEPT: "application/json" }
       expect(response.status).to eq(204)
       expect(response.body).to eq("")
     end
@@ -130,14 +124,8 @@ describe "When updating a payment status through the webhook" do
 
   context "with a payment id that doesn't exist" do
 
-    let :params do
-      {
-        id: -1
-      }
-    end
-
     it "returns a NOT FOUND status" do
-      post payment_webhook_path(@tenant.token), params: params, headers: { HTTP_ACCEPT: "application/json" }
+      post payment_webhook_path(@tenant.token, -1), headers: { HTTP_ACCEPT: "application/json" }
       expect(response.status).to eq(404)
       expect(response.body).to eq("")
     end
