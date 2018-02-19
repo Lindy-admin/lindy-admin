@@ -9,8 +9,5 @@ FactoryBot.define do
     sequence :email do |n|
       "email#{n}@example.test"
     end
-    sequence :address do |n|
-      "addressstreet #{n}"
-    end
   end
 end

@@ -110,7 +110,7 @@ class ApiController < ApplicationController
   end
 
   def member_params
-    params.permit(:firstname, :lastname, :email, :address)
+    params.permit(:firstname, :lastname, :email)
   end
 
   def course_params
