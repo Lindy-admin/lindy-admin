@@ -110,11 +110,16 @@ class ApiController < ApplicationController
   end
 
   def member_params
-    params.permit(:firstname, :lastname, :email)
+    params.require([:firstname, :lastname, :email])
+    return {
+      firstname: params[:firstname],
+      lastname: params[:lastname],
+      email: params[:email]
+    }
   end
 
   def course_params
-    params.permit(:course_id)
+    params.require(:course_id)
   end
 
   def disable_cors
