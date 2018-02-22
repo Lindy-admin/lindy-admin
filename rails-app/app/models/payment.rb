@@ -8,7 +8,14 @@ class Payment < ApplicationRecord
     submitted: 1,
     paid: 2,
     aborted: 3,
-    failed: 4
+    failed: 4,
+    cancelled: 5,
+    pending: 6,
+    expired: 7,
+    paidout: 8,
+    refunded: 9,
+    charged_back: 10,
+    unknown: 11
   }
 
   after_create :submit_to_payment_provider

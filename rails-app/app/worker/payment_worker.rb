@@ -30,7 +30,8 @@ class PaymentWorker
     rescue IncorrectConfigException
       payment.status = :failed
       payment.save!
-      return
+    ensure
+      logger.info("Setting payment status for registration #{registration.id} to #{payment.status}")
     end
   end
 
