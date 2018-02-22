@@ -74,15 +74,16 @@ class ApiController < ApplicationController
       mollie = Mollie::API::Client.new(Setting.mollie_api_key)
       mollie_payment = mollie.payments.get payment.remote_id
 
-      # the mollie_payment.paid? method seems to function incorrectly
-      if mollie_payment.status == "paid"
-          payment.status = :paid
-      elsif !mollie_payment.open?
-          payment.status = :aborted
+      begin
+        payment.status = mollie_payment.status
+      rescue ArgumentError => e
+        payment.status = :unknown
+      ensure
+        payment.save!
       end
-      payment.save!
+
     rescue Mollie::API::Exception => e
-        render text: "Failed", status: 500
+      render text: "Failed", status: 500
     ensure
       Apartment::Tenant.reset
     end
