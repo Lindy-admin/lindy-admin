@@ -8,6 +8,7 @@ rails-app/db/*.sqlite3-journal
 rails-app/public/system
 rails-app/coverage/
 rails-app/spec/tmp
+reports/
 **.orig
 rerun.txt
 pickle-email-*.html

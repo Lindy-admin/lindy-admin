@@ -1,10 +1,10 @@
 version: '3.1'
 services:
 
-  test:
+  app:
     build:
       context: ..
-      dockerfile: deployment/test/Dockerfile
+      dockerfile: deployment/app/Dockerfile
     image: todorus/lindy-admin:test
     environment:
       HOST_NAME: admin.test
@@ -16,14 +16,12 @@ services:
       - 80
       - 443
     volumes:
-      - ../rails-app:/rails-app
+      - ../reports:/rails-app/reports
     depends_on:
       - storage
     links:
       - storage
-    stdin_open: true
-    tty: true
-    command: /bin/bash
+    command: bash -c "sleep 15s; rspec spec"
 
   storage:
     image: postgres:9.6.3
@@ -35,46 +33,3 @@ services:
       - ../data/storage:/var/lib/postgresql/data
     ports:
       - 5432
-
-  # worker:
-  #   image: todorus/lindy-admin:develop
-  #   environment:
-  #     REDIS_URL: "redis://redis:6379"
-  #   ports:
-  #     - 3000
-  #     - 80
-  #     - 443
-  #   restart: unless-stopped
-  #   depends_on:
-  #     - storage
-  #     - redis
-  #   links:
-  #     - storage
-  #     - redis
-  #   command: bundle exec sidekiq
-
-  redis:
-    image: redis
-    volumes:
-      - ../data/redis:/data
-    ports:
-      - 6379
-    restart: unless-stopped
-
-  https-portal:
-    image: steveltn/https-portal:1
-    ports:
-     - '80:80'
-     - '443:443'
-    volumes:
-     - ../data/ssl_certs:/var/lib/https-portal
-    depends_on:
-     - test
-    links:
-     - test
-    restart: always
-    environment:
-     DOMAINS: 'lindy.admin.test -> http://test:3000'
-     STAGE: local
-     # STAGE: 'production'
-     # FORCE_RENEW: 'true'
