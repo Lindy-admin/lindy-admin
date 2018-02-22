@@ -1,0 +1,35 @@
+version: '3.1'
+services:
+
+  app:
+    build:
+      context: ..
+      dockerfile: deployment/app/Dockerfile
+    image: todorus/lindy-admin:test
+    environment:
+      HOST_NAME: admin.test
+      WEBHOOK_HOST_NAME: example.com
+      SECRET_KEY_BASE: 32fbc25fb6cf0b875046c4342fd340b85ad5ba7c9ccca1993c3af44d584caf0f3c3f4b57b50ab20b3b8dee1a212bc61ea7e7f7f0dc2d0562bfe37c57fa54286b
+      REDIS_URL: "redis://redis:6379"
+    ports:
+      - 3000
+      - 80
+      - 443
+    volumes:
+      - ../reports:/rails-app/reports
+    depends_on:
+      - storage
+    links:
+      - storage
+    command: bash -c "sleep 15s; rake db:create RAILS_ENV=test"
+
+  storage:
+    image: postgres:9.6.3
+    environment:
+       POSTGRES_USER: lindy
+       POSTGRES_DB: lindy
+       POSTGRES_PASSWORD: mysecretpassword
+    volumes:
+      - ../data/storage:/var/lib/postgresql/data
+    ports:
+      - 5432
