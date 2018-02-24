@@ -36,7 +36,7 @@ class PaymentWorker
   end
 
   def check_config(payment, api_key)
-    raise IncorrectConfigException, "No api key" if api_key == nil
+    raise IncorrectConfigException, "No api key" if api_key == nil || api_key == ""
   end
 
 end

@@ -150,13 +150,61 @@ describe "MailjetWorker" do
 
     end
 
-    context "without mailjet settings" do
+    context "with an empty template id" do
 
       before(:each) do
-        @mailing = FactoryBot.create(:mailing, remote_id: nil, remote_template_id: nil)
+        @mailing = FactoryBot.create(:mailing, remote_id: nil, remote_template_id: "")
+      end
+
+      it "does not call the Mailjet API" do
+        @subject.perform(@mailing.id)
+        assert_not_requested :post,  "https://api.mailjet.com/v3.1/send"
+      end
+
+      it "updates the Mailing status" do
+        expect {
+          @subject.perform(@mailing.id)
+        }.to change{
+          @mailing.reload
+          @mailing.status
+        }.from("created").to("failed")
+      end
+
+    end
+
+    context "without a mailjet key" do
+
+      before(:each) do
+        @mailing = FactoryBot.create(:mailing, remote_id: nil)
 
         Setting[:mailjet_public_api_key] = nil
         Setting[:mailjet_private_api_key] = nil
+        Setting.save
+      end
+
+      it "does not call the Mailjet API" do
+        @subject.perform(@mailing.id)
+        assert_not_requested :post,  "https://api.mailjet.com/v3.1/send"
+      end
+
+      it "updates the Mailing status" do
+        expect {
+          @subject.perform(@mailing.id)
+        }.to change{
+          @mailing.reload
+          @mailing.status
+        }.from("created").to("failed")
+      end
+
+    end
+
+    context "with an empty mailjet key" do
+
+      before(:each) do
+        @mailing = FactoryBot.create(:mailing, remote_id: nil)
+
+        Setting[:mailjet_public_api_key] = ""
+        Setting[:mailjet_private_api_key] = ""
         Setting.save
       end
 
@@ -245,56 +293,56 @@ describe "MailjetWorker" do
           )
       end
 
-      context "unsuccesfully" do
+      it "calls the Mailjet API" do
+        @subject.perform(@mailing.id)
+        assert_requested :post,  "https://api.mailjet.com/v3.1/send"
+      end
 
-        let(:remote_id) {456}
-
-        before(:each) do
-          stub_request(:post, "https://api.mailjet.com/v3.1/send").
-            to_return(
-              status: 200,
-              headers: {},
-              body: {
-                Messages: [
-                  {
-                    Status: "failed",
-                    To: [
-                      {
-                        Email: @mailing.registration.member.email,
-                        MessageUUID: "123",
-                        MessageID: remote_id,
-                        MessageHref: "https://api.mailjet.com/v3/message/#{remote_id}"
-                      }
-                    ]
-                  }
-                ]
-              }.to_json
-            )
-        end
-
-        it "calls the Mailjet API" do
+      it "updates the Mailing status" do
+        expect {
           @subject.perform(@mailing.id)
-          assert_requested :post,  "https://api.mailjet.com/v3.1/send"
-        end
+        }.to change{
+          @mailing.reload
+          @mailing.status
+        }.from("created").to("sent")
+      end
 
-        it "updates the Mailing status" do
-          expect {
-            @subject.perform(@mailing.id)
-          }.to change{
-            @mailing.reload
-            @mailing.status
-          }.from("created").to("failed")
-        end
+      it "updates the Mailing remote id" do
+        expect {
+          @subject.perform(@mailing.id)
+        }.to change{
+          @mailing.reload
+          @mailing.remote_id
+        }.from(nil).to("#{remote_id}")
+      end
 
-        it "updates the Mailing remote id" do
-          expect {
-            @subject.perform(@mailing.id)
-          }.to change{
-            @mailing.reload
-            @mailing.remote_id
-          }.from(nil).to("#{remote_id}")
-        end
+    end
 
+    context "unsuccesfully" do
+
+      let(:remote_id) {456}
+
+      before(:each) do
+        stub_request(:post, "https://api.mailjet.com/v3.1/send").
+          to_return(
+            status: 200,
+            headers: {},
+            body: {
+              Messages: [
+                {
+                  Status: "failed",
+                  To: [
+                    {
+                      Email: @mailing.registration.member.email,
+                      MessageUUID: "123",
+                      MessageID: remote_id,
+                      MessageHref: "https://api.mailjet.com/v3/message/#{remote_id}"
+                    }
+                  ]
+                }
+              ]
+            }.to_json
+          )
       end
 
       it "calls the Mailjet API" do
@@ -308,7 +356,7 @@ describe "MailjetWorker" do
         }.to change{
           @mailing.reload
           @mailing.status
-        }.from("created").to("sent")
+        }.from("created").to("failed")
       end
 
       it "updates the Mailing remote id" do

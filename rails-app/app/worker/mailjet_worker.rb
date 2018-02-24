@@ -33,10 +33,10 @@ class MailjetWorker
   end
 
   def check_config(mailing, options, variables, sender_email, sender_name)
-    raise IncorrectConfigException, "No api key" if options[:api_key] == nil
-    raise IncorrectConfigException, "No api secret" if options[:secret_key] == nil
-    raise IncorrectConfigException, "No template id" if mailing.remote_template_id == nil
-    raise IncorrectConfigException, "No sender email" if sender_email == nil
+    raise IncorrectConfigException, "No api key" if options[:api_key] == nil || options[:api_key] == ""
+    raise IncorrectConfigException, "No api secret" if options[:secret_key] == nil || options[:secret_key] == ""
+    raise IncorrectConfigException, "No template id" if mailing.remote_template_id == nil || mailing.remote_template_id == ""
+    raise IncorrectConfigException, "No sender email" if sender_email == nil || sender_email == ""
   end
 
   def notify_admin(mailing, options, variables, sender_email, sender_name)
