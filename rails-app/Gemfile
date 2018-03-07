@@ -39,7 +39,7 @@ gem 'sidekiq', '~> 4.1', '>= 4.1.2'
 gem 'sinatra', require: false
 gem 'slim'
 # Transactional email provider
-gem 'mailjet', '~> 1.3', '>= 1.3.8'
+gem 'mailjet', '~> 1.5', '>= 1.5.4'
 # Render HTML source (for a form example)
 gem 'coderay', '~> 1.1', '>= 1.1.2'
 
