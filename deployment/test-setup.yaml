@@ -21,7 +21,7 @@ services:
       - storage
     links:
       - storage
-    command: bash -c "sleep 15s; rspec spec"
+    command: bash -c "sleep 15s; rake db:create RAILS_ENV=test"
 
   storage:
     image: postgres:9.6.3

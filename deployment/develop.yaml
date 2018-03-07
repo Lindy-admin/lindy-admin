@@ -17,6 +17,7 @@ services:
       - 443
     volumes:
       - ../rails-app:/rails-app
+      - ../reports:/rails-app/reports
     depends_on:
       - storage
       - redis

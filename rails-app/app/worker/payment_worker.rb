@@ -1,9 +1,9 @@
 class PaymentWorker
   include Sidekiq::Worker
+  sidekiq_options queue: 'critical'
 
   class IncorrectConfigException < StandardError
   end
-
 
   def perform(payment_id, webhook_url)
     begin
@@ -36,7 +36,7 @@ class PaymentWorker
   end
 
   def check_config(payment, api_key)
-    raise IncorrectConfigException, "No api key" if api_key == nil
+    raise IncorrectConfigException, "No api key" if api_key == nil || api_key == ""
   end
 
 end

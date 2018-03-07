@@ -31,6 +31,8 @@ include Warden::Test::Helpers
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
+Sidekiq::Logging.logger = nil
+
 RSpec.configure do |config|
   # named routes
   config.include Rails.application.routes.url_helpers
