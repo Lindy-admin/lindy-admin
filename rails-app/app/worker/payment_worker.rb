@@ -1,9 +1,9 @@
 class PaymentWorker
   include Sidekiq::Worker
+  sidekiq_options queue: 'critical'
 
   class IncorrectConfigException < StandardError
   end
-
 
   def perform(payment_id, webhook_url)
     begin
