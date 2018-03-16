@@ -69,6 +69,37 @@ describe "When registering for a course" do
       }.to change{Payment.count}.by(1)
     end
 
+    it "will queue a Payment for the Registration" do
+      expect {
+        post registrations_path, params: params, headers: headers
+      }.to change(PaymentWorker.jobs, :size).by(1)
+
+      payment = Payment.last
+      expect(PaymentWorker).to have_enqueued_sidekiq_job(
+        payment.id,
+        payment_webhook_url(Apartment::Tenant.current, payment.id,
+        host: Rails.application.config.webhook_hostname)
+      )
+    end
+
+    it "will create Mailings for the Registration" do
+      expect {
+        post registrations_path, params: params, headers: headers
+      }.to change{Mailing.count}.by(2)
+      expect(Mailing.all.map{|mailing| mailing.target}).to eq(["admin", "member"])
+    end
+
+    it "will queue Mailings for the registration" do
+      expect {
+        post registrations_path, params: params, headers: headers
+      }.to change(MailjetWorker.jobs, :size).by(2)
+
+      mailings = Mailing.where(registration: Registration.last)
+      mailings.each do |mailing|
+        expect(MailjetWorker).to have_enqueued_sidekiq_job(mailing.id)
+      end
+    end
+
     it "will return a CREATED status and the registration" do
       post registrations_path, params: params, headers: headers
 

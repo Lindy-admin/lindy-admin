@@ -23,7 +23,6 @@ class Registration < ApplicationRecord
       label: :registration,
       target: :admin
     )
-    MailjetWorker.perform_async(mailing.id)
 
     logger.info("qeueuing registration mail")
     mailing = Mailing.create(
@@ -32,7 +31,6 @@ class Registration < ApplicationRecord
       label: :registration,
       target: :member
     )
-    MailjetWorker.perform_async(mailing.id)
   end
 
   def send_status_mail
@@ -44,7 +42,6 @@ class Registration < ApplicationRecord
         label: :waitinglist,
         target: :admin
       )
-      MailjetWorker.perform_async(mailing.id)
 
       logger.info("qeueuing waitinglist mail")
       mailing = Mailing.create(
@@ -53,7 +50,6 @@ class Registration < ApplicationRecord
         label: :waitinglist,
         target: :member
       )
-      MailjetWorker.perform_async(mailing.id)
     elsif self.status == "accepted" then
       logger.info("notifying admin about acceptance")
       mailing = Mailing.create(
@@ -62,7 +58,6 @@ class Registration < ApplicationRecord
         label: :acceptance,
         target: :admin
       )
-      MailjetWorker.perform_async(mailing.id)
 
       logger.info("qeueuing acceptance mail")
       mailing = Mailing.create(
@@ -71,7 +66,6 @@ class Registration < ApplicationRecord
         label: :acceptance,
         target: :member
       )
-      MailjetWorker.perform_async(mailing.id)
     end
   end
 

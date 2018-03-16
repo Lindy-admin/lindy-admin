@@ -21,7 +21,7 @@ class Payment < ApplicationRecord
   # the job may get started to when using after_create, so use after_commit instead
   # see https://github.com/mperham/sidekiq/issues/322
   after_commit :submit_to_payment_provider, on: :create
-  
+
   after_save :send_confirmation_email, if: :status_changed?
 
   def submit_to_payment_provider
@@ -41,7 +41,6 @@ class Payment < ApplicationRecord
         label: :payment,
         target: :member
       )
-      MailjetWorker.perform_async(mailing.id)
     end
   end
 
