@@ -21,10 +21,14 @@ class SettingsController < ApplicationController
   end
 
   def clean_params(params)
-    if params.has_key?(:mollie_redirect_url)
+    if params.has_key?(:mollie_redirect_url) && !params[:mollie_redirect_url].empty?
       # strip the url params, if any
-      uri = URI(params[:mollie_redirect_url])
-      params[:mollie_redirect_url] = "#{uri.scheme}://#{uri.host}#{uri.path}"
+      begin
+        uri = URI(params[:mollie_redirect_url])
+        params[:mollie_redirect_url] = "#{uri.scheme}://#{uri.host}#{uri.path}"
+      rescue URI::InvalidURIError
+        params[:mollie_redirect_url] = Setting[:mollie_redirect_url]
+      end
     end
   end
 
