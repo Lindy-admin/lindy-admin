@@ -63,6 +63,7 @@ RSpec.configure do |config|
   #clean database after each test
   config.after(:each) do
     DatabaseCleaner.clean
+    Sidekiq::Worker.clear_all
   end
 
   # RSpec Rails can automatically mix in different behaviours to your tests

@@ -51,6 +51,7 @@ class ApiController < ApplicationController
         payment = @registration.payment
         render :register, status: :created
       rescue Exception => e
+        logger.error(e.message)
         render json: { error: 0, message: e.message}, status: :unprocessable_entity
       end
 

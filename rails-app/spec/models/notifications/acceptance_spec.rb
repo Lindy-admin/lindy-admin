@@ -2,30 +2,53 @@ require "rails_helper"
 
 describe "When a registration is accepted" do
 
+  def perform
+    Apartment::Tenant.switch!(@tenant_token)
+    @registration.update!(status: :accepted)
+    Apartment::Tenant.reset
+  end
+
+  def mailings_count(target)
+    Apartment::Tenant.switch!(@tenant_token)
+    count = Mailing.where(target: target, label: :acceptance).count
+    Apartment::Tenant.reset
+    return count
+  end
+
+  def last_mailing(target)
+    Apartment::Tenant.switch!(@tenant_token)
+    last = Mailing.where(target: target, label: :acceptance).last
+    Apartment::Tenant.reset
+    return last
+  end
+
   context "with correct settings" do
 
     context "while it was previously in triage status" do
 
       before(:each) do
+        @user = FactoryBot.create(:user, role: :admin)
+        @tenant_token = @user.tenant.token
+
+        Apartment::Tenant.switch!(@tenant_token)
         @registration = FactoryBot.create(:registration, status: :triage)
+        Apartment::Tenant.reset
       end
 
       it "sends an acceptance email" do
         expect{
-          @registration.update!(status: :accepted)
-        }.to change{Mailing.where(target: :member, label: :acceptance).count}.by(1)
+          perform
+        }.to change{ mailings_count(:member) }.by(1)
 
-        mailing = Mailing.where(target: :member, label: :acceptance).last
-        expect(MailjetWorker).to have_enqueued_sidekiq_job(mailing.id)
+        expect(MailjetWorker).to have_enqueued_sidekiq_job(@tenant_token, last_mailing(:member).id)
       end
 
       it "notifies the admin" do
         expect {
-          @registration.update!(status: :accepted)
-        }.to change{Mailing.where(target: :admin, label: :acceptance).count}.by(1)
+          perform
+        }.to change{ mailings_count(:admin) }.by(1)
 
-        mailing = Mailing.where(target: :admin, label: :acceptance).last
-        expect(MailjetWorker).to have_enqueued_sidekiq_job(mailing.id)
+        expect(MailjetWorker).to have_enqueued_sidekiq_job(@tenant_token, last_mailing(:admin).id)
       end
 
       pending "logs to the audit log"
@@ -35,25 +58,28 @@ describe "When a registration is accepted" do
     context "while it was previously in waitinglist status" do
 
       before(:each) do
+        @user = FactoryBot.create(:user, role: :admin)
+        @tenant_token = @user.tenant.token
+
+        Apartment::Tenant.switch!(@tenant_token)
         @registration = FactoryBot.create(:registration, status: :waitinglist)
+        Apartment::Tenant.reset
       end
 
       it "sends an acceptance email" do
         expect{
-          @registration.update!(status: :accepted)
-        }.to change{Mailing.where(target: :member, label: :acceptance).count}.by(1)
+          perform
+        }.to change{ mailings_count(:member) }.by(1)
 
-        mailing = Mailing.where(target: :member, label: :acceptance).last
-        expect(MailjetWorker).to have_enqueued_sidekiq_job(mailing.id)
+        expect(MailjetWorker).to have_enqueued_sidekiq_job(@tenant_token, last_mailing(:member).id)
       end
 
       it "notifies the admin" do
         expect {
-          @registration.update!(status: :accepted)
-        }.to change{Mailing.where(target: :admin, label: :acceptance).count}.by(1)
+          perform
+        }.to change{ mailings_count(:admin) }.by(1)
 
-        mailing = Mailing.where(target: :admin, label: :acceptance).last
-        expect(MailjetWorker).to have_enqueued_sidekiq_job(mailing.id)
+        expect(MailjetWorker).to have_enqueued_sidekiq_job(@tenant_token, last_mailing(:admin).id)
       end
 
       pending "logs to the audit log"

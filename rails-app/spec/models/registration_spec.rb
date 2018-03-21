@@ -1,53 +1,47 @@
 require "rails_helper"
 require "mollie_helper"
 
-describe "When registering for a course", type: :request do
+describe "Registration" do
 
-  before(:each) do
-    Setting.mailjet_sender_email_address = "some@email.com"
-    Setting.mailjet_sender_email_name = "some_email_name"
-    Setting.mailjet_paid_template_id = 1
-    Setting.save
+  context "Creating" do
 
-    @course = FactoryBot.create(:course)
-    @ticket = FactoryBot.create(:ticket, course: @course)
+    context "with valid input" do
 
-    stub_payment_creation_request
-  end
+      before(:each) do
+        @member = FactoryBot.create(:member)
+        @course = FactoryBot.create(:course)
+        @ticket = FactoryBot.create(:ticket)
+      end
 
-  context "while providing the correct input" do
+      it "creates a notification mailing" do
+        expect {
+          Registration.create(
+            member: @member,
+            course: @course,
+            ticket: @ticket,
+            role: true,
+            status: :triage
+          )
+        }.to change{
+          Mailing.where(label: :registration, target: :admin).count
+        }.by(1)
+      end
 
-    let (:params) do
-      {
-        firstname: "firstname",
-        lastname: "lastname",
-        course: @course.id,
-        ticket: @ticket.id,
-        role: 1,
-        email: "test@email.com"
-      }
+      it "creates a welcome mailing" do
+        expect {
+          Registration.create(
+            member: @member,
+            course: @course,
+            ticket: @ticket,
+            role: true,
+            status: :triage
+          )
+        }.to change{
+          Mailing.where(label: :registration, target: :member).count
+        }.by(1)
+      end
+
     end
-
-    it "will create a new Registration" do
-      expect {
-        post registrations_path, params: params
-      }.to change{Registration.count}.by(1)
-    end
-
-    it "will put the Registration in the triage status" do
-      post registrations_path, params: params
-
-      registration = Registration.last
-      expect(registration.status).to eq("triage")
-    end
-
-    it "will create a Payment for the Registration" do
-      expect {
-        post registrations_path, params: params
-      }.to change{Payment.count}.by(1)
-    end
-
-    pending "logs to the audit log"
 
   end
 

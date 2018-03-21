@@ -5,7 +5,10 @@ class PaymentWorker
   class IncorrectConfigException < StandardError
   end
 
-  def perform(payment_id, webhook_url)
+  def perform(tenant_id, payment_id, webhook_url)
+
+    Apartment::Tenant.switch!(tenant_id)
+    
     begin
       payment = Payment.find(payment_id)
       registration = payment.registration

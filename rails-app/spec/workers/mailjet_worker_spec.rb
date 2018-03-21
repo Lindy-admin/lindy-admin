@@ -52,13 +52,13 @@ describe "MailjetWorker" do
       end
 
       it "calls the Mailjet API" do
-        @subject.perform(@mailing.id)
+        @subject.perform(@tenant.token, @mailing.id)
         assert_requested :post,  "https://api.mailjet.com/v3.1/send"
       end
 
       it "updates the Mailing status" do
         expect {
-          @subject.perform(@mailing.id)
+          @subject.perform(@tenant.token, @mailing.id)
         }.to change{
           @mailing.reload
           @mailing.status
@@ -67,7 +67,7 @@ describe "MailjetWorker" do
 
       it "updates the Mailing remote id" do
         expect {
-          @subject.perform(@mailing.id)
+          @subject.perform(@tenant.token, @mailing.id)
         }.to change{
           @mailing.reload
           @mailing.remote_id
@@ -104,13 +104,13 @@ describe "MailjetWorker" do
       end
 
       it "calls the Mailjet API" do
-        @subject.perform(@mailing.id)
+        @subject.perform(@tenant.token, @mailing.id)
         assert_requested :post,  "https://api.mailjet.com/v3.1/send"
       end
 
       it "updates the Mailing status" do
         expect {
-          @subject.perform(@mailing.id)
+          @subject.perform(@tenant.token, @mailing.id)
         }.to change{
           @mailing.reload
           @mailing.status
@@ -119,7 +119,7 @@ describe "MailjetWorker" do
 
       it "updates the Mailing remote id" do
         expect {
-          @subject.perform(@mailing.id)
+          @subject.perform(@tenant.token, @mailing.id)
         }.to change{
           @mailing.reload
           @mailing.remote_id
@@ -135,13 +135,13 @@ describe "MailjetWorker" do
       end
 
       it "does not call the Mailjet API" do
-        @subject.perform(@mailing.id)
+        @subject.perform(@tenant.token, @mailing.id)
         assert_not_requested :post,  "https://api.mailjet.com/v3.1/send"
       end
 
       it "updates the Mailing status" do
         expect {
-          @subject.perform(@mailing.id)
+          @subject.perform(@tenant.token, @mailing.id)
         }.to change{
           @mailing.reload
           @mailing.status
@@ -157,13 +157,13 @@ describe "MailjetWorker" do
       end
 
       it "does not call the Mailjet API" do
-        @subject.perform(@mailing.id)
+        @subject.perform(@tenant.token, @mailing.id)
         assert_not_requested :post,  "https://api.mailjet.com/v3.1/send"
       end
 
       it "updates the Mailing status" do
         expect {
-          @subject.perform(@mailing.id)
+          @subject.perform(@tenant.token, @mailing.id)
         }.to change{
           @mailing.reload
           @mailing.status
@@ -183,13 +183,13 @@ describe "MailjetWorker" do
       end
 
       it "does not call the Mailjet API" do
-        @subject.perform(@mailing.id)
+        @subject.perform(@tenant.token, @mailing.id)
         assert_not_requested :post,  "https://api.mailjet.com/v3.1/send"
       end
 
       it "updates the Mailing status" do
         expect {
-          @subject.perform(@mailing.id)
+          @subject.perform(@tenant.token, @mailing.id)
         }.to change{
           @mailing.reload
           @mailing.status
@@ -209,13 +209,13 @@ describe "MailjetWorker" do
       end
 
       it "does not call the Mailjet API" do
-        @subject.perform(@mailing.id)
+        @subject.perform(@tenant.token, @mailing.id)
         assert_not_requested :post,  "https://api.mailjet.com/v3.1/send"
       end
 
       it "updates the Mailing status" do
         expect {
-          @subject.perform(@mailing.id)
+          @subject.perform(@tenant.token, @mailing.id)
         }.to change{
           @mailing.reload
           @mailing.status
@@ -294,13 +294,13 @@ describe "MailjetWorker" do
       end
 
       it "calls the Mailjet API" do
-        @subject.perform(@mailing.id)
+        @subject.perform(@tenant.token, @mailing.id)
         assert_requested :post,  "https://api.mailjet.com/v3.1/send"
       end
 
       it "updates the Mailing status" do
         expect {
-          @subject.perform(@mailing.id)
+          @subject.perform(@tenant.token, @mailing.id)
         }.to change{
           @mailing.reload
           @mailing.status
@@ -309,7 +309,7 @@ describe "MailjetWorker" do
 
       it "updates the Mailing remote id" do
         expect {
-          @subject.perform(@mailing.id)
+          @subject.perform(@tenant.token, @mailing.id)
         }.to change{
           @mailing.reload
           @mailing.remote_id
@@ -346,13 +346,13 @@ describe "MailjetWorker" do
       end
 
       it "calls the Mailjet API" do
-        @subject.perform(@mailing.id)
+        @subject.perform(@tenant.token, @mailing.id)
         assert_requested :post,  "https://api.mailjet.com/v3.1/send"
       end
 
       it "updates the Mailing status" do
         expect {
-          @subject.perform(@mailing.id)
+          @subject.perform(@tenant.token, @mailing.id)
         }.to change{
           @mailing.reload
           @mailing.status
@@ -361,7 +361,7 @@ describe "MailjetWorker" do
 
       it "updates the Mailing remote id" do
         expect {
-          @subject.perform(@mailing.id)
+          @subject.perform(@tenant.token, @mailing.id)
         }.to change{
           @mailing.reload
           @mailing.remote_id
@@ -379,13 +379,13 @@ describe "MailjetWorker" do
       end
 
       it "does not call the Mailjet API" do
-        @subject.perform(@mailing.id)
+        @subject.perform(@tenant.token, @mailing.id)
         assert_not_requested :post,  "https://api.mailjet.com/v3.1/send"
       end
 
       it "updates the Mailing status" do
         expect {
-          @subject.perform(@mailing.id)
+          @subject.perform(@tenant.token, @mailing.id)
         }.to change{
           @mailing.reload
           @mailing.status
@@ -402,13 +402,13 @@ describe "MailjetWorker" do
       end
 
       it "does not call the Mailjet API" do
-        @subject.perform(@mailing.id)
+        @subject.perform(@tenant.token, @mailing.id)
         assert_not_requested :post,  "https://api.mailjet.com/v3.1/send"
       end
 
       it "updates the Mailing status" do
         expect {
-          @subject.perform(@mailing.id)
+          @subject.perform(@tenant.token, @mailing.id)
         }.to change{
           @mailing.reload
           @mailing.status

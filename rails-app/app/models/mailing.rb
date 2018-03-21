@@ -20,4 +20,10 @@ class Mailing < ApplicationRecord
     admin: 2
   }
 
+  after_create :queue_mailing
+
+  def queue_mailing
+    MailjetWorker.perform_async(Apartment::Tenant.current, self.id)
+  end
+
 end
