@@ -5,7 +5,10 @@ class MailjetWorker
   end
 
 
-  def perform(mailing_id)
+  def perform(tenant_id, mailing_id)
+
+    Apartment::Tenant.switch!(tenant_id)
+
     begin
       mailing = Mailing.find(mailing_id)
 

@@ -27,6 +27,7 @@ class Payment < ApplicationRecord
   def submit_to_payment_provider
     logger.info("qeueuing payment creation")
     PaymentWorker.perform_async(
+      Apartment::Tenant.current,
       self.id,
       payment_webhook_url(Apartment::Tenant.current, self.id, host: Rails.application.config.webhook_hostname)
     )
