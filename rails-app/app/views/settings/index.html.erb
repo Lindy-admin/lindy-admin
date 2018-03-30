@@ -41,6 +41,7 @@
     <%= label_tag(:mailjet_sender_email_name, "Display name") %>
     <%= text_field_tag(:mailjet_sender_email_name, @settings[:mailjet_sender_email_name]) %>
   </div>
+  <% if !Setting.mailjet_public_api_key.blank? && !Setting.mailjet_private_api_key.blank? %>
 
   <h3>Templates</h3>
   <p>
@@ -114,6 +115,7 @@
     <%= label_tag(:mailjet_notification_email_template_id, "Template id") %>
     <%= text_field_tag(:mailjet_notification_email_template_id, @settings[:mailjet_notification_email_template_id]) %>
   </div>
+  <% end %>
 
   <%= submit_tag "Save", class: "btn btn-success" %>
 <% end %>
