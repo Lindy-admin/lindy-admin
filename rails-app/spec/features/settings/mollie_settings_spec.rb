@@ -15,6 +15,35 @@ describe "When configuring Mollie" do
   before(:each) do
     Setting.mollie_api_key = "0987654321"
     Setting.mollie_redirect_url = "http://redirect.me"
+
+    stub_request(:get, "https://api.mailjet.com/v3/REST/template?OwnerType=user").
+         to_return(
+           status: 200,
+           headers:{
+             "Content-Type" => "application/json; charset=utf-8"
+           },
+           body: {
+            Count: 1,
+            Data: [
+                {
+                    Author: "",
+                    Categories: "",
+                    Copyright: "",
+                    Description: "",
+                    EditMode: "",
+                    ID: "",
+                    IsStarred: "false",
+                    Name: "First Template",
+                    OwnerId: "5",
+                    OwnerType: "",
+                    Presets: "",
+                    Previews: "",
+                    Purposes: ""
+                }
+            ],
+            Total: 1
+          }.to_json
+        )
   end
 
   context "while logged in as an admin" do
