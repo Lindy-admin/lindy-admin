@@ -1,6 +1,6 @@
 <h1>Settings</h1>
 
-<%= form_tag(settings_path, method: 'put', class:"settings") do %>
+<%= form_tag(settings_path, method: 'put', class:"settings form-inline") do %>
 
   <h2>Mollie</h2>
   <p>
@@ -27,94 +27,96 @@
     <%= text_field_tag(:mailjet_private_api_key, @settings[:mailjet_private_api_key]) %>
   </div>
 
-  <h3>Sender</h3>
-  <p>
-    The sender that will be shown to people receiving the notification emails.
-    The email address should be one of your approved email address in your Mailjet
-    account
-  </p>
-  <div>
-    <%= label_tag(:mailjet_sender_email_address, "Email address") %>
-    <%= text_field_tag(:mailjet_sender_email_address, @settings[:mailjet_sender_email_address]) %>
-  </div>
-  <div>
-    <%= label_tag(:mailjet_sender_email_name, "Display name") %>
-    <%= text_field_tag(:mailjet_sender_email_name, @settings[:mailjet_sender_email_name]) %>
-  </div>
   <% if !Setting.mailjet_public_api_key.blank? && !Setting.mailjet_private_api_key.blank? %>
 
-  <h3>Templates</h3>
-  <p>
-    Whenever a registration is created or changes state, an email will be sent to
-    the members email address. Please fill out the template ids from Mailjet to
-    be used on each event.
-  </p>
+    <h3>Sender</h3>
+    <p>
+      The sender that will be shown to people receiving the notification emails.
+      The email address should be one of your approved email address in your Mailjet
+      account
+    </p>
+    <div>
+      <%= label_tag(:mailjet_sender_email_address, "Email address") %>
+      <%= text_field_tag(:mailjet_sender_email_address, @settings[:mailjet_sender_email_address]) %>
+    </div>
+    <div>
+      <%= label_tag(:mailjet_sender_email_name, "Display name") %>
+      <%= text_field_tag(:mailjet_sender_email_name, @settings[:mailjet_sender_email_name]) %>
+    </div>
 
-  <h4>Registered</h4>
-  <div>
-    <%= label_tag(:mailjet_registered_subject, "Subject") %>
-    <%= text_field_tag(:mailjet_registered_subject, @settings[:mailjet_registered_subject]) %>
-  </div>
-  <div>
-    <%= label_tag(:mailjet_registered_template_id, "Template id") %>
-    <%= text_field_tag(:mailjet_registered_template_id, @settings[:mailjet_registered_template_id]) %>
-  </div>
+    <h3>Templates</h3>
+    <p>
+      Whenever a registration is created or changes state, an email will be sent to
+      the members email address. Please fill out the template ids from Mailjet to
+      be used on each event.
+    </p>
 
-  <h4>Waitinglist</h4>
-  <div>
-    <%= label_tag(:mailjet_waitinglist_subject, "Subject") %>
-    <%= text_field_tag(:mailjet_waitinglist_subject, @settings[:mailjet_waitinglist_subject]) %>
-  </div>
-  <div>
-    <%= label_tag(:mailjet_waitinglist_template_id, "Template id") %>
-    <%= text_field_tag(:mailjet_waitinglist_template_id, @settings[:mailjet_waitinglist_template_id]) %>
-  </div>
+    <h4>Registered</h4>
+    <div>
+      <%= label_tag(:mailjet_registered_subject, "Subject") %>
+      <%= text_field_tag(:mailjet_registered_subject, @settings[:mailjet_registered_subject]) %>
+    </div>
+    <div>
+      <%= label_tag(:mailjet_registered_template_id, "Template") %>
+      <%= select_tag :mailjet_registered_template_id, options_for_select(@mailjet_templates.map{|x| [x[:name], x[:id]]}, @settings[:mailjet_registered_template_id]), class: "form-control" %>
+    </div>
 
-  <h4>Accepted</h4>
-  <div>
-    <%= label_tag(:mailjet_accepted_subject, "Subject") %>
-    <%= text_field_tag(:mailjet_accepted_subject, @settings[:mailjet_accepted_subject]) %>
-  </div>
-  <div>
-    <%= label_tag(:mailjet_accepted_template_id, "Template id") %>
-    <%= text_field_tag(:mailjet_accepted_template_id, @settings[:mailjet_accepted_template_id]) %>
-  </div>
+    <h4>Waitinglist</h4>
+    <div>
+      <%= label_tag(:mailjet_waitinglist_subject, "Subject") %>
+      <%= text_field_tag(:mailjet_waitinglist_subject, @settings[:mailjet_waitinglist_subject]) %>
+    </div>
+    <div>
+      <%= label_tag(:mailjet_waitinglist_template_id, "Template") %>
+      <%= select_tag :mailjet_waitinglist_template_id, options_for_select(@mailjet_templates.map{|x| [x[:name], x[:id]]}, @settings[:mailjet_waitinglist_template_id]), class: "form-control" %>
+    </div>
 
-  <h4>Paid</h4>
-  <div>
-    <%= label_tag(:mailjet_paid_subject, "Subject") %>
-    <%= text_field_tag(:mailjet_paid_subject, @settings[:mailjet_paid_subject]) %>
-  </div>
-  <div>
-    <%= label_tag(:mailjet_paid_template_id, "Template id") %>
-    <%= text_field_tag(:mailjet_paid_template_id, @settings[:mailjet_paid_template_id]) %>
-  </div>
-  <p>
-    The variables that are available for each template are:
-  </p>
-  <ul>
-    <li>member_firstname</li>
-    <li>member_lastname</li>
-    <li>course_title</li>
-    <li>ticket_label</li>
-    <li>payment_url</li>
-    <li>registration_status</li>
-  </ul>
+    <h4>Accepted</h4>
+    <div>
+      <%= label_tag(:mailjet_accepted_subject, "Subject") %>
+      <%= text_field_tag(:mailjet_accepted_subject, @settings[:mailjet_accepted_subject]) %>
+    </div>
+    <div>
+      <%= label_tag(:mailjet_accepted_template_id, "Template") %>
+      <%= select_tag :mailjet_accepted_template_id, options_for_select(@mailjet_templates.map{|x| [x[:name], x[:id]]}, @settings[:mailjet_accepted_template_id]), class: "form-control" %>
+    </div>
 
-  <h2>Notifications</h2>
-  <p>
-    In addition to a notification email to the member, there will also be a mail
-    sent to the an additional email, so administrators can be notified of any
-    activity.
-  </p>
-  <div>
-    <%= label_tag(:notification_email_address, "Email address") %>
-    <%= text_field_tag(:notification_email_address, @settings[:notification_email_address]) %>
-  </div>
-  <div>
-    <%= label_tag(:mailjet_notification_email_template_id, "Template id") %>
-    <%= text_field_tag(:mailjet_notification_email_template_id, @settings[:mailjet_notification_email_template_id]) %>
-  </div>
+    <h4>Paid</h4>
+    <div>
+      <%= label_tag(:mailjet_paid_subject, "Subject") %>
+      <%= text_field_tag(:mailjet_paid_subject, @settings[:mailjet_paid_subject]) %>
+    </div>
+    <div>
+      <%= label_tag(:mailjet_paid_template_id, "Template") %>
+      <%= select_tag :mailjet_paid_template_id, options_for_select(@mailjet_templates.map{|x| [x[:name], x[:id]]}, @settings[:mailjet_paid_template_id]), class: "form-control" %>
+    </div>
+    <p>
+      The variables that are available for each template are:
+    </p>
+    <ul>
+      <li>member_firstname</li>
+      <li>member_lastname</li>
+      <li>course_title</li>
+      <li>ticket_label</li>
+      <li>payment_url</li>
+      <li>registration_status</li>
+    </ul>
+
+    <h2>Notifications</h2>
+    <p>
+      In addition to a notification email to the member, there will also be a mail
+      sent to the an additional email, so administrators can be notified of any
+      activity.
+    </p>
+    <div>
+      <%= label_tag(:notification_email_address, "Email address") %>
+      <%= text_field_tag(:notification_email_address, @settings[:notification_email_address]) %>
+    </div>
+    <div>
+      <%= label_tag(:mailjet_notification_email_template_id, "Template") %>
+      <%= select_tag :mailjet_notification_email_template_id, options_for_select(@mailjet_templates.map{|x| [x[:name], x[:id]]}, @settings[:mailjet_notification_email_template_id]), class: "form-control" %>
+    </div>
+
   <% end %>
 
   <%= submit_tag "Save", class: "btn btn-success" %>
