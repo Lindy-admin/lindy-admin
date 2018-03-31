@@ -4,6 +4,17 @@ class SettingsController < ApplicationController
 
   def index
     @settings = Setting.get_all
+
+    if !Setting.mailjet_public_api_key.blank? && !Setting.mailjet_private_api_key.blank?
+      auth = {username: Setting.mailjet_public_api_key, password: Setting.mailjet_private_api_key}
+      response = HTTParty.get("https://api.mailjet.com/v3/REST/template?OwnerType=user", :basic_auth => auth)
+      @mailjet_templates = response["Data"].map{ |template|
+        {
+          name: template["Name"],
+          id: template["ID"]
+        }
+      }
+    end
   end
 
   def edit

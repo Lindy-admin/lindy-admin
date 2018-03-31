@@ -39,6 +39,7 @@ gem 'sinatra', require: false
 gem 'slim'
 # Transactional email provider
 gem 'mailjet', '~> 1.5', '>= 1.5.4'
+gem 'httparty', '~> 0.13.7' #needed for a workaround, see https://github.com/mailjet/mailjet-gem/issues/140
 # Render HTML source (for a form example)
 gem 'coderay', '~> 1.1', '>= 1.1.2'
 
