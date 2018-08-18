@@ -63,8 +63,18 @@ form input[type=radio] {
   border-right: solid 1px #CCC;
 }
 #role_container label:first-of-type {
-  border-radius: 20px 0 0 20px;
+  border-radius: 6px 0 0 6px;
 }
 #role_container label:last-of-type {
-  border-radius: 0 20px 20px 0;
+  border-radius: 0 6px 6px 0;
+}
+#personal_info_container .col-xs-12 {
+  padding-left: 0;
+  padding-right: 0;
+}
+#personal_info_container #firstname_container {
+  padding-left: 0;
+}
+#personal_info_container #lastname_container {
+  padding-right: 0;
 }

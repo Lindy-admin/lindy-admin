@@ -26,21 +26,20 @@
     <%= label_tag(:role_0, "Follow", class: "radio col-xs-6") %>
   </div>
 
-  <div id="personal_info_container">
-    <div  class="row" >
-      <h2>Personal info</h2>
-    </div>
+  <div id="personal_info_container" class="row">
+    <h2>Personal info</h2>
+
     <div class="col-xs-12">
       <label for="email">Email</label>
       <input type="text" name="email" id="email" class="form-control" />
     </div>
 
-    <div class="col-xs-6">
+    <div id="firstname_container" class="col-xs-6">
       <label for="firstname">Firstname</label>
       <input type="text" name="firstname" id="firstname" class="form-control" />
     </div>
 
-    <div class="col-xs-6">
+    <div id="lastname_container" class="col-xs-6">
       <label for="lastname">Lastname</label>
       <input type="text" name="lastname" id="lastname" class="form-control" />
     </div>
@@ -50,11 +49,10 @@
       <label for="note">Note</label>
       <textarea name="additional[note]" id="additional_note" class="form-control"></textarea>
     </div>
-  </div>
 
-  <div class="row actions">
     <input type="submit" name="commit" value="Save" class="btn btn-success" data-disable-with="Save" />
   </div>
+
 </form>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -76,8 +74,6 @@ function populateCourses(course_select) {
           });
 
           $(ticketElementsSelector).click(onTicketClick);
-
-          onCourseChange();
         } else {
           $(empty_message).show();
           $(form).hide();
@@ -151,34 +147,6 @@ function onRoleChange() {
   }, 1000);
 }
 
-function onCourseChange(e) {
-  var course_id = course_select.val();
-
-  $('input[type="submit"]').hide();
-
-  $.ajax(
-    {
-      url: "<%= api_courses_url(Apartment::Tenant.current) %>/"+course_id,
-      method: "GET",
-      crossDomain: true,
-      success: function(data){
-        ticket_select.empty()
-
-        $.each(data["tickets"], function() {
-          ticket = this;
-          ticket_select.append('<option value="'+ticket["id"]+'">'+ticket["label"]+'</option>')
-        });
-
-        $('input[type="submit"]').show();
-      },
-      error: function(error){
-        console.error("Could not fetch ticket data", error);
-      }
-    }
-  )
-
-}
-
 function submitData(data) {
   console.log("submitting", data);
   $.ajax(
@@ -205,6 +173,11 @@ function submitData(data) {
 $('#lindy_admin_register_form').on('submit', function(e) { //use on if jQuery 1.7+
     e.preventDefault();  //prevent form from submitting
     var data = $("#lindy_admin_register_form :input").serializeArray();
+    var index = Object.keys(data).length;
+    for(key in selectedData) {
+      data[index] = {"name": key, "value": selectedData[key]};
+      index++;
+    }
     console.log(data);
     submitData(data)
 });
@@ -226,9 +199,7 @@ var selectedData = {};
 
 $(role_container).hide();
 $(personal_info_container).hide();
-$('input[type="submit"]').hide();
 
 $('input[type=radio][name=role]').change(onRoleChange);
-course_select.change(onCourseChange);
 populateCourses(course_select);
 </script>

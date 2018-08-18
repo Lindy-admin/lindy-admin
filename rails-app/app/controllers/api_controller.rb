@@ -34,12 +34,16 @@ class ApiController < ApplicationController
       tenant = Tenant.where(token: params[:tenant]).first
       Apartment::Tenant.switch!(tenant.token)
 
+      logger.info("member")
       @member = Member.find_or_initialize_by(email: params[:email])
-      @course = Course.find(params[:course])
-      @ticket = @course.tickets.find(params[:ticket])
+      logger.info("course")
+      @course = Course.find(params[:course_id].to_i)
+      logger.info("ticker")
+      @ticket = @course.tickets.find(params[:ticket_id].to_i)
       role = params[:role]
       additional_params = params[:additional]
 
+      logger.info("registration exists?")
       if Registration.exists?(member_id: @member.id, course_id: @course.id)
         @registration = Registration.where(member_id: @member.id, course_id: @course.id).first
         render :register, status: :conflict
