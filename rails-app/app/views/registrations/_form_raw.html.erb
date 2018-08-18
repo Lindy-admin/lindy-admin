@@ -4,7 +4,16 @@
 <div id=lindy_admin_register_form_error style="display: none;">
   Something went wrong while registering, please try again later.
 </div>
+<div id=lindy_admin_register_form_empty style="display: none;">
+  There are currently no courses available. Please check again later
+</div>
 <form id="lindy_admin_register_form" accept-charset="UTF-8">
+  <div class="row">
+    <h2>Filter</h2>
+  </div>
+  <div class="row">
+    <h2>Courses</h2>
+  </div>
 
   <div class="row">
     <label for="course">Course</label>
@@ -22,6 +31,9 @@
     <div class="col-xs-4 input-group"><select name="ticket" id="ticket" class="form-control"><option value="">Loading...</option></select></div>
   </div>
 
+  <div class="row">
+    <h2>Personal info</h2>
+  </div>
   <div class="row">
     <label for="firstname">Firstname</label>
     <div class="col-xs-4 input-group"><input type="text" name="firstname" id="firstname" class="form-control" /></div>
@@ -63,13 +75,18 @@ function populateCourses(course_select) {
       method: "GET",
       crossDomain: true,
       success: function(data) {
-        course_select.empty();
-        $.each(data, function() {
-         course = this;
-         course_select.append('<option value="'+course["id"]+'">'+course["title"]+'</option>')
-        });
+        if(data != null && data.length > 0) {
+          course_select.empty();
+          $.each(data, function() {
+           course = this;
+           course_select.append('<option value="'+course["id"]+'">'+course["title"]+'</option>')
+          });
 
-        onCourseChange();
+          onCourseChange();
+        } else {
+          $(empty_message).show();
+          $(form).hide();
+        }
       },
       error: function(error){
         console.error("Could not fetch courses data", error);
@@ -138,6 +155,7 @@ $('#lindy_admin_register_form').on('submit', function(e) { //use on if jQuery 1.
 var form = $("#lindy_admin_register_form");
 var success_message = $("#lindy_admin_register_form_success");
 var error_message = $("#lindy_admin_register_form_error");
+var empty_message = $("#lindy_admin_register_form_empty");
 
 var course_select = $("select#course");
 var ticket_select = $("select#ticket");
