@@ -4,20 +4,7 @@
 <div id=lindy_admin_register_form_error style="display: none;">
   Something went wrong while registering, please try again later.
 </div>
-<div id=lindy_admin_register_form_empty style="display: none;">
-  There are currently no courses available. Please check again later
-</div>
 <form id="lindy_admin_register_form" accept-charset="UTF-8">
-  <div class="row">
-    <h2>Filter</h2>
-  </div>
-  <div class="row">
-    <h2>Courses</h2>
-  </div>
-
-  <div class="row">
-    <ul id="courses_list"></ul>
-  </div>
 
   <div class="row">
     <label for="course">Course</label>
@@ -35,9 +22,6 @@
     <div class="col-xs-4 input-group"><select name="ticket" id="ticket" class="form-control"><option value="">Loading...</option></select></div>
   </div>
 
-  <div id="personal_info" class="row">
-    <h2>Personal info</h2>
-  </div>
   <div class="row">
     <label for="firstname">Firstname</label>
     <div class="col-xs-4 input-group"><input type="text" name="firstname" id="firstname" class="form-control" /></div>
@@ -79,80 +63,19 @@ function populateCourses(course_select) {
       method: "GET",
       crossDomain: true,
       success: function(data) {
-        if(data != null && data.length > 0) {
-          course_select.empty();
-          $.each(data, function() {
-           course = this;
-           course_select.append('<option value="'+course["id"]+'">'+course["title"]+'</option>')
-           addCourse(course);
-          });
+        course_select.empty();
+        $.each(data, function() {
+         course = this;
+         course_select.append('<option value="'+course["id"]+'">'+course["title"]+'</option>')
+        });
 
-          $(ticketElementsSelector).click(onTicketClick);
-
-          onCourseChange();
-        } else {
-          $(empty_message).show();
-          $(form).hide();
-        }
+        onCourseChange();
       },
       error: function(error){
         console.error("Could not fetch courses data", error);
       }
     }
   )
-}
-function addCourse(course) {
-
-
-  $(courses_list).append(
-    '<li class="course" data-course_id="'+course["id"]+'">'+
-      '<div class="info_container">'+
-        '<h3>'+course["title"]+'</h3>'+
-        '<div class="description">'+course["description"]+'</div>'+
-      '</div>'+
-      '<ul class="tickets_list">'+
-        getTicketsString(course)+
-      '</ul>'+
-    '</li>'
-  );
-}
-function getTicketsString(course) {
-  var ticketsList = $("<ul></ul>");
-  $.each(course["tickets"], function(){
-    var ticket = this;
-    var price = (ticket["price_cents"]/100)
-    $(ticketsList).append('<li class="ticket" data-course_id="'+course["id"]+'" data-ticket_id="'+ticket["id"]+'">'+
-    ticket["label"]+' €'+ price +
-    '</li>')
-  })
-  return ticketsList.html();
-}
-
-function onTicketClick(){
-  ticketElement = $(this);
-  courseId = ticketElement.data("course_id");
-  ticketId = ticketElement.data("ticket_id");
-  $(ticketElementsSelector).removeClass(selectedClass);
-
-  if(selectedData["ticket_id"] != ticketId){
-    selectedData["course_id"] = courseId;
-    selectedData["ticket_id"] = ticketId;
-    ticketElement.addClass(selectedClass);
-    $('li.course:not([data-course_id="'+courseId+'"])').fadeOut(300);
-    setTimeout(scrollToPersonal, 500);
-  } else {
-    selectedData["course_id"] = null;
-    selectedData["ticket_id"] = null;
-      $('li.course').fadeIn();
-  }
-}
-
-function scrollToPersonal() {
-  console.log("scrollToPersonal");
-  $('li.course:not([data-course_id="'+courseId+'"])').hide();
-  $([document.documentElement, document.body]).animate({
-      scrollTop: $("#personal_info").offset().top
-  }, 1000);
 }
 
 function onCourseChange(e) {
@@ -209,22 +132,15 @@ function submitData(data) {
 $('#lindy_admin_register_form').on('submit', function(e) { //use on if jQuery 1.7+
     e.preventDefault();  //prevent form from submitting
     var data = $("#lindy_admin_register_form :input").serializeArray();
-    console.log(data);
     submitData(data)
 });
 
-var selectedClass = "selected";
-var ticketElementsSelector = "ul.tickets_list li.ticket"
 var form = $("#lindy_admin_register_form");
 var success_message = $("#lindy_admin_register_form_success");
 var error_message = $("#lindy_admin_register_form_error");
-var empty_message = $("#lindy_admin_register_form_empty");
 
-var courses_list = $("ul#courses_list");
 var course_select = $("select#course");
 var ticket_select = $("select#ticket");
-
-var selectedData = {};
 
 $('input[type="submit"]').hide();
 course_select.change(onCourseChange);
