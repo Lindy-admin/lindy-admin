@@ -18,7 +18,7 @@
   <div class="row">
     <ul id="courses_list"></ul>
   </div>
-  <div id="role_container" class="row" style="display: none;">
+  <div id="role_container" class="row">
     <h2 id="role">Role</h2>
     <%= radio_button_tag(:role, "1") %>
     <%= label_tag(:role_1, "Lead", class: "radio col-xs-6") %>
@@ -26,15 +26,14 @@
     <%= label_tag(:role_0, "Follow", class: "radio col-xs-6") %>
   </div>
 
-  <div id="personal_info" class="row">
-    <h2>Personal info</h2>
-  </div>
-  <div class="row">
+  <div id="personal_info_container">
+    <div  class="row" >
+      <h2>Personal info</h2>
+    </div>
     <div class="col-xs-12">
       <label for="email">Email</label>
-      <div><input type="text" name="email" id="email" class="form-control" /></div>
+      <input type="text" name="email" id="email" class="form-control" />
     </div>
-
 
     <div class="col-xs-6">
       <label for="firstname">Firstname</label>
@@ -135,9 +134,21 @@ function onTicketClick(){
   } else {
     selectedData["course_id"] = null;
     selectedData["ticket_id"] = null;
-      $('li.course').fadeIn();
-      $(role_container).fadeOut();
+    $('li.course').fadeIn();
+    $(role_container).fadeOut();
+    $(personal_info_container).fadeOut();
+
+    $('input[type=radio][name=role]').change(null);
+    $('input[type=radio][name=role]').attr("checked", false);
+    $('input[type=radio][name=role]').change(onRoleChange);
   }
+}
+
+function onRoleChange() {
+  $(personal_info_container).show();
+  $([document.documentElement, document.body]).animate({
+      scrollTop: $("#personal_info_container").offset().top - .25 * $(window).height()
+  }, 1000);
 }
 
 function onCourseChange(e) {
@@ -209,10 +220,15 @@ var courses_list = $("ul#courses_list");
 var course_select = $("select#course");
 var ticket_select = $("select#ticket");
 var role_container = $("#role_container");
+var personal_info_container = $("#personal_info_container");
 
 var selectedData = {};
 
+$(role_container).hide();
+$(personal_info_container).hide();
 $('input[type="submit"]').hide();
+
+$('input[type=radio][name=role]').change(onRoleChange);
 course_select.change(onCourseChange);
 populateCourses(course_select);
 </script>
