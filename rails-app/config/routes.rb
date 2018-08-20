@@ -31,6 +31,8 @@ Rails.application.routes.draw do
   post 'api/:tenant/register', to: 'api#register', as: "api_register"
   get 'api/:tenant/courses', to: 'api#courses', as: "api_courses"
   get 'api/:tenant/courses/:id', to: 'api#course', as: "api_course"
+  get 'api/:tenant/styles', to: 'api#styles', as: "api_styles"
+  get 'api/:tenant/locations', to: 'api#locations', as: "api_locations"
 
   require 'sidekiq/web'
 

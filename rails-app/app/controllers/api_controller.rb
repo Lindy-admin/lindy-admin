@@ -29,6 +29,28 @@ class ApiController < ApplicationController
     end
   end
 
+  def styles
+    begin
+      tenant = Tenant.where(token: params[:tenant]).first
+      Apartment::Tenant.switch!(tenant.token)
+      @styles = get_tags_for_context("styles")
+      render
+    ensure
+      Apartment::Tenant.reset
+    end
+  end
+
+  def locations
+    begin
+      tenant = Tenant.where(token: params[:tenant]).first
+      Apartment::Tenant.switch!(tenant.token)
+      @locations =  get_tags_for_context("locations")
+      render
+    ensure
+      Apartment::Tenant.reset
+    end
+  end
+
   def register
     begin
       tenant = Tenant.where(token: params[:tenant]).first
@@ -107,6 +129,10 @@ class ApiController < ApplicationController
   end
 
   private
+  def get_tags_for_context(context)
+    ActsAsTaggableOn::Tagging.includes(:tag).where(taggable_type: "Course", context: context).uniq.pluck(:id, :name).map{|t| {id: t[0], name: t[1]}}
+  end
+
   def set_default_response_format
     request.format = :json
   end
