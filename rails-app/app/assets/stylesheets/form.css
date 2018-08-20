@@ -1,0 +1,80 @@
+form {
+  max-width: 500px;
+}
+form input[type=radio] {
+  display: none;
+}
+#courses_list {
+  padding: 0;
+  list-style: none;
+}
+#courses_list * {
+  padding: 0;
+  list-style: none;
+}
+#courses_list li.course {
+  /* border: 1px solid #AAA; */
+  border-radius: 6px;
+  box-shadow: 1px 1px 2px;
+  margin-bottom: 35px;
+  padding-top: 10px;
+}
+#courses_list li.course .info_container {
+  padding: 10px 20px 30px 20px;
+  border-bottom: solid 1px #999;
+}
+#courses_list li.course .description {
+  margin-left: 0;
+  margin-right: 0;
+}
+#courses_list li h3 {
+  margin-top: 0;
+}
+#courses_list li.course .tickets_list {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+#courses_list .tickets_list li, label.radio {
+  border-top: solid 1px #CCC;
+  border-bottom: solid 1px #999;
+  padding: 10px;
+  margin: 0;
+}
+#courses_list .tickets_list li:last-of-type {
+  border-bottom: solid 1px #00000000;
+  border-radius: 0 0 6px 6px;
+}
+#courses_list .tickets_list li:hover, label.radio:hover {
+  color: #FFF;
+  font-weight: bold;
+  background: #5cc593;
+}
+#courses_list .tickets_list li:active, #courses_list .tickets_list li.selected, label.radio:active, form input[type="radio"]:checked+label {
+  color: #FFF;
+  font-weight: bold;
+
+  background: #42bd82;
+  border-top: solid 1px #999;
+  border-bottom: solid 1px #CCC;
+}
+#role_container label{
+  border-left: solid 1px #999;
+  border-right: solid 1px #CCC;
+}
+#role_container label:first-of-type {
+  border-radius: 6px 0 0 6px;
+}
+#role_container label:last-of-type {
+  border-radius: 0 6px 6px 0;
+}
+#personal_info_container .col-xs-12 {
+  padding-left: 0;
+  padding-right: 0;
+}
+#personal_info_container #firstname_container {
+  padding-left: 0;
+}
+#personal_info_container #lastname_container {
+  padding-right: 0;
+}

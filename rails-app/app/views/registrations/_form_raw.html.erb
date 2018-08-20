@@ -4,53 +4,55 @@
 <div id=lindy_admin_register_form_error style="display: none;">
   Something went wrong while registering, please try again later.
 </div>
+<div id=lindy_admin_register_form_empty style="display: none;">
+  There are currently no courses available. Please check again later
+</div>
 <form id="lindy_admin_register_form" accept-charset="UTF-8">
-
   <div class="row">
-    <label for="course">Course</label>
-    <div class="col-xs-4 input-group"><select name="course" id="course" class="form-control"><option value="">Loading...</option></select></div>
+    <h2>Filter</h2>
+  </div>
+  <div class="row">
+    <h2>Courses</h2>
   </div>
 
   <div class="row">
-    <label for="role">Role</label>
-    <div class="col-xs-4 input-group"><select name="role" id="role" class="form-control"><option value="true">Lead</option>
-<option value="false">Follow</option></select></div>
+    <ul id="courses_list"></ul>
+  </div>
+  <div id="role_container" class="row">
+    <h2 id="role">Role</h2>
+    <%= radio_button_tag(:role, "1") %>
+    <%= label_tag(:role_1, "Lead", class: "radio col-xs-6") %>
+    <%= radio_button_tag(:role, "0") %>
+    <%= label_tag(:role_0, "Follow", class: "radio col-xs-6") %>
   </div>
 
-  <div class="row">
-    <label for="ticket">Ticket</label>
-    <div class="col-xs-4 input-group"><select name="ticket" id="ticket" class="form-control"><option value="">Loading...</option></select></div>
-  </div>
+  <div id="personal_info_container" class="row">
+    <h2>Personal info</h2>
 
-  <div class="row">
-    <label for="firstname">Firstname</label>
-    <div class="col-xs-4 input-group"><input type="text" name="firstname" id="firstname" class="form-control" /></div>
-  </div>
+    <div class="col-xs-12">
+      <label for="email">Email</label>
+      <input type="text" name="email" id="email" class="form-control" />
+    </div>
 
-  <div class="row">
-    <label for="lastname">Lastname</label>
-    <div class="col-xs-4 input-group"><input type="text" name="lastname" id="lastname" class="form-control" /></div>
-  </div>
+    <div id="firstname_container" class="col-xs-6">
+      <label for="firstname">Firstname</label>
+      <input type="text" name="firstname" id="firstname" class="form-control" />
+    </div>
 
-  <div class="row">
-    <label for="email">Email</label>
-    <div class="col-xs-4 input-group"><input type="text" name="email" id="email" class="form-control" /></div>
-  </div>
+    <div id="lastname_container" class="col-xs-6">
+      <label for="lastname">Lastname</label>
+      <input type="text" name="lastname" id="lastname" class="form-control" />
+    </div>
 
-  <div class="row">
-    <label for="address">Address</label>
-    <div class="col-xs-4 input-group"><input type="text" name="additional[address]" id="additional_address" class="form-control" /></div>
-  </div>
+    <!--  Optional properties can be added by using name="additional[PROPERTY_NAME]" -->
+    <div class="col-xs-12">
+      <label for="note">Note</label>
+      <textarea name="additional[note]" id="additional_note" class="form-control"></textarea>
+    </div>
 
-  <!--  Optional properties can be added by using name="additional[PROPERTY_NAME]" -->
-  <div class="row">
-    <label for="note">Note</label>
-    <div class="col-xs-4 input-group"><input type="text" name="additional[note]" id="additional_note" class="form-control" /></div>
-  </div>
-
-  <div class="row actions">
     <input type="submit" name="commit" value="Save" class="btn btn-success" data-disable-with="Save" />
   </div>
+
 </form>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -63,13 +65,19 @@ function populateCourses(course_select) {
       method: "GET",
       crossDomain: true,
       success: function(data) {
-        course_select.empty();
-        $.each(data, function() {
-         course = this;
-         course_select.append('<option value="'+course["id"]+'">'+course["title"]+'</option>')
-        });
+        if(data != null && data.length > 0) {
+          course_select.empty();
+          $.each(data, function() {
+           course = this;
+           course_select.append('<option value="'+course["id"]+'">'+course["title"]+'</option>')
+           addCourse(course);
+          });
 
-        onCourseChange();
+          $(ticketElementsSelector).click(onTicketClick);
+        } else {
+          $(empty_message).show();
+          $(form).hide();
+        }
       },
       error: function(error){
         console.error("Could not fetch courses data", error);
@@ -77,33 +85,66 @@ function populateCourses(course_select) {
     }
   )
 }
+function addCourse(course) {
 
-function onCourseChange(e) {
-  var course_id = course_select.val();
 
-  $('input[type="submit"]').hide();
+  $(courses_list).append(
+    '<li class="course" data-course_id="'+course["id"]+'">'+
+      '<div class="info_container">'+
+        '<h3>'+course["title"]+'</h3>'+
+        '<div class="description">'+course["description"]+'</div>'+
+      '</div>'+
+      '<ul class="tickets_list">'+
+        getTicketsString(course)+
+      '</ul>'+
+    '</li>'
+  );
+}
+function getTicketsString(course) {
+  var ticketsList = $("<ul></ul>");
+  $.each(course["tickets"], function(){
+    var ticket = this;
+    var price = (ticket["price_cents"]/100)
+    $(ticketsList).append('<li class="ticket" data-course_id="'+course["id"]+'" data-ticket_id="'+ticket["id"]+'">'+
+    ticket["label"]+' €'+ price +
+    '</li>')
+  })
+  return ticketsList.html();
+}
 
-  $.ajax(
-    {
-      url: "<%= api_courses_url(Apartment::Tenant.current) %>/"+course_id,
-      method: "GET",
-      crossDomain: true,
-      success: function(data){
-        ticket_select.empty()
+function onTicketClick(){
+  ticketElement = $(this);
+  courseId = ticketElement.data("course_id");
+  ticketId = ticketElement.data("ticket_id");
+  $(ticketElementsSelector).removeClass(selectedClass);
 
-        $.each(data["tickets"], function() {
-          ticket = this;
-          ticket_select.append('<option value="'+ticket["id"]+'">'+ticket["label"]+'</option>')
-        });
+  if(selectedData["ticket_id"] != ticketId){
+    selectedData["course_id"] = courseId;
+    selectedData["ticket_id"] = ticketId;
+    ticketElement.addClass(selectedClass);
+    $('li.course:not([data-course_id="'+courseId+'"])').hide();
+    $(role_container).show();
+    $([document.documentElement, document.body]).animate({
+        scrollTop: $("#role").offset().top - .25 * $(window).height()
+    }, 1000);
+  } else {
+    selectedData["course_id"] = null;
+    selectedData["ticket_id"] = null;
+    $('li.course').fadeIn();
+    $(role_container).fadeOut();
+    $(personal_info_container).fadeOut();
 
-        $('input[type="submit"]').show();
-      },
-      error: function(error){
-        console.error("Could not fetch ticket data", error);
-      }
-    }
-  )
+    $('input[type=radio][name=role]').change(null);
+    $('input[type=radio][name=role]').attr("checked", false);
+    $('input[type=radio][name=role]').change(onRoleChange);
+  }
+}
 
+function onRoleChange() {
+  $(personal_info_container).show();
+  $([document.documentElement, document.body]).animate({
+      scrollTop: $("#personal_info_container").offset().top - .25 * $(window).height()
+  }, 1000);
 }
 
 function submitData(data) {
@@ -132,17 +173,33 @@ function submitData(data) {
 $('#lindy_admin_register_form').on('submit', function(e) { //use on if jQuery 1.7+
     e.preventDefault();  //prevent form from submitting
     var data = $("#lindy_admin_register_form :input").serializeArray();
+    var index = Object.keys(data).length;
+    for(key in selectedData) {
+      data[index] = {"name": key, "value": selectedData[key]};
+      index++;
+    }
+    console.log(data);
     submitData(data)
 });
 
+var selectedClass = "selected";
+var ticketElementsSelector = "ul.tickets_list li.ticket"
 var form = $("#lindy_admin_register_form");
 var success_message = $("#lindy_admin_register_form_success");
 var error_message = $("#lindy_admin_register_form_error");
+var empty_message = $("#lindy_admin_register_form_empty");
 
+var courses_list = $("ul#courses_list");
 var course_select = $("select#course");
 var ticket_select = $("select#ticket");
+var role_container = $("#role_container");
+var personal_info_container = $("#personal_info_container");
 
-$('input[type="submit"]').hide();
-course_select.change(onCourseChange);
+var selectedData = {};
+
+$(role_container).hide();
+$(personal_info_container).hide();
+
+$('input[type=radio][name=role]').change(onRoleChange);
 populateCourses(course_select);
 </script>
