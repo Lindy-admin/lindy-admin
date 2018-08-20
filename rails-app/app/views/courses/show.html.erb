@@ -3,6 +3,16 @@
   <%= simple_format(@course.description) %>
 </p>
 
+<h4>Tags</h4>
+<p>
+  <strong>Locations:</strong>
+  <%= @course.location_list %>
+</p>
+<p>
+  <strong>Styles:</strong>
+  <%= @course.style_list %>
+</p>
+
 <h4>Registration</h4>
 <p>
   <strong>Start:</strong>

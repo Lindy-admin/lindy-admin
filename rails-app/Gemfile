@@ -32,6 +32,8 @@ gem 'apartment', '~> 2.1'
 
 # Storing settings
 gem "rails-settings-cached"
+# Tagging
+gem 'acts-as-taggable-on', '~> 6.0'
 
 gem 'sidekiq', '~> 4.1', '>= 4.1.2'
 # Sidekiq monitoring

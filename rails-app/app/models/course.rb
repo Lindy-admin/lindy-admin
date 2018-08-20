@@ -3,6 +3,8 @@ class Course < ApplicationRecord
   has_many :participants, through: :registrations, source: :member
   has_many :tickets, dependent: :destroy
 
+  acts_as_taggable_on :locations, :styles
+
   validates :title, presence: true
   validates :registration_start, presence: true
   validates :registration_end, presence: true
