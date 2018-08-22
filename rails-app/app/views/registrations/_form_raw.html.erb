@@ -10,6 +10,18 @@
 <form id="lindy_admin_register_form" accept-charset="UTF-8">
   <div class="row">
     <h2>Filter</h2>
+    <div class="row">
+
+      <div class="col-xs-6">
+        <label for="style">Style</label>
+        <select name="style" id="style" class="form-control"><option value="">Loading...</option></select>
+      </div>
+
+      <div class="col-xs-6">
+        <label for="location">Location</label>
+        <select name="location" id="location" class="form-control"><option value="">Loading...</option></select>
+      </div>
+    </div>
   </div>
   <div class="row">
     <h2>Courses</h2>
@@ -58,18 +70,56 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
 
-function populateCourses(course_select) {
+function populateFilter(selector, url) {
   $.ajax(
     {
-      url: "<%= api_courses_url(Apartment::Tenant.current) %>",
+      url: url,
       method: "GET",
       crossDomain: true,
       success: function(data) {
+        setOptions(selector, data);
+      },
+      error: function(error){
+        console.error("Could not fetch courses data", error);
+      }
+    }
+  )
+}
+
+function setOptions(selector, data) {
+  selector.empty()
+  selector.append('<option value="0">All</option>')
+  $.each(data, function(){
+    option = this;
+    selector.append('<option value="'+option+'">'+option+'</option>')
+  })
+}
+
+function populateCourses(style, location) {
+
+
+  var args = ""
+  if(style != null){
+    args += "style="+style;
+  }
+  if(location != null){
+    if(args.length > 0) {
+      args += "&"
+    }
+    args += "location="+location;
+  }
+
+  var url = "<%= api_courses_url(Apartment::Tenant.current) %>?" + args;
+  $.ajax(
+    {
+      url: url,
+      method: "GET",
+      crossDomain: true,
+      success: function(data) {
+        $(courses_list).empty();
         if(data != null && data.length > 0) {
-          course_select.empty();
           $.each(data, function() {
            course = this;
-           course_select.append('<option value="'+course["id"]+'">'+course["title"]+'</option>')
            addCourse(course);
           });
 
@@ -118,9 +168,9 @@ function onTicketClick(){
   ticketId = ticketElement.data("ticket_id");
   $(ticketElementsSelector).removeClass(selectedClass);
 
-  if(selectedData["ticket_id"] != ticketId){
-    selectedData["course_id"] = courseId;
-    selectedData["ticket_id"] = ticketId;
+  if(selectedData["ticket"] != ticketId){
+    selectedData["course"] = courseId;
+    selectedData["ticket"] = ticketId;
     ticketElement.addClass(selectedClass);
     $('li.course:not([data-course_id="'+courseId+'"])').hide();
     $(role_container).show();
@@ -128,8 +178,8 @@ function onTicketClick(){
         scrollTop: $("#role").offset().top - .25 * $(window).height()
     }, 1000);
   } else {
-    selectedData["course_id"] = null;
-    selectedData["ticket_id"] = null;
+    selectedData["course"] = null;
+    selectedData["ticket"] = null;
     $('li.course').fadeIn();
     $(role_container).fadeOut();
     $(personal_info_container).fadeOut();
@@ -138,6 +188,23 @@ function onTicketClick(){
     $('input[type=radio][name=role]').attr("checked", false);
     $('input[type=radio][name=role]').change(onRoleChange);
   }
+}
+
+function onStyleChange() {
+  tag_style = $(this).val();
+  if(tag_style == 0) {
+    tag_style = null;
+  }
+  console.log("style", tag_style);
+  populateCourses(tag_style, tag_location);
+}
+
+function onLocationChange() {
+  tag_location = $(this).val();
+  if(tag_location == 0) {
+    tag_location = null;
+  }
+  populateCourses(tag_style, tag_location);
 }
 
 function onRoleChange() {
@@ -182,6 +249,9 @@ $('#lindy_admin_register_form').on('submit', function(e) { //use on if jQuery 1.
     submitData(data)
 });
 
+var tag_style = null;
+var tag_location = null;
+
 var selectedClass = "selected";
 var ticketElementsSelector = "ul.tickets_list li.ticket"
 var form = $("#lindy_admin_register_form");
@@ -190,8 +260,8 @@ var error_message = $("#lindy_admin_register_form_error");
 var empty_message = $("#lindy_admin_register_form_empty");
 
 var courses_list = $("ul#courses_list");
-var course_select = $("select#course");
-var ticket_select = $("select#ticket");
+var style_select = $("select#style");
+var location_select = $("select#location");
 var role_container = $("#role_container");
 var personal_info_container = $("#personal_info_container");
 
@@ -200,6 +270,11 @@ var selectedData = {};
 $(role_container).hide();
 $(personal_info_container).hide();
 
+style_select.change(onStyleChange);
+location_select.change(onLocationChange);
+
 $('input[type=radio][name=role]').change(onRoleChange);
-populateCourses(course_select);
+populateCourses(null, null);
+populateFilter(style_select, "<%= api_styles_url(Apartment::Tenant.current) %>")
+populateFilter(location_select, "<%= api_locations_url(Apartment::Tenant.current) %>")
 </script>

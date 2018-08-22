@@ -11,7 +11,15 @@ class ApiController < ApplicationController
       tenant = Tenant.where(token: params[:tenant]).first
       Apartment::Tenant.switch!(tenant.token)
       today = Date.today
-      @courses = Course.where("registration_start <= ? AND registration_end >= ?", today, today)
+      @courses = Course.where("registration_start <= ? AND registration_end >= ?", today, today).order(:id)
+
+      if params.has_key?(:style)
+        @courses = @courses.tagged_with(params[:style], on: :styles, all: true)
+      end
+      if params.has_key?(:location)
+        @courses = @courses.tagged_with(params[:location], on: :locations, all: true)
+      end
+
       render
     ensure
       Apartment::Tenant.reset
@@ -29,21 +37,40 @@ class ApiController < ApplicationController
     end
   end
 
+  def styles
+    begin
+      tenant = Tenant.where(token: params[:tenant]).first
+      Apartment::Tenant.switch!(tenant.token)
+      @styles = get_tags_for_context("styles")
+      render
+    ensure
+      Apartment::Tenant.reset
+    end
+  end
+
+  def locations
+    begin
+      tenant = Tenant.where(token: params[:tenant]).first
+      Apartment::Tenant.switch!(tenant.token)
+      @locations =  get_tags_for_context("locations")
+      render
+    ensure
+      Apartment::Tenant.reset
+    end
+  end
+
   def register
+
     begin
       tenant = Tenant.where(token: params[:tenant]).first
       Apartment::Tenant.switch!(tenant.token)
 
-      logger.info("member")
       @member = Member.find_or_initialize_by(email: params[:email])
-      logger.info("course")
-      @course = Course.find(params[:course_id].to_i)
-      logger.info("ticker")
-      @ticket = @course.tickets.find(params[:ticket_id].to_i)
+      @course = Course.find(params[:course].to_i)
+      @ticket = @course.tickets.find(params[:ticket].to_i)
       role = params[:role]
       additional_params = params[:additional]
 
-      logger.info("registration exists?")
       if Registration.exists?(member_id: @member.id, course_id: @course.id)
         @registration = Registration.where(member_id: @member.id, course_id: @course.id).first
         render :register, status: :conflict
@@ -107,6 +134,10 @@ class ApiController < ApplicationController
   end
 
   private
+  def get_tags_for_context(context)
+    ActsAsTaggableOn::Tagging.includes(:tag).where(taggable_type: "Course", context: context).distinct.pluck(:name)
+  end
+
   def set_default_response_format
     request.format = :json
   end

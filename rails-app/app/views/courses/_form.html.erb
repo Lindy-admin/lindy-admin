@@ -8,6 +8,16 @@
   </div>
 
   <div class="row">
+    <%= f.label :locations %>
+    <div class="col-xs-4 input-group"><%= f.text_field :location_list, value: f.object.location_list.to_s, class: "form-control" %></div>
+  </div>
+
+  <div class="row">
+    <%= f.label :styles %>
+    <div class="col-xs-4 input-group"><%= f.text_field :style_list, value: f.object.style_list.to_s, class: "form-control" %></div>
+  </div>
+
+  <div class="row">
     <%= f.label :description %>
     <div class="col-xs-4 input-group"><%= f.text_area :description, class: "form-control" %></div>
   </div>
