@@ -88,19 +88,35 @@ function populateFilter(selector, url) {
 
 function setOptions(selector, data) {
   selector.empty()
+  selector.append('<option value="0">All</option>')
   $.each(data, function(){
     option = this;
-    selector.append('<option value="'+option["id"]+'">'+option["name"]+'</option>')
+    selector.append('<option value="'+option+'">'+option+'</option>')
   })
 }
 
-function populateCourses() {
+function populateCourses(style, location) {
+
+
+  var args = ""
+  if(style != null){
+    args += "style="+style;
+  }
+  if(location != null){
+    if(args.length > 0) {
+      args += "&"
+    }
+    args += "location="+location;
+  }
+
+  var url = "<%= api_courses_url(Apartment::Tenant.current) %>?" + args;
   $.ajax(
     {
-      url: "<%= api_courses_url(Apartment::Tenant.current) %>",
+      url: url,
       method: "GET",
       crossDomain: true,
       success: function(data) {
+        $(courses_list).empty();
         if(data != null && data.length > 0) {
           $.each(data, function() {
            course = this;
@@ -174,6 +190,23 @@ function onTicketClick(){
   }
 }
 
+function onStyleChange() {
+  tag_style = $(this).val();
+  if(tag_style == 0) {
+    tag_style = null;
+  }
+  console.log("style", tag_style);
+  populateCourses(tag_style, tag_location);
+}
+
+function onLocationChange() {
+  tag_location = $(this).val();
+  if(tag_location == 0) {
+    tag_location = null;
+  }
+  populateCourses(tag_style, tag_location);
+}
+
 function onRoleChange() {
   $(personal_info_container).show();
   $([document.documentElement, document.body]).animate({
@@ -216,6 +249,9 @@ $('#lindy_admin_register_form').on('submit', function(e) { //use on if jQuery 1.
     submitData(data)
 });
 
+var tag_style = null;
+var tag_location = null;
+
 var selectedClass = "selected";
 var ticketElementsSelector = "ul.tickets_list li.ticket"
 var form = $("#lindy_admin_register_form");
@@ -238,7 +274,7 @@ style_select.change(onStyleChange);
 location_select.change(onLocationChange);
 
 $('input[type=radio][name=role]').change(onRoleChange);
-populateCourses();
+populateCourses(null, null);
 populateFilter(style_select, "<%= api_styles_url(Apartment::Tenant.current) %>")
 populateFilter(location_select, "<%= api_locations_url(Apartment::Tenant.current) %>")
 </script>
