@@ -10,6 +10,18 @@
 <form id="lindy_admin_register_form" accept-charset="UTF-8">
   <div class="row">
     <h2>Filter</h2>
+    <div class="row">
+
+      <div class="col-xs-6">
+        <label for="style">Style</label>
+        <select name="style" id="style" class="form-control"><option value="">Loading...</option></select>
+      </div>
+
+      <div class="col-xs-6">
+        <label for="location">Location</label>
+        <select name="location" id="location" class="form-control"><option value="">Loading...</option></select>
+      </div>
+    </div>
   </div>
   <div class="row">
     <h2>Courses</h2>
@@ -58,7 +70,31 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
 
-function populateCourses(course_select) {
+function populateFilter(selector, url) {
+  $.ajax(
+    {
+      url: url,
+      method: "GET",
+      crossDomain: true,
+      success: function(data) {
+        setOptions(selector, data);
+      },
+      error: function(error){
+        console.error("Could not fetch courses data", error);
+      }
+    }
+  )
+}
+
+function setOptions(selector, data) {
+  selector.empty()
+  $.each(data, function(){
+    option = this;
+    selector.append('<option value="'+option["id"]+'">'+option["name"]+'</option>')
+  })
+}
+
+function populateCourses() {
   $.ajax(
     {
       url: "<%= api_courses_url(Apartment::Tenant.current) %>",
@@ -66,10 +102,8 @@ function populateCourses(course_select) {
       crossDomain: true,
       success: function(data) {
         if(data != null && data.length > 0) {
-          course_select.empty();
           $.each(data, function() {
            course = this;
-           course_select.append('<option value="'+course["id"]+'">'+course["title"]+'</option>')
            addCourse(course);
           });
 
@@ -190,8 +224,8 @@ var error_message = $("#lindy_admin_register_form_error");
 var empty_message = $("#lindy_admin_register_form_empty");
 
 var courses_list = $("ul#courses_list");
-var course_select = $("select#course");
-var ticket_select = $("select#ticket");
+var style_select = $("select#style");
+var location_select = $("select#location");
 var role_container = $("#role_container");
 var personal_info_container = $("#personal_info_container");
 
@@ -200,6 +234,11 @@ var selectedData = {};
 $(role_container).hide();
 $(personal_info_container).hide();
 
+style_select.change(onStyleChange);
+location_select.change(onLocationChange);
+
 $('input[type=radio][name=role]').change(onRoleChange);
-populateCourses(course_select);
+populateCourses();
+populateFilter(style_select, "<%= api_styles_url(Apartment::Tenant.current) %>")
+populateFilter(location_select, "<%= api_locations_url(Apartment::Tenant.current) %>")
 </script>
