@@ -109,6 +109,24 @@ describe "When requesting the available courses" do
 
     end
 
+    context "with a location and style filter" do
+
+      let(:get_courses) {
+        get api_courses_path @tenant.token, headers: headers, params: {location: @LOCATION_DENBOSCH, style: @STYLE_SHAG}
+      }
+
+      it "will return the courses only for that style and location" do
+        get_courses
+        expect(response.status).to be(200)
+
+        body = JSON.parse response.body
+        expect(body.length).to eq(1)
+        expect(body[0]["id"]).to eq(@course3.id)
+        expect(body[0]["title"]).to eq(@course3.title)
+      end
+
+    end
+
   end
 
   context "with no course that is open for registration" do

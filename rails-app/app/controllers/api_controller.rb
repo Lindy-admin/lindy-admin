@@ -14,10 +14,10 @@ class ApiController < ApplicationController
       @courses = Course.where("registration_start <= ? AND registration_end >= ?", today, today).order(:id)
 
       if params.has_key?(:style)
-        @courses = @courses.tagged_with(params[:style], on: :styles)
+        @courses = @courses.tagged_with(params[:style], on: :styles, all: true)
       end
       if params.has_key?(:location)
-        @courses = @courses.tagged_with(params[:location], on: :locations)
+        @courses = @courses.tagged_with(params[:location], on: :locations, all: true)
       end
 
       render
@@ -135,7 +135,7 @@ class ApiController < ApplicationController
 
   private
   def get_tags_for_context(context)
-    ActsAsTaggableOn::Tagging.includes(:tag).where(taggable_type: "Course", context: context).uniq.pluck(:id, :name).map{|t| {id: t[0], name: t[1]}}
+    ActsAsTaggableOn::Tagging.includes(:tag).where(taggable_type: "Course", context: context).distinct.pluck(:name)
   end
 
   def set_default_response_format
