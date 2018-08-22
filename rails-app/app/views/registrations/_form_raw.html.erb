@@ -152,9 +152,9 @@ function onTicketClick(){
   ticketId = ticketElement.data("ticket_id");
   $(ticketElementsSelector).removeClass(selectedClass);
 
-  if(selectedData["ticket_id"] != ticketId){
-    selectedData["course_id"] = courseId;
-    selectedData["ticket_id"] = ticketId;
+  if(selectedData["ticket"] != ticketId){
+    selectedData["course"] = courseId;
+    selectedData["ticket"] = ticketId;
     ticketElement.addClass(selectedClass);
     $('li.course:not([data-course_id="'+courseId+'"])').hide();
     $(role_container).show();
@@ -162,8 +162,8 @@ function onTicketClick(){
         scrollTop: $("#role").offset().top - .25 * $(window).height()
     }, 1000);
   } else {
-    selectedData["course_id"] = null;
-    selectedData["ticket_id"] = null;
+    selectedData["course"] = null;
+    selectedData["ticket"] = null;
     $('li.course').fadeIn();
     $(role_container).fadeOut();
     $(personal_info_container).fadeOut();
