@@ -11,35 +11,32 @@ describe "When requesting the available courses" do
   context "with courses that are open for registration" do
 
     before(:each) do
-      before(:each) do
-        Apartment::Tenant.switch!(@tenant.token)
+      Apartment::Tenant.switch!(@tenant.token)
 
-        @LOCATION_NIJMEGEN = "Nijmegen"
-        @LOCATION_DENBOSCH = "Den Bosch"
+      @LOCATION_NIJMEGEN = "Nijmegen"
+      @LOCATION_DENBOSCH = "Den Bosch"
 
-        @STYLE_LINDY = "Lindy Hop"
-        @STYLE_SHAG = "Collegiate Shag"
+      @STYLE_LINDY = "Lindy Hop"
+      @STYLE_SHAG = "Collegiate Shag"
 
-        @course1 = FactoryBot.create(:course, registration_start: DateTime.now.to_date - 2.days, registration_end: DateTime.now.to_date + 2.days)
-        @course1.location_list = [@LOCATION_NIJMEGEN]
-        @course1.style_list = [@STYLE_SHAG]
-        @course1.save!
-        @ticket1 = FactoryBot.create(:ticket, course: @course1)
+      @course1 = FactoryBot.create(:course, registration_start: DateTime.now.to_date - 2.days, registration_end: DateTime.now.to_date + 2.days)
+      @course1.location_list = [@LOCATION_NIJMEGEN]
+      @course1.style_list = [@STYLE_SHAG]
+      @course1.save!
+      @ticket1 = FactoryBot.create(:ticket, course: @course1)
 
-        @course2 = FactoryBot.create(:course, registration_start: DateTime.now.to_date - 2.days, registration_end: DateTime.now.to_date + 2.days)
-        @course2.location_list = [@LOCATION_NIJMEGEN, @LOCATION_DENBOSCH]
-        @course2.style_list = [@STYLE_LINDY]
-        @course2.save!
-        @ticket2 = FactoryBot.create(:ticket, course: @course2)
-        Apartment::Tenant.reset
+      @course2 = FactoryBot.create(:course, registration_start: DateTime.now.to_date - 2.days, registration_end: DateTime.now.to_date + 2.days)
+      @course2.location_list = [@LOCATION_NIJMEGEN, @LOCATION_DENBOSCH]
+      @course2.style_list = [@STYLE_LINDY]
+      @course2.save!
+      @ticket2 = FactoryBot.create(:ticket, course: @course2)
 
-        @course3 = FactoryBot.create(:course, registration_start: DateTime.now.to_date - 2.days, registration_end: DateTime.now.to_date + 2.days)
-        @ticket3 = FactoryBot.create(:ticket, course: @course3)
-        @course3.location_list = [@LOCATION_DENBOSCH]
-        @course3.style_list = [@STYLE_LINDY, @STYLE_SHAG]
-        @course3.save!
-        Apartment::Tenant.reset
-      end
+      @course3 = FactoryBot.create(:course, registration_start: DateTime.now.to_date - 2.days, registration_end: DateTime.now.to_date + 2.days)
+      @ticket3 = FactoryBot.create(:ticket, course: @course3)
+      @course3.location_list = [@LOCATION_DENBOSCH]
+      @course3.style_list = [@STYLE_LINDY, @STYLE_SHAG]
+      @course3.save!
+      Apartment::Tenant.reset
     end
 
     let (:headers) do
@@ -48,9 +45,9 @@ describe "When requesting the available courses" do
       }
     end
 
-    context "without a filter"
+    context "without a filter" do
 
-      let get_courses {
+      let(:get_courses) {
         get api_courses_path @tenant.token, headers: headers
       }
 
@@ -70,9 +67,9 @@ describe "When requesting the available courses" do
 
     end
 
-    context "with a location filter"
+    context "with a location filter" do
 
-      let get_courses {
+      let(:get_courses) {
         get api_courses_path @tenant.token, headers: headers, params: {location: @LOCATION_NIJMEGEN}
       }
 
@@ -91,13 +88,13 @@ describe "When requesting the available courses" do
 
     end
 
-    context "with a style filter"
+    context "with a style filter" do
 
-      let get_courses {
+      let(:get_courses) {
         get api_courses_path @tenant.token, headers: headers, params: {style: @STYLE_SHAG}
       }
 
-      it "will return the courses only for that location" do
+      it "will return the courses only for that style" do
         get_courses
         expect(response.status).to be(200)
 

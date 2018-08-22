@@ -11,7 +11,15 @@ class ApiController < ApplicationController
       tenant = Tenant.where(token: params[:tenant]).first
       Apartment::Tenant.switch!(tenant.token)
       today = Date.today
-      @courses = Course.where("registration_start <= ? AND registration_end >= ?", today, today)
+      @courses = Course.where("registration_start <= ? AND registration_end >= ?", today, today).order(:id)
+
+      if params.has_key?(:style)
+        @courses = @courses.tagged_with(params[:style], on: :styles)
+      end
+      if params.has_key?(:location)
+        @courses = @courses.tagged_with(params[:location], on: :locations)
+      end
+
       render
     ensure
       Apartment::Tenant.reset
