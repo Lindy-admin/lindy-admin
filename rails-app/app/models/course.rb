@@ -11,10 +11,13 @@ class Course < ApplicationRecord
   validate :start_is_before_end
 
   def leads
-    registrations.where(role: true)
+    registrations.where(role: "lead")
   end
   def follows
-    registrations.where(role: false)
+    registrations.where(role: "follow")
+  end
+  def solos
+    registrations.where(role: "solo")
   end
 
   def register(member, member_params, role, ticket, additional_params)

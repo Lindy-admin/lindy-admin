@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180820054948) do
+ActiveRecord::Schema.define(version: 20180824064120) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -59,12 +59,12 @@ ActiveRecord::Schema.define(version: 20180820054948) do
   create_table "registrations", force: :cascade do |t|
     t.integer  "member_id"
     t.integer  "course_id"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-    t.boolean  "role",       default: false, null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
     t.integer  "ticket_id"
     t.integer  "status",     default: 0
     t.json     "additional"
+    t.integer  "role",       default: 0
     t.index ["course_id"], name: "index_registrations_on_course_id", using: :btree
     t.index ["member_id", "course_id"], name: "index_registrations_on_member_id_and_course_id", unique: true, using: :btree
     t.index ["member_id"], name: "index_registrations_on_member_id", using: :btree

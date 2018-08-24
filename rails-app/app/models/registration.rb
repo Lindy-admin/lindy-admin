@@ -12,6 +12,13 @@ class Registration < ApplicationRecord
     accepted: 3
   }
 
+  enum role: {
+    error: 0,
+    lead: 1,
+    follow: 2,
+    solo: 3
+  }
+
   after_create :send_created_mail
   after_save :send_status_mail, if: :status_changed?
 

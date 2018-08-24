@@ -61,7 +61,12 @@ class RegistrationsController < ApplicationController
   end
 
   def switch_role
-    new_role = !@registration.role
+    case @registration.role
+    when "lead"
+      new_role = "follow"
+    when "follow"
+      new_role = "lead"
+    end
     respond_to do |format|
       if @registration.update(role: new_role)
         format.html { redirect_to :back, notice: "Role was switched." }

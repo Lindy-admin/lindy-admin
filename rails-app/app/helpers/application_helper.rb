@@ -1,6 +1,7 @@
 module ApplicationHelper
   def role_label(value)
-    return value ? "Lead" : "Follow"
+    # return value ? "Lead" : "Follow"
+    value
   end
 
   def sortable(column, title = nil)
