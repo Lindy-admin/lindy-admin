@@ -7,7 +7,7 @@
       <th>Description</th>
       <th>Start</th>
       <th>End</th>
-      <th>Leads / Follows</th>
+      <th>Registrations</th>
     </tr>
   </thead>
 
@@ -19,14 +19,25 @@
         <td><%= course.registration_start %></td>
         <td><%= course.registration_end %></td>
         <td>
-          <strong>Accepted (L/F):</strong>
-          <%= "#{course.leads.where(status:"accepted").count} / #{course.follows.where(status:"accepted").count}" %>
-          <br />
-          <strong>Waitinglist (L/F):</strong>
-          <%= "#{course.leads.where(status:"waitinglist").count} / #{course.follows.where(status:"waitinglist").count}" %>
-          <br />
-          <strong>Triage (L/F):</strong>
-          <%= "#{course.leads.where(status:"triage").count} / #{course.follows.where(status:"triage").count}" %>
+          <% if course.roles == "lead_and_follow" %>
+            <strong>Accepted:</strong>
+            <%= "#{course.leads.where(status:"accepted").count} / #{course.follows.where(status:"accepted").count}" %>
+            <br />
+            <strong>Waitinglist:</strong>
+            <%= "#{course.leads.where(status:"waitinglist").count} / #{course.follows.where(status:"waitinglist").count}" %>
+            <br />
+            <strong>Triage:</strong>
+            <%= "#{course.leads.where(status:"triage").count} / #{course.follows.where(status:"triage").count}" %>
+          <% elsif course.roles == "solo"%>
+            <strong>Accepted:</strong>
+            <%= "#{course.solos.where(status:"accepted").count}" %>
+            <br />
+            <strong>Waitinglist:</strong>
+            <%= "#{course.solos.where(status:"waitinglist").count}" %>
+            <br />
+            <strong>Triage:</strong>
+            <%= "#{course.solos.where(status:"triage").count}" %>
+          <% end %>
         </td>
       </tr>
     <% end %>

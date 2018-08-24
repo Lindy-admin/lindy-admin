@@ -18,6 +18,12 @@
   </div>
 
   <div class="row">
+    <%= f.label :roles %>
+    <b><%= @course.roles %></b>
+    <div class="col-xs-4 input-group"><%= f.select :roles, Course.roles.keys.to_a.map{ |r| [r.gsub("_", " "), r] }, selected: @course.roles, class: "form-control" %></div>
+  </div>
+
+  <div class="row">
     <%= f.label :description %>
     <div class="col-xs-4 input-group"><%= f.text_area :description, class: "form-control" %></div>
   </div>

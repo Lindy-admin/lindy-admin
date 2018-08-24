@@ -9,6 +9,10 @@
   <%= @course.location_list %>
 </p>
 <p>
+  <strong>Roles:</strong>
+  <%= @course.roles.gsub("_", " ") %>
+</p>
+<p>
   <strong>Styles:</strong>
   <%= @course.style_list %>
 </p>

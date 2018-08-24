@@ -3,6 +3,11 @@ class Course < ApplicationRecord
   has_many :participants, through: :registrations, source: :member
   has_many :tickets, dependent: :destroy
 
+  enum roles: {
+    lead_and_follow: 1,
+    solo: 2
+  }
+
   acts_as_taggable_on :locations, :styles
 
   validates :title, presence: true
