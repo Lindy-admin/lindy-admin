@@ -136,8 +136,6 @@ function populateCourses(style, location) {
   )
 }
 function addCourse(course) {
-
-
   $(courses_list).append(
     '<li class="course" data-course_id="'+course["id"]+'">'+
       '<div class="info_container">'+
@@ -172,25 +170,15 @@ function onTicketClick(){
     selectedData["course"] = courseId;
     selectedData["ticket"] = ticketId;
     ticketElement.addClass(selectedClass);
-    $('li.course:not([data-course_id="'+courseId+'"])').hide();
-    $(role_container).show();
-    $([document.documentElement, document.body]).animate({
-        scrollTop: $("#role").offset().top - .25 * $(window).height()
-    }, 1000);
+    setState(STATE_ROLE);
   } else {
     selectedData["course"] = null;
     selectedData["ticket"] = null;
-    $('li.course').fadeIn();
-    $(role_container).fadeOut();
-    $(personal_info_container).fadeOut();
-
-    $('input[type=radio][name=role]').change(null);
-    $('input[type=radio][name=role]').attr("checked", false);
-    $('input[type=radio][name=role]').change(onRoleChange);
+    setState(STATE_COURSE);
   }
 }
 
-function onStyleChange() {
+function onStyleChange(event) {
   tag_style = $(this).val();
   if(tag_style == 0) {
     tag_style = null;
@@ -199,7 +187,7 @@ function onStyleChange() {
   populateCourses(tag_style, tag_location);
 }
 
-function onLocationChange() {
+function onLocationChange(event) {
   tag_location = $(this).val();
   if(tag_location == 0) {
     tag_location = null;
@@ -207,11 +195,8 @@ function onLocationChange() {
   populateCourses(tag_style, tag_location);
 }
 
-function onRoleChange() {
-  $(personal_info_container).show();
-  $([document.documentElement, document.body]).animate({
-      scrollTop: $("#personal_info_container").offset().top - .25 * $(window).height()
-  }, 1000);
+function onRoleChange(event) {
+  setState(STATE_PERSONAL);
 }
 
 function submitData(data) {
@@ -236,6 +221,64 @@ function submitData(data) {
   )
 }
 
+function setState(state) {
+  switch (state) {
+    default:
+    case STATE_COURSE:
+      setCourseState(false);
+      setRoleState(false);
+      setPersonalState(false);
+    break;
+    case STATE_ROLE:
+      setCourseState(false);
+      setRoleState(true);
+      setPersonalState(false);
+      scrollTo("#role");
+    break;
+    case STATE_PERSONAL:
+      setCourseState(false);
+      setRoleState(true);
+      setPersonalState(true);
+      scrollTo("#personal_info_container");
+    break;
+  }
+}
+
+function setCourseState(value) {
+  if(value) {
+    $('li.course').fadeIn();
+  } else {
+    $('li.course:not([data-course_id="'+courseId+'"])').hide();
+  }
+}
+
+function setRoleState(value) {
+  if(value) {
+    ticketElement.addClass(selectedClass);
+    $(role_container).show();
+  } else {
+    console.log("rollout")
+    $('input[type=radio][name=role]').change(null);
+    $('input[type=radio][name=role]').attr("checked", false);
+    $('input[type=radio][name=role]').change(onRoleChange);
+    $(role_container).fadeOut();
+  }
+}
+
+function setPersonalState(value) {
+  if(value) {
+    $(personal_info_container).show();
+  } else {
+    $(personal_info_container).fadeOut();
+  }
+}
+
+function scrollTo(containerId) {
+  $([document.documentElement, document.body]).animate({
+      scrollTop: $(containerId).offset().top - .25 * $(window).height()
+  }, 1000);
+}
+
 // capture the submit
 $('#lindy_admin_register_form').on('submit', function(e) { //use on if jQuery 1.7+
     e.preventDefault();  //prevent form from submitting
@@ -248,6 +291,10 @@ $('#lindy_admin_register_form').on('submit', function(e) { //use on if jQuery 1.
     console.log(data);
     submitData(data)
 });
+
+var STATE_COURSE = 0;
+var STATE_ROLE = 1;
+var STATE_PERSONAL = 2;
 
 var tag_style = null;
 var tag_location = null;
