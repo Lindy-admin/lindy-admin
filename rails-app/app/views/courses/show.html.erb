@@ -63,7 +63,7 @@
   <strong>Triage (L/F):</strong>
   <%= "#{@course.leads.where(status:"triage").count} / #{@course.follows.where(status:"triage").count}" %>
 </p>
-<%= render partial: 'registrations/registrations_table', locals: {registrations: @course.registrations.order(:created_at)} %>
+<%= render partial: 'registrations/registrations_table', locals: {registrations: @course.registrations.order(:created_at), roles: @course} %>
 
 <div class="row">
   <h2>Export</h2>

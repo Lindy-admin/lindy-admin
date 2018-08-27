@@ -13,8 +13,8 @@
     <div class="row">
 
       <div class="col-xs-6">
-        <label for="style">Style</label>
-        <select name="style" id="style" class="form-control"><option value="">Loading...</option></select>
+        <label for="style_select">Style</label>
+        <select name="style_select" id="style_select" class="form-control"><option value="">Loading...</option></select>
       </div>
 
       <div class="col-xs-6">
@@ -152,8 +152,9 @@ function getTicketsString(course) {
   var ticketsList = $("<ul></ul>");
   $.each(course["tickets"], function(){
     var ticket = this;
+    var ticket_partnered = course["roles"]=="lead_and_follow"
     var price = (ticket["price_cents"]/100)
-    $(ticketsList).append('<li class="ticket" data-course_id="'+course["id"]+'" data-ticket_id="'+ticket["id"]+'">'+
+    $(ticketsList).append('<li class="ticket" data-course_id="'+course["id"]+'" data-ticket_id="'+ticket["id"]+'" data-partnered="'+ticket_partnered+'">'+
     ticket["label"]+' €'+ price +
     '</li>')
   })
@@ -164,13 +165,18 @@ function onTicketClick(){
   ticketElement = $(this);
   courseId = ticketElement.data("course_id");
   ticketId = ticketElement.data("ticket_id");
+  partnered = ticketElement.data("partnered");
   $(ticketElementsSelector).removeClass(selectedClass);
 
   if(selectedData["ticket"] != ticketId){
     selectedData["course"] = courseId;
     selectedData["ticket"] = ticketId;
     ticketElement.addClass(selectedClass);
-    setState(STATE_ROLE);
+    if(partnered) {
+      setState(STATE_ROLE);
+    } else {
+      setState(STATE_PERSONAL);
+    }
   } else {
     selectedData["course"] = null;
     selectedData["ticket"] = null;
@@ -225,7 +231,7 @@ function setState(state) {
   switch (state) {
     default:
     case STATE_COURSE:
-      setCourseState(false);
+      setCourseState(true);
       setRoleState(false);
       setPersonalState(false);
     break;
@@ -253,11 +259,10 @@ function setCourseState(value) {
 }
 
 function setRoleState(value) {
-  if(value) {
+  if(value && partnered) {
     ticketElement.addClass(selectedClass);
     $(role_container).show();
   } else {
-    console.log("rollout")
     $('input[type=radio][name=role]').change(null);
     $('input[type=radio][name=role]').attr("checked", false);
     $('input[type=radio][name=role]').change(onRoleChange);
@@ -307,11 +312,12 @@ var error_message = $("#lindy_admin_register_form_error");
 var empty_message = $("#lindy_admin_register_form_empty");
 
 var courses_list = $("ul#courses_list");
-var style_select = $("select#style");
+var style_select = $("select#style_select");
 var location_select = $("select#location");
 var role_container = $("#role_container");
 var personal_info_container = $("#personal_info_container");
 
+var partnered;
 var selectedData = {};
 
 $(role_container).hide();

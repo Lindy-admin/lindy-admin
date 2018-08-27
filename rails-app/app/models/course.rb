@@ -30,6 +30,8 @@ class Course < ApplicationRecord
       member.update_attributes(member_params)
       member.save!
 
+      role = "solo" if self.roles == "solo"
+
       registration = Registration.new(
         member_id: member.id,
         course_id: self.id,
