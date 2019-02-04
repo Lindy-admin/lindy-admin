@@ -3,7 +3,7 @@ FactoryBot.define do
     course
     ticket
     member
-    role true
+    role :lead
     status :triage
   end
 end
