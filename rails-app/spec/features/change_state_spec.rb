@@ -15,6 +15,9 @@ feature "Waitinglist" do
 
       before(:each) do
         @user = FactoryBot.create(:user, role: :admin, password: password)
+        Apartment::Tenant.switch!(@user.tenant.token)
+        Config.create!
+        Apartment::Tenant.reset
       end
 
       it "changes the status from triage to waitinglist" do

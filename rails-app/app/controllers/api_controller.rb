@@ -103,7 +103,7 @@ class ApiController < ApplicationController
         raise ActiveRecord::RecordNotFound
       end
 
-      mollie = Mollie::API::Client.new(Setting.mollie_api_key)
+      mollie = Mollie::API::Client.new(Config.first.mollie_api_key)
       mollie_payment = mollie.payments.get payment.remote_id
 
       begin

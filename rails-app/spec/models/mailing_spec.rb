@@ -28,6 +28,7 @@ describe "Mailing" do
         @tenant_token = @user.tenant.token
 
         Apartment::Tenant.switch!(@tenant_token)
+        Config.create!
         @registration = FactoryBot.create(:registration, status: :triage)
         Apartment::Tenant.reset
       end

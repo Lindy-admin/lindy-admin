@@ -4,7 +4,16 @@ require "mollie_helper"
 describe "Payment" do
 
   before(:each) do
+    @user = FactoryBot.create(:user, role: :admin)
+    @tenant_token = @user.tenant.token
+
+    Apartment::Tenant.switch!(@tenant_token)
+    Config.create!
     @registration = FactoryBot.create(:registration)
+  end
+
+  after(:each) do
+    Apartment::Tenant.reset
   end
 
   context "Creating" do

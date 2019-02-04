@@ -26,7 +26,7 @@ class Registration < ApplicationRecord
     logger.info("notifying admin about registration")
     mailing = Mailing.create(
       registration: self,
-      remote_template_id: Setting.mailjet_notification_email_template_id,
+      remote_template_id: Config.first.mailjet_notification_email_template_id,
       label: :registration,
       target: :admin
     )
@@ -34,7 +34,7 @@ class Registration < ApplicationRecord
     logger.info("qeueuing registration mail")
     mailing = Mailing.create(
       registration: self,
-      remote_template_id: Setting.mailjet_registered_template_id,
+      remote_template_id: Config.first.mailjet_registered_template_id,
       label: :registration,
       target: :member
     )
@@ -45,7 +45,7 @@ class Registration < ApplicationRecord
       logger.info("notifying admin about waitinglist")
       mailing = Mailing.create(
         registration: self,
-        remote_template_id: Setting.mailjet_notification_email_template_id,
+        remote_template_id: Config.first.mailjet_notification_email_template_id,
         label: :waitinglist,
         target: :admin
       )
@@ -53,7 +53,7 @@ class Registration < ApplicationRecord
       logger.info("qeueuing waitinglist mail")
       mailing = Mailing.create(
         registration: self,
-        remote_template_id: Setting.mailjet_waitinglist_template_id,
+        remote_template_id: Config.first.mailjet_waitinglist_template_id,
         label: :waitinglist,
         target: :member
       )
@@ -61,7 +61,7 @@ class Registration < ApplicationRecord
       logger.info("notifying admin about acceptance")
       mailing = Mailing.create(
         registration: self,
-        remote_template_id: Setting.mailjet_notification_email_template_id,
+        remote_template_id: Config.first.mailjet_notification_email_template_id,
         label: :acceptance,
         target: :admin
       )
@@ -69,7 +69,7 @@ class Registration < ApplicationRecord
       logger.info("qeueuing acceptance mail")
       mailing = Mailing.create(
         registration: self,
-        remote_template_id: Setting.mailjet_accepted_template_id,
+        remote_template_id: Config.first.mailjet_accepted_template_id,
         label: :acceptance,
         target: :member
       )

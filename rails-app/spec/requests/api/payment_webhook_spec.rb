@@ -9,6 +9,7 @@ describe "When updating a payment status through the webhook" do
     user = FactoryBot.create(:user, role: :admin)
     @tenant = user.tenant
     Apartment::Tenant.switch!(@tenant.token)
+    Config.create!
     registration = FactoryBot.create(:registration)
     @payment = FactoryBot.create(:payment, registration: registration, status: :submitted)
     Apartment::Tenant.reset

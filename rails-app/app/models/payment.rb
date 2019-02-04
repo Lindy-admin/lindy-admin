@@ -38,7 +38,7 @@ class Payment < ApplicationRecord
       logger.info("qeueuing confirmation mail")
       mailing = Mailing.create(
         registration: self.registration,
-        remote_template_id: Setting.mailjet_paid_template_id,
+        remote_template_id: Config.first.mailjet_paid_template_id,
         label: :payment,
         target: :member
       )

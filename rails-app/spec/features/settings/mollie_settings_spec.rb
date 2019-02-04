@@ -13,9 +13,6 @@ describe "When configuring Mollie" do
   end
 
   before(:each) do
-    Setting.mollie_api_key = "0987654321"
-    Setting.mollie_redirect_url = "http://redirect.me"
-
     stub_request(:get, "https://api.mailjet.com/v3/REST/template?OwnerType=user").
          to_return(
            status: 200,
@@ -50,6 +47,12 @@ describe "When configuring Mollie" do
 
     before(:each) do
       @user = FactoryBot.create(:user, role: :admin, password: password)
+      Apartment::Tenant.switch!(@user.tenant.token)
+      config = Config.new
+      config.mollie_api_key = "0987654321"
+      config.mollie_redirect_url = "http://redirect.me"
+      config.save!
+      Apartment::Tenant.reset
       login_as(@user, :scope => :user)
     end
 
@@ -61,7 +64,7 @@ describe "When configuring Mollie" do
       it "will update the api key" do
         expect{update_mollie_settings}.to change {
           Apartment::Tenant.switch!(@user.tenant.token)
-          key = Setting.mollie_api_key
+          key = Config.first.mollie_api_key
           Apartment::Tenant.reset
           key
         }.to(mollie_api_key)
@@ -70,7 +73,7 @@ describe "When configuring Mollie" do
       it "will update the redirect url" do
         expect{update_mollie_settings}.to change {
           Apartment::Tenant.switch!(@user.tenant.token)
-          url = Setting.mollie_redirect_url
+          url = Config.first.mollie_redirect_url
           Apartment::Tenant.reset
           url
         }.to(mollie_redirect_url)
@@ -86,7 +89,7 @@ describe "When configuring Mollie" do
       it "will empty the api key" do
         expect{update_mollie_settings}.to change {
           Apartment::Tenant.switch!(@user.tenant.token)
-          key = Setting.mollie_api_key
+          key = Config.first.mollie_api_key
           Apartment::Tenant.reset
           key
         }.to(mollie_api_key)
@@ -95,7 +98,7 @@ describe "When configuring Mollie" do
       it "will empty the redirect url" do
         expect{update_mollie_settings}.to change {
           Apartment::Tenant.switch!(@user.tenant.token)
-          url = Setting.mollie_redirect_url
+          url = Config.first.mollie_redirect_url
           Apartment::Tenant.reset
           url
         }.to(mollie_redirect_url)
@@ -111,7 +114,7 @@ describe "When configuring Mollie" do
       it "will update the api key" do
         expect{update_mollie_settings}.to change {
           Apartment::Tenant.switch!(@user.tenant.token)
-          key = Setting.mollie_api_key
+          key = Config.first.mollie_api_key
           Apartment::Tenant.reset
           key
         }.to(mollie_api_key)
@@ -120,7 +123,7 @@ describe "When configuring Mollie" do
       it "will not update the redirect url" do
         expect{update_mollie_settings}.to_not change {
           Apartment::Tenant.switch!(@user.tenant.token)
-          url = Setting.mollie_redirect_url
+          url = Config.first.mollie_redirect_url
           Apartment::Tenant.reset
           url
         }

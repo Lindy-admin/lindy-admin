@@ -31,6 +31,7 @@ describe "When a registration is put onto the waitinglist", type: :request do
         @tenant_token = @user.tenant.token
 
         Apartment::Tenant.switch!(@tenant_token)
+        Config.create!
         @registration = FactoryBot.create(:registration, status: :triage)
         Apartment::Tenant.reset
       end
@@ -62,6 +63,7 @@ describe "When a registration is put onto the waitinglist", type: :request do
         @tenant_token = @user.tenant.token
 
         Apartment::Tenant.switch!(@tenant_token)
+        Config.create!
         @registration = FactoryBot.create(:registration, status: :accepted)
         Apartment::Tenant.reset
       end

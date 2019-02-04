@@ -9,6 +9,7 @@ describe "When requesting a payments status" do
     @user = FactoryBot.create(:user, role: :admin)
     @tenant = @user.tenant
     Apartment::Tenant.switch!(@tenant.token)
+    Config.create!
     @registration = FactoryBot.create(:registration)
     Apartment::Tenant.reset
   }

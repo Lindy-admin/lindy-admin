@@ -10,13 +10,14 @@ describe "MailjetWorker" do
       @tenant = FactoryBot.create(:user, role: :admin).tenant
 
       Apartment::Tenant.switch!(@tenant.token)
-      @mailing = FactoryBot.create(:mailing, target: :member, label: :payment, remote_id: nil)
+      @config = Config.new
+      @config.mailjet_public_api_key = "1234567890"
+      @config.mailjet_private_api_key = "0987654321"
+      @config.mailjet_sender_email_address = "sender@test.test"
+      @config.mailjet_sender_email_name = "Sender name"
+      @config.save!
 
-      Setting[:mailjet_public_api_key] = "1234567890"
-      Setting[:mailjet_private_api_key] = "0987654321"
-      Setting[:mailjet_sender_email_address] = "sender@test.test"
-      Setting[:mailjet_sender_email_name] = "Sender name"
-      Setting.save
+      @mailing = FactoryBot.create(:mailing, target: :member, label: :payment, remote_id: nil)
     end
 
     after(:each) do
@@ -91,7 +92,7 @@ describe "MailjetWorker" do
                   Status: "failed",
                   To: [
                     {
-                      Email: Setting[:notification_email_address],
+                      Email: @config.notification_email_address,
                       MessageUUID: "123",
                       MessageID: remote_id,
                       MessageHref: "https://api.mailjet.com/v3/message/#{remote_id}"
@@ -175,11 +176,11 @@ describe "MailjetWorker" do
     context "without a mailjet key" do
 
       before(:each) do
-        @mailing = FactoryBot.create(:mailing, remote_id: nil)
+        @config.mailjet_public_api_key = nil
+        @config.mailjet_private_api_key = nil
+        @config.save!
 
-        Setting[:mailjet_public_api_key] = nil
-        Setting[:mailjet_private_api_key] = nil
-        Setting.save
+        @mailing = FactoryBot.create(:mailing, remote_id: nil)
       end
 
       it "does not call the Mailjet API" do
@@ -201,11 +202,11 @@ describe "MailjetWorker" do
     context "with an empty mailjet key" do
 
       before(:each) do
-        @mailing = FactoryBot.create(:mailing, remote_id: nil)
+        @config.mailjet_public_api_key = ""
+        @config.mailjet_private_api_key = ""
+        @config.save!
 
-        Setting[:mailjet_public_api_key] = ""
-        Setting[:mailjet_private_api_key] = ""
-        Setting.save
+        @mailing = FactoryBot.create(:mailing, remote_id: nil)
       end
 
       it "does not call the Mailjet API" do
@@ -255,15 +256,16 @@ describe "MailjetWorker" do
       @tenant = FactoryBot.create(:user, role: :admin).tenant
 
       Apartment::Tenant.switch!(@tenant.token)
-      @mailing = FactoryBot.create(:mailing, target: :admin, label: :payment, remote_id: nil)
+      @config = Config.new
+      @config.mailjet_public_api_key = "1234567890"
+      @config.mailjet_private_api_key = "0987654321"
+      @config.mailjet_sender_email_address = "sender@test.test"
+      @config.mailjet_sender_email_name = "Sender name"
+      @config.notification_email_address = admin_email
+      @config.mailjet_notification_email_template_id = 1
+      @config.save!
 
-      Setting[:mailjet_public_api_key] = "1234567890"
-      Setting[:mailjet_private_api_key] = "0987654321"
-      Setting[:mailjet_sender_email_address] = "sender@test.test"
-      Setting[:mailjet_sender_email_name] = "Sender name"
-      Setting[:notification_email_address] = admin_email
-      Setting[:mailjet_notification_email_template_id] = 1
-      Setting.save
+      @mailing = FactoryBot.create(:mailing, target: :admin, label: :payment, remote_id: nil)
     end
 
     context "succesfully" do
@@ -373,9 +375,9 @@ describe "MailjetWorker" do
     context "without mailjet settings" do
 
       before(:each) do
-        Setting[:mailjet_public_api_key] = nil
-        Setting[:mailjet_private_api_key] = nil
-        Setting.save
+        @config.mailjet_public_api_key = nil
+        @config.mailjet_private_api_key = nil
+        @config.save!
       end
 
       it "does not call the Mailjet API" do
@@ -397,8 +399,8 @@ describe "MailjetWorker" do
     context "without a notification email address" do
 
       before(:each) do
-        Setting[:notification_email_address] = nil
-        Setting.save
+        @config.notification_email_address = nil
+        @config.save!
       end
 
       it "does not call the Mailjet API" do

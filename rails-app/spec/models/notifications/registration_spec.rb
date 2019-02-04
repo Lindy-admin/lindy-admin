@@ -30,6 +30,7 @@ describe "When a member registers for a course" do
       @tenant_token = @user.tenant.token
 
       Apartment::Tenant.switch!(@tenant_token)
+      Config.create!
       @member = FactoryBot.create(:member)
       @course = FactoryBot.create(:course)
       @ticket = FactoryBot.create(:ticket, course: @course)
@@ -40,7 +41,7 @@ describe "When a member registers for a course" do
 
     it "will send an email confirmation" do
       expect {
-        perform(@member, {}, true, @ticket, {})
+        perform(@member, {}, :lead, @ticket, {})
       }.to change{ mailings_count(:member) }.by(1)
 
       expect(MailjetWorker).to have_enqueued_sidekiq_job( @tenant_token, last_mailing(:member).id )
@@ -48,7 +49,7 @@ describe "When a member registers for a course" do
 
     it "notifies the admin" do
       expect {
-        perform(@member, {}, true, @ticket, {})
+        perform(@member, {}, :lead, @ticket, {})
       }.to change{ mailings_count(:admin) }.by(1)
 
       expect(MailjetWorker).to have_enqueued_sidekiq_job( @tenant_token, last_mailing(:admin).id )

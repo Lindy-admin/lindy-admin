@@ -8,10 +8,11 @@ describe "When registering for a course" do
     @tenant = @user.tenant
     Apartment::Tenant.switch!(@tenant.token)
 
-    Setting.mailjet_sender_email_address = "some@email.com"
-    Setting.mailjet_sender_email_name = "some_email_name"
-    Setting.mailjet_paid_template_id = 1
-    Setting.save
+    @config = Config.new
+    @config.mailjet_sender_email_address = "some@email.com"
+    @config.mailjet_sender_email_name = "some_email_name"
+    @config.mailjet_paid_template_id = 1
+    @config.save!
 
     @course = FactoryBot.create(:course)
     @ticket = FactoryBot.create(:ticket, course: @course)
@@ -32,7 +33,7 @@ describe "When registering for a course" do
         lastname: "lastname",
         course: @course.id,
         ticket: @ticket.id,
-        role: 1,
+        role: :lead,
         email: "test@email.com",
         additional: {
           extra1: "Some note",
@@ -160,7 +161,7 @@ describe "When registering for a course" do
         lastname: "lastname",
         course: @course.id,
         ticket: @ticket.id,
-        role: 1,
+        role: :lead,
         email: "test_email.com",
         additional: {
           extra1: "Some note",
@@ -205,7 +206,7 @@ describe "When registering for a course" do
         lastname: "lastname",
         course: @course.id,
         ticket: @ticket.id,
-        role: 1,
+        role: :lead,
         email: "test@email.com"
       }
     end

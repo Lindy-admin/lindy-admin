@@ -27,11 +27,11 @@
       <p>
       <div>
         <%= label_tag(:mollie_api_key, "API key") %>
-        <%= text_field_tag(:mollie_api_key, @settings[:mollie_api_key]) %>
+        <%= text_field_tag(:mollie_api_key, @config.mollie_api_key) %>
       </div>
       <div>
         <%= label_tag(:mollie_redirect_url, "Result url") %>
-        <%= text_field_tag(:mollie_redirect_url, @settings[:mollie_redirect_url]) %>
+        <%= text_field_tag(:mollie_redirect_url, @config.mollie_redirect_url) %>
       </div>
     </div>
 
@@ -42,15 +42,15 @@
       <h2>Mailjet</h2>
       <div>
         <%= label_tag(:mailjet_public_api_key, "Public API key") %>
-        <%= text_field_tag(:mailjet_public_api_key, @settings[:mailjet_public_api_key]) %>
+        <%= text_field_tag(:mailjet_public_api_key, @config.mailjet_public_api_key) %>
       </div>
       <div>
         <%= label_tag(:mailjet_private_api_key, "Private API key") %>
-        <%= text_field_tag(:mailjet_private_api_key, @settings[:mailjet_private_api_key]) %>
+        <%= text_field_tag(:mailjet_private_api_key, @config.mailjet_private_api_key) %>
       </div>
     </div>
 
-    <% if !Setting.mailjet_public_api_key.blank? && !Setting.mailjet_private_api_key.blank? %>
+    <% if !@config.mailjet_public_api_key.blank? && !@config.mailjet_private_api_key.blank? %>
 
       <div class="row">
         <h3>Sender</h3>
@@ -61,11 +61,11 @@
         </p>
         <div>
           <%= label_tag(:mailjet_sender_email_address, "Email address") %>
-          <%= text_field_tag(:mailjet_sender_email_address, @settings[:mailjet_sender_email_address]) %>
+          <%= text_field_tag(:mailjet_sender_email_address, @config.mailjet_sender_email_address) %>
         </div>
         <div>
           <%= label_tag(:mailjet_sender_email_name, "Display name") %>
-          <%= text_field_tag(:mailjet_sender_email_name, @settings[:mailjet_sender_email_name]) %>
+          <%= text_field_tag(:mailjet_sender_email_name, @config.mailjet_sender_email_name) %>
         </div>
       </div>
 
@@ -84,11 +84,11 @@
           <h4>Registered</h4>
           <div>
             <%= label_tag(:mailjet_registered_subject, "Subject") %>
-            <%= text_field_tag(:mailjet_registered_subject, @settings[:mailjet_registered_subject]) %>
+            <%= text_field_tag(:mailjet_registered_subject, @config.mailjet_registered_subject) %>
           </div>
           <div>
             <%= label_tag(:mailjet_registered_template_id, "Template") %>
-            <%= select_tag :mailjet_registered_template_id, options_for_select(@mailjet_templates.map{|x| [x[:name], x[:id]]}, @settings[:mailjet_registered_template_id]), class: "form-control" %>
+            <%= select_tag :mailjet_registered_template_id, options_for_select(@mailjet_templates.map{|x| [x[:name], x[:id]]}, @config.mailjet_registered_template_id), class: "form-control" %>
           </div>
         </div>
 
@@ -96,11 +96,11 @@
           <h4>Waitinglist</h4>
           <div>
             <%= label_tag(:mailjet_waitinglist_subject, "Subject") %>
-            <%= text_field_tag(:mailjet_waitinglist_subject, @settings[:mailjet_waitinglist_subject]) %>
+            <%= text_field_tag(:mailjet_waitinglist_subject, @config.mailjet_waitinglist_subject) %>
           </div>
           <div>
             <%= label_tag(:mailjet_waitinglist_template_id, "Template") %>
-            <%= select_tag :mailjet_waitinglist_template_id, options_for_select(@mailjet_templates.map{|x| [x[:name], x[:id]]}, @settings[:mailjet_waitinglist_template_id]), class: "form-control" %>
+            <%= select_tag :mailjet_waitinglist_template_id, options_for_select(@mailjet_templates.map{|x| [x[:name], x[:id]]}, @config.mailjet_waitinglist_template_id), class: "form-control" %>
           </div>
         </div>
 
@@ -108,11 +108,11 @@
           <h4>Accepted</h4>
           <div>
             <%= label_tag(:mailjet_accepted_subject, "Subject") %>
-            <%= text_field_tag(:mailjet_accepted_subject, @settings[:mailjet_accepted_subject]) %>
+            <%= text_field_tag(:mailjet_accepted_subject, @config.mailjet_accepted_subject) %>
           </div>
           <div>
             <%= label_tag(:mailjet_accepted_template_id, "Template") %>
-            <%= select_tag :mailjet_accepted_template_id, options_for_select(@mailjet_templates.map{|x| [x[:name], x[:id]]}, @settings[:mailjet_accepted_template_id]), class: "form-control" %>
+            <%= select_tag :mailjet_accepted_template_id, options_for_select(@mailjet_templates.map{|x| [x[:name], x[:id]]}, @config.mailjet_accepted_template_id), class: "form-control" %>
           </div>
         </div>
 
@@ -120,11 +120,11 @@
           <h4>Paid</h4>
           <div>
             <%= label_tag(:mailjet_paid_subject, "Subject") %>
-            <%= text_field_tag(:mailjet_paid_subject, @settings[:mailjet_paid_subject]) %>
+            <%= text_field_tag(:mailjet_paid_subject, @config.mailjet_paid_subject) %>
           </div>
           <div>
             <%= label_tag(:mailjet_paid_template_id, "Template") %>
-            <%= select_tag :mailjet_paid_template_id, options_for_select(@mailjet_templates.map{|x| [x[:name], x[:id]]}, @settings[:mailjet_paid_template_id]), class: "form-control" %>
+            <%= select_tag :mailjet_paid_template_id, options_for_select(@mailjet_templates.map{|x| [x[:name], x[:id]]}, @config.mailjet_paid_template_id), class: "form-control" %>
           </div>
         </div>
 
@@ -152,7 +152,7 @@
     <div class="row">
       <h2>Notifications</h2>
 
-      <% if !Setting.mailjet_public_api_key.blank? && !Setting.mailjet_private_api_key.blank? %>
+      <% if !@config.mailjet_public_api_key.blank? && !@config.mailjet_private_api_key.blank? %>
         <p>
           In addition to a notification email to the member, there will also be a mail
           sent to the an additional email, so administrators can be notified of any
@@ -160,11 +160,11 @@
         </p>
         <div>
           <%= label_tag(:notification_email_address, "Email address") %>
-          <%= text_field_tag(:notification_email_address, @settings[:notification_email_address]) %>
+          <%= text_field_tag(:notification_email_address, @config.notification_email_address) %>
         </div>
         <div>
           <%= label_tag(:mailjet_notification_email_template_id, "Template") %>
-          <%= select_tag :mailjet_notification_email_template_id, options_for_select(@mailjet_templates.map{|x| [x[:name], x[:id]]}, @settings[:mailjet_notification_email_template_id]), class: "form-control" %>
+          <%= select_tag :mailjet_notification_email_template_id, options_for_select(@mailjet_templates.map{|x| [x[:name], x[:id]]}, @config.mailjet_notification_email_template_id), class: "form-control" %>
         </div>
       </div>
     <% else %>

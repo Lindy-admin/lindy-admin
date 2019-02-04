@@ -1,0 +1,25 @@
+class Config < ApplicationRecord
+
+  # mollie_api_key: ~
+  # mollie_redirect_url: ~
+  #
+  # mailjet_public_api_key: ~
+  # mailjet_private_api_key: ~
+  #
+  # mailjet_sender_email_address: ~
+  # mailjet_sender_email_name: ~
+  #
+  # mailjet_registered_template_id: ~
+  # mailjet_registered_subject: ~
+  # mailjet_waitinglist_template_id: ~
+  # mailjet_waitinglist_subject: ~
+  # mailjet_accepted_template_id: ~
+  # mailjet_accepted_subject: ~
+  # mailjet_paid_subject: ~
+  # mailjet_paid_template_id: ~
+  #
+  # notification_email_address: ~
+  # mailjet_notification_email_template_id: ~
+
+
+end

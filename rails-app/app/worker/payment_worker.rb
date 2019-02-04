@@ -8,20 +8,20 @@ class PaymentWorker
   def perform(tenant_id, payment_id, webhook_url)
 
     Apartment::Tenant.switch!(tenant_id)
-    
+
     begin
       payment = Payment.find(payment_id)
       registration = payment.registration
 
       logger.info("Creating payment for registration #{registration.id}")
 
-      check_config(payment, Setting.mollie_api_key)
+      check_config(payment, Config.first.mollie_api_key)
 
-      mollie = Mollie::API::Client.new(Setting.mollie_api_key)
+      mollie = Mollie::API::Client.new(Config.first.mollie_api_key)
       mollie_payment = mollie.payments.create(
         amount:       registration.ticket.price.fractional * 0.01,
         description:  registration.course.title,
-        redirect_url: "#{Setting.mollie_redirect_url}?payment=#{payment.id}",
+        redirect_url: "#{Config.first.mollie_redirect_url}?payment=#{payment.id}",
         webhook_url:  webhook_url
       )
 

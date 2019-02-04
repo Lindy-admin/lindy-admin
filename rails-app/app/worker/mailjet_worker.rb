@@ -12,11 +12,11 @@ class MailjetWorker
     begin
       mailing = Mailing.find(mailing_id)
 
-      sender_email = Setting.mailjet_sender_email_address
-      sender_name = Setting.mailjet_sender_email_name
+      sender_email = Config.first.mailjet_sender_email_address
+      sender_name = Config.first.mailjet_sender_email_name
       options = {
-        api_key: Setting.mailjet_public_api_key,
-        secret_key: Setting.mailjet_private_api_key
+        api_key: Config.first.mailjet_public_api_key,
+        secret_key: Config.first.mailjet_private_api_key
       }
       variables = get_variables(mailing)
 
@@ -43,7 +43,7 @@ class MailjetWorker
   end
 
   def notify_admin(mailing, options, variables, sender_email, sender_name)
-    raise IncorrectConfigException, "No notification email" if Setting.notification_email_address == nil
+    raise IncorrectConfigException, "No notification email" if Config.first.notification_email_address == nil
 
     logger.info("Sending #{mailing.label} notification mail")
     template_id = mailing.remote_template_id.to_i
@@ -61,7 +61,7 @@ class MailjetWorker
             },
             To: [
               {
-                Email: Setting.notification_email_address,
+                Email: Config.first.notification_email_address,
                 Name: "Lindy Administrator"
               }
             ],
@@ -115,13 +115,13 @@ class MailjetWorker
   def get_subject(mailing)
     case mailing.label
     when "registration"
-      return Setting.mailjet_registered_subject
+      return Config.first.mailjet_registered_subject
     when "payment"
-      return Setting.mailjet_paid_subject
+      return Config.first.mailjet_paid_subject
     when "waitinglist"
-      return Setting.mailjet_waitinglist_subject
+      return Config.first.mailjet_waitinglist_subject
     when "acceptance"
-      return Setting.mailjet_accepted_subject
+      return Config.first.mailjet_accepted_subject
     end
   end
 
