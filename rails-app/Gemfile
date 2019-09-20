@@ -26,7 +26,7 @@ git 'https://github.com/mollie/mollie-api-ruby.git', :tag => 'v2.2.1' do
 end
 
 # Authentication
-gem 'devise', '~> 4.4'
+gem 'devise', '~> 4.7'
 # Multi tenancy
 gem 'apartment', '~> 2.1'
 
