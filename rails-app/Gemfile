@@ -33,7 +33,7 @@ gem 'apartment', '~> 2.1'
 # Storing settings
 gem "rails-settings-cached"
 
-gem 'sidekiq', '~> 4.1', '>= 4.1.2'
+gem 'sidekiq', '~> 5.2'
 # Sidekiq monitoring
 gem 'sinatra', require: false
 gem 'slim'
